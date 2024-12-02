@@ -4,14 +4,14 @@ import { FileUploader } from "./FileUploader"
 import { TextInput } from "./TextInput"
 import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, memo } from "react"
 import { SidebarTrigger } from "./ui/sidebar"
 import { Copy, RefreshCw } from "lucide-react"
 import AIGenerationVisualizer from "./AIGenerationVisualizer"
 import { useLocation } from "react-router-dom"
 import { Separator } from "./ui/separator"
 
-export function MainContent() {
+const MainContentComponent = () => {
   const { toast } = useToast()
   const [isProcessing, setIsProcessing] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
@@ -183,3 +183,5 @@ export function MainContent() {
     </main>
   )
 }
+
+export const MainContent = memo(MainContentComponent);

@@ -20,7 +20,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AppSidebar />
-            <div className="flex-1 animate-fade-in">
+            <div className="flex-1 transition-all duration-300 ease-in-out">
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/talent-summary" element={<TalentSummary />} />
