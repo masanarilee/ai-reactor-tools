@@ -1,4 +1,5 @@
 import { toast } from "sonner"
+import { supabase } from "@/integrations/supabase/client"
 
 export async function generateTalentSummary(fileContent: string, supplementaryInfo: string) {
   try {
@@ -19,29 +20,16 @@ ${fileContent}
 ${supplementaryInfo}
 `
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': import.meta.env.VITE_CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-opus-20240229',
-        max_tokens: 2000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
+    const { data, error } = await supabase.functions.invoke('ask-claude', {
+      body: { prompt }
+    })
 
-    if (!response.ok) {
-      throw new Error('API request failed');
-    }
+    if (error) throw error
+    return data.text
 
-    const data = await response.json();
-    return data.content[0].text;
   } catch (error) {
-    console.error('Error:', error);
-    toast.error("サマリの生成に失敗しました。");
-    throw error;
+    console.error('Error:', error)
+    toast.error("サマリの生成に失敗しました。")
+    throw error
   }
 }
