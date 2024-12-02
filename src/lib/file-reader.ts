@@ -1,6 +1,9 @@
 import * as XLSX from 'xlsx';
 import * as mammoth from 'mammoth';
-import * as pdfParse from 'pdf-parse';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Initialize pdf.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 export const readFileContent = async (file: File): Promise<string> => {
   try {
@@ -10,9 +13,21 @@ export const readFileContent = async (file: File): Promise<string> => {
     // PDFファイルの処理
     if (file.type === 'application/pdf') {
       const arrayBuffer = await file.arrayBuffer();
-      const pdfData = await pdfParse(new Uint8Array(arrayBuffer));
-      console.log('PDF content length:', pdfData.text.length);
-      return pdfData.text;
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = '';
+      
+      // Extract text from all pages
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items
+          .map((item: any) => item.str)
+          .join(' ');
+        fullText += pageText + '\n';
+      }
+      
+      console.log('PDF content length:', fullText.length);
+      return fullText;
     }
 
     // Excelファイルの処理
