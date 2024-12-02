@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AnimatePresence, motion } from "framer-motion";
@@ -23,13 +23,27 @@ const queryClient = new QueryClient({
 });
 
 const pageTransitionVariants = {
-  initial: { opacity: 0, x: 20 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: -20 },
+  initial: { 
+    opacity: 0,
+    y: 20,
+    scale: 0.98
+  },
+  animate: { 
+    opacity: 1,
+    y: 0,
+    scale: 1
+  },
+  exit: { 
+    opacity: 0,
+    y: -20,
+    scale: 0.98
+  },
 };
 
 // レイアウトコンポーネント
 const Layout = () => {
+  const location = useLocation();
+  
   return (
     <div className="min-h-screen flex w-full bg-background overflow-hidden">
       <AppSidebar />
@@ -42,11 +56,12 @@ const Layout = () => {
             animate="animate"
             exit="exit"
             transition={{ 
-              type: "tween", 
-              ease: "easeInOut",
-              duration: 0.15 
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+              duration: 0.2
             }}
-            className="h-full w-full"
+            className="h-full w-full absolute inset-0"
           >
             <Outlet />
           </motion.div>
