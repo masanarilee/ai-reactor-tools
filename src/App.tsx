@@ -9,7 +9,14 @@ import Index from "./pages/Index";
 import TalentSummary from "./pages/TalentSummary";
 import JobSummary from "./pages/JobSummary";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -20,12 +27,14 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AppSidebar />
-            <div className="flex-1 transition-all duration-300 ease-in-out">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/talent-summary" element={<TalentSummary />} />
-                <Route path="/job-summary" element={<JobSummary />} />
-              </Routes>
+            <div className="flex-1">
+              <div className="transition-opacity duration-200 ease-in-out">
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/talent-summary" element={<TalentSummary />} />
+                  <Route path="/job-summary" element={<JobSummary />} />
+                </Routes>
+              </div>
             </div>
           </BrowserRouter>
         </div>
