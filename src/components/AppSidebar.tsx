@@ -55,9 +55,9 @@ export function AppSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-xl py-6">
-                      <item.icon className="w-7 h-7" />
-                      <span>{item.title}</span>
+                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-sm py-8">
+                      <item.icon className="w-8 h-8" />
+                      <span className="ml-4">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
