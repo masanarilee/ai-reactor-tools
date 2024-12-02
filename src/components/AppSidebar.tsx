@@ -67,9 +67,19 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a 
                       href={item.path} 
-                      className="text-[#1E3D59] hover:text-[#17A2B8] text-base py-12 font-['Noto Sans JP'] tracking-wide transition-all duration-300 ease-in-out hover:bg-[#F8FAFC] rounded-lg hover:scale-[1.02] hover:shadow-sm relative group"
+                      className={`
+                        text-[#1E3D59] hover:text-[#17A2B8] text-base py-12 font-['Noto Sans JP'] tracking-wide 
+                        transition-all duration-300 ease-in-out hover:bg-[#F8FAFC] rounded-lg hover:scale-[1.02] 
+                        hover:shadow-sm relative group
+                        ${location.pathname === item.path ? 'bg-[#F8FAFC] text-[#17A2B8] shadow-sm scale-[1.02]' : ''}
+                      `}
                     >
-                      <item.icon className="w-38 h-38 transition-transform duration-300 group-hover:scale-110" />
+                      <item.icon 
+                        className={`
+                          w-38 h-38 transition-transform duration-300 
+                          ${location.pathname === item.path ? 'text-[#17A2B8] scale-110' : 'group-hover:scale-110'}
+                        `} 
+                      />
                       <span className="ml-4 text-base relative">
                         {item.title}
                         <span 
