@@ -63,9 +63,15 @@ export function AppSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-base py-12 font-['Noto Sans JP'] tracking-wide transition-all duration-200 ease-in-out">
-                      <item.icon className="w-38 h-38" />
-                      <span className="ml-4 text-base">{item.title}</span>
+                    <a 
+                      href={item.path} 
+                      className="text-[#1E3D59] hover:text-[#17A2B8] text-base py-12 font-['Noto Sans JP'] tracking-wide transition-all duration-300 ease-in-out hover:bg-[#F8FAFC] rounded-lg hover:scale-[1.02] hover:shadow-sm relative group"
+                    >
+                      <item.icon className="w-38 h-38 transition-transform duration-300 group-hover:scale-110" />
+                      <span className="ml-4 text-base relative">
+                        {item.title}
+                        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
+                      </span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
