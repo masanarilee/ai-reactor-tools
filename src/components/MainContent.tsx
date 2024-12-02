@@ -131,7 +131,7 @@ const MainContentComponent = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="space-y-8 bg-gray-50 p-8 rounded-lg shadow-sm"
+              className="space-y-8 bg-white p-8 rounded-lg shadow-sm"
             >
               <div>
                 <div className="h-[60px] flex items-center">
@@ -180,7 +180,7 @@ const MainContentComponent = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-gray-50 p-10 rounded-lg shadow-sm"
+              className="bg-white p-10 rounded-lg shadow-sm"
             >
               <div className="h-[60px] flex items-center justify-between">
                 <h3 className="text-lg font-medium text-[#1E3D59]">プレビュー</h3>
