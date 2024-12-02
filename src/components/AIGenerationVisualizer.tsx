@@ -18,10 +18,10 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
 
   useEffect(() => {
     if (isGenerating) {
-      // Random percentage update
+      // Random percentage update - now every 0.1 seconds
       const percentageInterval = setInterval(() => {
         setPercentage(Math.floor(Math.random() * 99) + 1) // 1-99
-      }, 800)
+      }, 100) // Changed from 800 to 100 (0.1 seconds)
 
       const interval = setInterval(() => {
         setParticles(prevParticles => {
@@ -88,7 +88,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
       <div className="absolute inset-0 ml-[var(--sidebar-width)] bg-white/80 backdrop-blur-sm" />
-      <div className="flex flex-col items-center gap-8">
+      <div className="flex flex-col items-center justify-center gap-12">
         <div ref={containerRef} className="relative w-[16rem] h-[16rem] z-10">
           <svg className="w-full h-full" viewBox="0 0 100 100">
             <defs>
@@ -138,7 +138,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
               y="50"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="text-3xl font-bold fill-[#1E3D59]"
+              className="text-4xl font-bold fill-[#1E3D59]"
             >
               {percentage}%
             </text>
@@ -169,10 +169,10 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
           </div>
         </div>
 
-        {/* Generating Text - Now below the spinner */}
+        {/* Generating Text - Now with larger size and proper spacing */}
         <motion.div
           ref={textRef}
-          className="text-4xl font-bold whitespace-nowrap"
+          className="text-5xl font-bold whitespace-nowrap mt-8"
           style={{
             background: "linear-gradient(90deg, #1E3D59, #17A2B8, #1E3D59)",
             backgroundSize: "200% 100%",
