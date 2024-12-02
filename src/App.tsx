@@ -9,6 +9,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import Index from "./pages/Index";
 import TalentSummary from "./pages/TalentSummary";
 import JobSummary from "./pages/JobSummary";
+import Counseling from "./pages/Counseling";
+import CompanyAnalysis from "./pages/CompanyAnalysis";
+import Scout from "./pages/Scout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -65,6 +68,9 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/talent-summary" element={<TalentSummary />} />
               <Route path="/job-summary" element={<JobSummary />} />
+              <Route path="/counseling" element={<Counseling />} />
+              <Route path="/company-analysis" element={<CompanyAnalysis />} />
+              <Route path="/scout" element={<Scout />} />
             </Route>
           </Routes>
         </BrowserRouter>
