@@ -158,7 +158,7 @@ const MainContentComponent = () => {
                   <Button 
                     onClick={handleProcess}
                     disabled={isProcessing}
-                    className="flex-1 bg-[#1E3D59] hover:bg-[#17A2B8]"
+                    className="flex-1 bg-[#1E3D59] hover:bg-[#17A2B8] text-white"
                   >
                     {isProcessing ? "生成中..." : "サマリー生成"}
                   </Button>
