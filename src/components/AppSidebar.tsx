@@ -17,6 +17,7 @@ import {
   useSidebar
 } from "@/components/ui/sidebar"
 import "@fontsource/noto-sans-jp"
+import { useLocation } from "react-router-dom"
 
 const menuItems = [
   {
@@ -43,6 +44,7 @@ const menuItems = [
 
 export function AppSidebar() {
   const { state } = useSidebar();
+  const location = useLocation();
   
   return (
     <Sidebar collapsible="icon">
@@ -70,7 +72,11 @@ export function AppSidebar() {
                       <item.icon className="w-38 h-38 transition-transform duration-300 group-hover:scale-110" />
                       <span className="ml-4 text-base relative">
                         {item.title}
-                        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
+                        <span 
+                          className={`absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left ${
+                            location.pathname === item.path ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                          }`}
+                        ></span>
                       </span>
                     </a>
                   </SidebarMenuButton>
