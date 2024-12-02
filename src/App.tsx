@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { BrowserRouter as Router } from "react-router-dom"
 import "./App.css"
-import AppSidebar from "./components/AppSidebar"
-import MainContent from "./components/MainContent"
+import { AppSidebar } from "./components/AppSidebar"
+import { MainContent } from "./components/MainContent"
 import { Toaster } from "./components/ui/sonner"
 
 const queryClient = new QueryClient({
