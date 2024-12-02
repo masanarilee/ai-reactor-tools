@@ -98,11 +98,13 @@ export function MainContent() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Input Column */}
           <div className="space-y-8 bg-white p-8 rounded-lg shadow-sm">
-            <FileUploader 
-              onError={handleError}
-              onSuccess={handleFileUploadSuccess}
-              acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-            />
+            <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 bg-gray-50">
+              <FileUploader 
+                onError={handleError}
+                onSuccess={handleFileUploadSuccess}
+                acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
+              />
+            </div>
             <div className="space-y-6">
               <TextInput 
                 label="補足情報"
@@ -146,7 +148,7 @@ export function MainContent() {
                 コピー
               </Button>
             </div>
-            <div className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm">
+            <div className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-xs leading-relaxed">
               {previewContent || "生成されたサマリがここに表示されます"}
             </div>
           </div>
