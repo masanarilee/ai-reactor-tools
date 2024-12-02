@@ -48,7 +48,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <div className={`flex items-center px-4 py-3 ${state === 'collapsed' ? 'hidden' : ''}`}>
-            <span className="text-2xl font-bold font-['Gotham']">
+            <span className="text-3xl font-bold font-['Gotham']">
               <span className="text-[#1E3D59]">Biz</span>
               <span className="text-[#17A2B8]">Assist</span>
             </span>
@@ -64,7 +64,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-base py-12">
                       <item.icon className="w-38 h-38" />
-                      <span className="ml-4 text-lg">{item.title}</span>
+                      <span className="ml-4 text-base">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
