@@ -139,7 +139,7 @@ export function MainContent() {
                 コピー
               </Button>
             </div>
-            <div className="min-h-[600px] p-6 bg-gray-50 rounded border border-gray-200 font-mono text-sm">
+            <div className="min-h-[400px] p-6 bg-gray-50 rounded border border-gray-200 font-mono text-sm">
               {previewContent || "生成されたサマリがここに表示されます"}
             </div>
           </div>
