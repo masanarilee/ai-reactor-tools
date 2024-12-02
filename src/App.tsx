@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { BrowserRouter as Router } from "react-router-dom"
+import { ThemeProvider } from "next-themes"
 import "./App.css"
 import { AppSidebar } from "./components/AppSidebar"
 import { MainContent } from "./components/MainContent"
@@ -17,17 +18,19 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <SidebarProvider>
-          <div className="flex min-h-screen w-full">
-            <AppSidebar />
-            <MainContent />
-          </div>
-        </SidebarProvider>
-        <Toaster />
-      </Router>
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <SidebarProvider>
+            <div className="flex min-h-screen w-full">
+              <AppSidebar />
+              <MainContent />
+            </div>
+          </SidebarProvider>
+          <Toaster />
+        </Router>
+      </QueryClientProvider>
+    </ThemeProvider>
   )
 }
 
