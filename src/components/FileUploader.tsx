@@ -2,6 +2,7 @@ import { useCallback, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { Upload } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface FileUploaderProps {
   onError: (error: Error) => void
@@ -11,6 +12,7 @@ interface FileUploaderProps {
 
 export function FileUploader({ onError, onSuccess, acceptedFileTypes }: FileUploaderProps) {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  const [isDragging, setIsDragging] = useState(false)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     try {
@@ -40,12 +42,17 @@ export function FileUploader({ onError, onSuccess, acceptedFileTypes }: FileUplo
       onSuccess(acceptedFiles)
       toast({
         title: "ファイルアップロード完了",
-        description: `${acceptedFiles.map(f => f.name).join(', ')}`,
+        description: `${acceptedFiles.map(f => f.name).join(', ')}をアップロードしました`,
       })
 
     } catch (error) {
       if (error instanceof Error) {
         onError(error)
+        toast({
+          variant: "destructive",
+          title: "エラー",
+          description: error.message,
+        })
       } else {
         onError(new Error("ファイルアップロード中にエラーが発生しました"))
       }
@@ -60,7 +67,9 @@ export function FileUploader({ onError, onSuccess, acceptedFileTypes }: FileUplo
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
       'application/vnd.ms-excel': ['.xls'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
-    }
+    },
+    onDragEnter: () => setIsDragging(true),
+    onDragLeave: () => setIsDragging(false)
   })
 
   return (
@@ -68,7 +77,7 @@ export function FileUploader({ onError, onSuccess, acceptedFileTypes }: FileUplo
       <div
         {...getRootProps()}
         className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
-          ${isDragActive ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-primary'}`}
+          ${isDragActive || isDragging ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-primary'}`}
       >
         <input {...getInputProps()} />
         <Upload className="mx-auto h-12 w-12 text-gray-400" />
@@ -79,15 +88,22 @@ export function FileUploader({ onError, onSuccess, acceptedFileTypes }: FileUplo
           対応ファイル: {acceptedFileTypes.join(", ")}
         </p>
       </div>
+
       {uploadedFiles.length > 0 && (
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h4 className="text-sm font-medium mb-2">アップロード済みファイル:</h4>
-          <ul className="text-sm text-gray-600">
-            {uploadedFiles.map((file, index) => (
-              <li key={index}>{file.name}</li>
-            ))}
-          </ul>
-        </div>
+        <Alert>
+          <AlertDescription>
+            <div className="space-y-2">
+              <h4 className="font-medium">アップロード済みファイル:</h4>
+              <ul className="list-disc pl-4 space-y-1">
+                {uploadedFiles.map((file, index) => (
+                  <li key={index} className="text-sm">
+                    {file.name} ({(file.size / 1024 / 1024).toFixed(2)}MB)
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </AlertDescription>
+        </Alert>
       )}
     </div>
   )
