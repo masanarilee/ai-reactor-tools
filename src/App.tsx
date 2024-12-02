@@ -15,21 +15,33 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: Infinity,
       refetchOnWindowFocus: false,
+      suspense: true,
     },
   },
 });
+
+const pageTransitionVariants = {
+  initial: { opacity: 0, x: 20 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -20 },
+};
 
 const AnimatedRoutes = () => {
   const location = useLocation();
   
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        variants={pageTransitionVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={{ 
+          type: "tween", 
+          ease: "easeInOut",
+          duration: 0.15 
+        }}
         className="h-full w-full"
       >
         <Routes location={location}>
@@ -47,7 +59,7 @@ const App = () => (
     <TooltipProvider>
       <SidebarProvider>
         <BrowserRouter>
-          <div className="min-h-screen flex w-full bg-background">
+          <div className="min-h-screen flex w-full bg-background overflow-hidden">
             <Toaster />
             <Sonner />
             <AppSidebar />
