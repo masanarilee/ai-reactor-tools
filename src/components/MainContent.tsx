@@ -33,6 +33,7 @@ const MainContentComponent = () => {
     "/job-summary": "求人サマリー生成",
     "/counseling": "カウンセリングサポート",
     "/scout": "スカウトメッセージ生成",
+    "/company-analysis": "企業分析",
     "/": "人材サマリー生成"
   }
 
@@ -62,10 +63,7 @@ const MainContentComponent = () => {
 
     setIsProcessing(true)
     try {
-      console.log('Processing file:', uploadedFiles[0].name);
       const fileContent = await readFileContent(uploadedFiles[0]);
-      console.log('File content loaded, length:', fileContent.length);
-      
       const summary = await generateTalentSummary(fileContent, supplementaryInfo);
       setPreviewContent(summary);
       
@@ -162,7 +160,7 @@ const MainContentComponent = () => {
                     disabled={isProcessing}
                     className="flex-1 bg-[#1E3D59] hover:bg-[#17A2B8]"
                   >
-                    {isProcessing ? "Generating..." : "サマリー生成"}
+                    {isProcessing ? "生成中..." : "サマリー生成"}
                   </Button>
                   <Button
                     onClick={handleReset}
