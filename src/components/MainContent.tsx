@@ -11,6 +11,8 @@ import AIGenerationVisualizer from "./AIGenerationVisualizer"
 import { useLocation } from "react-router-dom"
 import { Separator } from "./ui/separator"
 import { motion } from "framer-motion"
+import { generateTalentSummary } from "@/lib/talent-summary"
+import { readFileContent } from "@/lib/file-reader"
 
 const contentVariants = {
   initial: { opacity: 0, y: 10 },
@@ -60,14 +62,9 @@ const MainContentComponent = () => {
 
     setIsProcessing(true)
     try {
-      toast({
-        title: "処理中",
-        description: "サマリを生成しています..."
-      })
-      
-      // Simulate processing
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setPreviewContent("生成されたサマリの内容がここに表示されます。")
+      const fileContent = await readFileContent(uploadedFiles[0]);
+      const summary = await generateTalentSummary(fileContent, supplementaryInfo);
+      setPreviewContent(summary);
       
       toast({
         title: "完了",
