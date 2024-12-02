@@ -56,14 +56,14 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <div className={`flex items-center justify-between px-4 py-3 ${state === 'collapsed' ? 'hidden' : ''}`}>
+          <div className={`flex items-center justify-between px-3 py-2 ${state === 'collapsed' ? 'hidden' : ''}`}>
             <span className="text-3xl font-bold font-['Gotham']">
               <span className="text-[#1E3D59]">Biz</span>
               <span className="text-[#17A2B8]">Assist</span>
             </span>
             <SidebarTrigger className="scale-125" />
           </div>
-          <div className={`flex justify-center px-4 py-2 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
+          <div className={`flex justify-center px-3 py-1.5 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
             <SidebarTrigger className="scale-125" />
           </div>
           <SidebarGroupContent>
@@ -74,7 +74,7 @@ export function AppSidebar() {
                     <a 
                       href={item.path} 
                       className={`
-                        text-[#1E3D59] hover:text-[#17A2B8] text-base py-12 font-['Noto Sans JP'] tracking-wide 
+                        text-[#1E3D59] hover:text-[#17A2B8] text-base py-8 font-['Noto Sans JP'] tracking-wide 
                         transition-all duration-300 ease-in-out hover:bg-[#F8FAFC] rounded-lg hover:scale-[1.02] 
                         hover:shadow-sm relative group
                         ${location.pathname === item.path ? 'bg-[#F8FAFC] text-[#17A2B8] shadow-sm scale-[1.02]' : ''}
