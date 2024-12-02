@@ -4,10 +4,9 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 
 // Initialize pdf.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url,
-).toString();
+if (typeof window !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+}
 
 export const readFileContent = async (file: File): Promise<string> => {
   try {
@@ -21,7 +20,7 @@ export const readFileContent = async (file: File): Promise<string> => {
       try {
         const pdf = await pdfjsLib.getDocument({
           data: arrayBuffer,
-          useWorkerFetch: true,
+          useWorkerFetch: false,
           isEvalSupported: true,
           useSystemFonts: true
         }).promise;
