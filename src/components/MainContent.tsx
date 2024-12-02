@@ -9,6 +9,7 @@ import { useState } from "react"
 export function MainContent() {
   const { toast } = useToast()
   const [isProcessing, setIsProcessing] = useState(false)
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
 
   const handleError = (error: Error) => {
     toast({
@@ -18,11 +19,35 @@ export function MainContent() {
     })
   }
 
+  const handleFileUploadSuccess = (files: File[]) => {
+    setUploadedFiles(files)
+  }
+
   const handleProcess = async () => {
+    if (uploadedFiles.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "ファイルが必要です",
+        description: "サマリを生成するにはファイルをアップロードしてください"
+      })
+      return
+    }
+
     setIsProcessing(true)
     try {
-      // 処理中
+      // 処理中の表示
+      toast({
+        title: "処理中",
+        description: "サマリを生成しています..."
+      })
+      
       await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // 成功時の表示
+      toast({
+        title: "完了",
+        description: "サマリが生成されました"
+      })
     } catch (error) {
       if (error instanceof Error) {
         handleError(error)
@@ -50,6 +75,7 @@ export function MainContent() {
             <div className="grid gap-6">
               <FileUploader 
                 onError={handleError}
+                onSuccess={handleFileUploadSuccess}
                 acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
               />
               <TextInput 
@@ -60,7 +86,7 @@ export function MainContent() {
                 onClick={handleProcess}
                 disabled={isProcessing}
               >
-                サマリを生成
+                {isProcessing ? "生成中..." : "サマリを生成"}
               </Button>
               <ChatInterface />
             </div>
@@ -70,6 +96,7 @@ export function MainContent() {
             <div className="grid gap-6">
               <FileUploader 
                 onError={handleError}
+                onSuccess={handleFileUploadSuccess}
                 acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
               />
               <TextInput 
@@ -80,7 +107,7 @@ export function MainContent() {
                 onClick={handleProcess}
                 disabled={isProcessing}
               >
-                サマリを生成
+                {isProcessing ? "生成中..." : "サマリを生成"}
               </Button>
               <ChatInterface />
             </div>
@@ -90,6 +117,7 @@ export function MainContent() {
             <div className="grid gap-6">
               <FileUploader 
                 onError={handleError}
+                onSuccess={handleFileUploadSuccess}
                 acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
               />
               <TextInput 
@@ -100,7 +128,7 @@ export function MainContent() {
                 onClick={handleProcess}
                 disabled={isProcessing}
               >
-                支援情報を生成
+                {isProcessing ? "生成中..." : "支援情報を生成"}
               </Button>
               <ChatInterface />
             </div>
@@ -110,6 +138,7 @@ export function MainContent() {
             <div className="grid gap-6">
               <FileUploader 
                 onError={handleError}
+                onSuccess={handleFileUploadSuccess}
                 acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
               />
               <TextInput 
@@ -120,7 +149,7 @@ export function MainContent() {
                 onClick={handleProcess}
                 disabled={isProcessing}
               >
-                スカウト文を生成
+                {isProcessing ? "生成中..." : "スカウト文を生成"}
               </Button>
               <ChatInterface />
             </div>
