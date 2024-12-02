@@ -8,6 +8,7 @@ import { useState } from "react"
 import { SidebarTrigger } from "./ui/sidebar"
 import { Copy, RefreshCw } from "lucide-react"
 import AIGenerationVisualizer from "./AIGenerationVisualizer"
+import { useLocation } from "react-router-dom"
 
 export function MainContent() {
   const { toast } = useToast()
@@ -15,6 +16,19 @@ export function MainContent() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [previewContent, setPreviewContent] = useState("")
   const [supplementaryInfo, setSupplementaryInfo] = useState("")
+  const location = useLocation()
+
+  // メニュー名のマッピング
+  const menuTitles: { [key: string]: string } = {
+    "/talent-summary": "人材サマリ生成",
+    "/job-summary": "案件サマリ生成",
+    "/counseling": "カウンセリング支援",
+    "/scout": "スカウト文生成",
+    "/": "人材サマリ生成" // デフォルトページ
+  }
+
+  // 現在のパスに基づいてメニュー名を取得
+  const currentMenuTitle = menuTitles[location.pathname]
 
   const handleError = (error: Error) => {
     toast({
@@ -91,11 +105,12 @@ export function MainContent() {
   return (
     <main className="flex-1 p-6 bg-gray-50 min-h-screen">
       <div className="container mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <SidebarTrigger className="lg:hidden" />
+          <h1 className="text-2xl font-bold text-[#1E3D59] ml-4">{currentMenuTitle}</h1>
         </div>
         
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8 mt-8">
           {/* Input Column */}
           <div className="space-y-8 bg-white p-8 rounded-lg shadow-sm">
             <div>
