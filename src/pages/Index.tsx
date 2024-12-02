@@ -1,10 +1,15 @@
+import { AppSidebar } from "@/components/AppSidebar"
 import { MainContent } from "@/components/MainContent"
+import { SidebarProvider } from "@/components/ui/sidebar"
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <MainContent />
-    </div>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar />
+        <MainContent />
+      </div>
+    </SidebarProvider>
   )
 }
 

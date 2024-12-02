@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ChatInterface from "./ChatInterface"
 import { useState } from "react"
+import { SidebarTrigger } from "./ui/sidebar"
 
 export function MainContent() {
   const { toast } = useToast()
@@ -35,7 +36,6 @@ export function MainContent() {
 
     setIsProcessing(true)
     try {
-      // 処理中の表示
       toast({
         title: "処理中",
         description: "サマリを生成しています..."
@@ -43,7 +43,6 @@ export function MainContent() {
       
       await new Promise(resolve => setTimeout(resolve, 1000))
       
-      // 成功時の表示
       toast({
         title: "完了",
         description: "サマリが生成されました"
@@ -58,102 +57,53 @@ export function MainContent() {
   }
 
   return (
-    <main className="flex-1 p-6">
+    <main className="flex-1 p-6 bg-gray-50">
       <div className="container mx-auto">
-        <h1 className="text-2xl font-bold mb-6">BizAssist</h1>
+        <div className="flex items-center justify-between mb-6">
+          <SidebarTrigger className="lg:hidden" />
+        </div>
         
         <Tabs defaultValue="talent" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="talent">人材サマリ生成</TabsTrigger>
-            <TabsTrigger value="job">案件サマリ生成</TabsTrigger>
-            <TabsTrigger value="counseling">カウンセリング支援</TabsTrigger>
-            <TabsTrigger value="scout">スカウト文生成</TabsTrigger>
+          <TabsList className="bg-white border border-[#1E3D59]/10">
+            <TabsTrigger value="talent" className="text-[#1E3D59] data-[state=active]:bg-[#17A2B8]/10">人材サマリ生成</TabsTrigger>
+            <TabsTrigger value="job" className="text-[#1E3D59] data-[state=active]:bg-[#17A2B8]/10">案件サマリ生成</TabsTrigger>
+            <TabsTrigger value="counseling" className="text-[#1E3D59] data-[state=active]:bg-[#17A2B8]/10">カウンセリング支援</TabsTrigger>
+            <TabsTrigger value="scout" className="text-[#1E3D59] data-[state=active]:bg-[#17A2B8]/10">スカウト文生成</TabsTrigger>
           </TabsList>
 
-          {/* 各タブのコンテンツ */}
-          <TabsContent value="talent" className="space-y-6">
-            <div className="grid gap-6">
-              <FileUploader 
-                onError={handleError}
-                onSuccess={handleFileUploadSuccess}
-                acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-              />
-              <TextInput 
-                label="補足情報"
-                placeholder="面談メモや補足情報を入力してください"
-              />
-              <Button 
-                onClick={handleProcess}
-                disabled={isProcessing}
-              >
-                {isProcessing ? "生成中..." : "サマリを生成"}
-              </Button>
-              <ChatInterface />
-            </div>
-          </TabsContent>
+          {["talent", "job", "counseling", "scout"].map((tab) => (
+            <TabsContent key={tab} value={tab} className="space-y-6">
+              <div className="grid lg:grid-cols-2 gap-6">
+                {/* Input Column */}
+                <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm">
+                  <FileUploader 
+                    onError={handleError}
+                    onSuccess={handleFileUploadSuccess}
+                    acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
+                  />
+                  <TextInput 
+                    label="補足情報"
+                    placeholder={`${tab === 'talent' ? '面談メモや補足情報' : 
+                                 tab === 'job' ? '案件に関する補足情報' :
+                                 tab === 'counseling' ? 'カウンセリングに関する補足情報' :
+                                 'スカウトに関する補足情報'}を入力してください`}
+                  />
+                  <Button 
+                    onClick={handleProcess}
+                    disabled={isProcessing}
+                    className="w-full bg-[#1E3D59] hover:bg-[#17A2B8]"
+                  >
+                    {isProcessing ? "生成中..." : "サマリを生成"}
+                  </Button>
+                </div>
 
-          <TabsContent value="job" className="space-y-6">
-            <div className="grid gap-6">
-              <FileUploader 
-                onError={handleError}
-                onSuccess={handleFileUploadSuccess}
-                acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-              />
-              <TextInput 
-                label="補足情報"
-                placeholder="案件に関する補足情報を入力してください"
-              />
-              <Button 
-                onClick={handleProcess}
-                disabled={isProcessing}
-              >
-                {isProcessing ? "生成中..." : "サマリを生成"}
-              </Button>
-              <ChatInterface />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="counseling" className="space-y-6">
-            <div className="grid gap-6">
-              <FileUploader 
-                onError={handleError}
-                onSuccess={handleFileUploadSuccess}
-                acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-              />
-              <TextInput 
-                label="補足情報"
-                placeholder="カウンセリングに関する補足情報を入力してください"
-              />
-              <Button 
-                onClick={handleProcess}
-                disabled={isProcessing}
-              >
-                {isProcessing ? "生成中..." : "支援情報を生成"}
-              </Button>
-              <ChatInterface />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="scout" className="space-y-6">
-            <div className="grid gap-6">
-              <FileUploader 
-                onError={handleError}
-                onSuccess={handleFileUploadSuccess}
-                acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-              />
-              <TextInput 
-                label="補足情報"
-                placeholder="スカウトに関する補足情報を入力してください"
-              />
-              <Button 
-                onClick={handleProcess}
-                disabled={isProcessing}
-              >
-                {isProcessing ? "生成中..." : "スカウト文を生成"}
-              </Button>
-              <ChatInterface />
-            </div>
-          </TabsContent>
+                {/* Output Column */}
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <ChatInterface />
+                </div>
+              </div>
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
     </main>

@@ -43,13 +43,18 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>BizAssist</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            <span className="text-xl font-['Gotham']">
+              <span className="text-[#1E3D59]">Biz</span>
+              <span className="text-[#17A2B8]">Assist</span>
+            </span>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.path}>
+                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8]">
                       <item.icon />
                       <span>{item.title}</span>
                     </a>
