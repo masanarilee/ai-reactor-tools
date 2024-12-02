@@ -3,6 +3,7 @@ import {
   Briefcase,
   MessageSquare,
   Send,
+  ChartBar,
 } from "lucide-react"
 import {
   Sidebar,
@@ -34,6 +35,11 @@ const menuItems = [
     title: "カウンセリング支援",
     icon: MessageSquare,
     path: "/counseling"
+  },
+  {
+    title: "企業分析",
+    icon: ChartBar,
+    path: "/company-analysis"
   },
   {
     title: "スカウト文生成",
