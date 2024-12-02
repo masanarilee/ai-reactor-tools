@@ -25,25 +25,21 @@ const queryClient = new QueryClient({
 const pageTransitionVariants = {
   initial: { 
     opacity: 0,
-    y: 5,
-    scale: 0.995
+    y: 2,
+    scale: 0.998
   },
   animate: { 
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      type: "spring",
-      stiffness: 380,
-      damping: 30,
-      mass: 0.1,
-      velocity: 2
+      duration: 0.15,
+      ease: [0.4, 0, 0.2, 1]
     }
   },
   exit: { 
     opacity: 0,
-    y: -5,
-    scale: 0.995,
+    scale: 0.998,
     transition: {
       duration: 0.1,
       ease: "easeOut"
