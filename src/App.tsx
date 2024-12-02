@@ -49,7 +49,6 @@ const pageTransitionVariants = {
   },
 };
 
-// レイアウトコンポーネント
 const Layout = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +56,7 @@ const Layout = () => {
   return (
     <div className="min-h-screen flex w-full bg-background overflow-hidden">
       <AppSidebar />
-      <div className="flex-1 relative">
+      <main className="flex-1 relative">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-50">
             <LoadingSpinner />
@@ -70,14 +69,14 @@ const Layout = () => {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="h-full w-full absolute inset-0"
+            className="h-full w-full"
             onAnimationStart={() => setIsLoading(true)}
             onAnimationComplete={() => setIsLoading(false)}
           >
             <Outlet />
           </motion.div>
         </AnimatePresence>
-      </div>
+      </main>
     </div>
   );
 };
