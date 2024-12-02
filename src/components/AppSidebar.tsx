@@ -54,7 +54,7 @@ export function AppSidebar() {
             </span>
             <SidebarTrigger className="scale-125" />
           </div>
-          <div className={`flex justify-end px-4 py-2 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
+          <div className={`flex justify-center px-4 py-2 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
             <SidebarTrigger className="scale-125" />
           </div>
           <SidebarGroupContent>
