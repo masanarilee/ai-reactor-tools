@@ -121,7 +121,7 @@ const MainContentComponent = () => {
         </div>
         <Separator className="mb-6" />
         
-        <Suspense fallback={<div className="animate-pulse">Loading...</div>}>
+        <Suspense fallback={<div className="animate-pulse">読み込み中...</div>}>
           <div className="grid lg:grid-cols-2 gap-8 mt-8">
             {/* Input Column */}
             <motion.div
