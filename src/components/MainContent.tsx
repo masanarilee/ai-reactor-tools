@@ -62,7 +62,10 @@ const MainContentComponent = () => {
 
     setIsProcessing(true)
     try {
+      console.log('Processing file:', uploadedFiles[0].name);
       const fileContent = await readFileContent(uploadedFiles[0]);
+      console.log('File content loaded, length:', fileContent.length);
+      
       const summary = await generateTalentSummary(fileContent, supplementaryInfo);
       setPreviewContent(summary);
       
@@ -71,6 +74,7 @@ const MainContentComponent = () => {
         description: "サマリーが生成されました"
       })
     } catch (error) {
+      console.error('Error in handleProcess:', error);
       if (error instanceof Error) {
         handleError(error)
       }
