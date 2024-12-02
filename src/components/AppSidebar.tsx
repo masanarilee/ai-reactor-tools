@@ -54,6 +54,9 @@ export function AppSidebar() {
             </span>
             <SidebarTrigger className="ml-2" />
           </div>
+          <div className={`px-4 py-2 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
+            <SidebarTrigger />
+          </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
