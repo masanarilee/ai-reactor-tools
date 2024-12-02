@@ -56,19 +56,19 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <div className={`flex items-center justify-between px-3 py-2 ${state === 'collapsed' ? 'hidden' : ''}`}>
+          <div className={`flex items-center justify-between px-3 py-2 mb-6 ${state === 'collapsed' ? 'hidden' : ''}`}>
             <span className="text-3xl font-bold font-['Gotham']">
               <span className="text-[#1E3D59]">Biz</span>
               <span className="text-[#17A2B8]">Assist</span>
             </span>
             <SidebarTrigger className="scale-125" />
           </div>
-          <div className={`flex justify-center px-3 py-1.5 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
+          <div className={`flex justify-center px-3 py-1.5 mb-6 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
             <SidebarTrigger className="scale-125" />
           </div>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
+              {menuItems.map((item, index) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a 
@@ -78,6 +78,7 @@ export function AppSidebar() {
                         transition-all duration-300 ease-in-out hover:bg-[#F8FAFC] rounded-lg hover:scale-[1.02] 
                         hover:shadow-sm relative group
                         ${location.pathname === item.path ? 'bg-[#F8FAFC] text-[#17A2B8] shadow-sm scale-[1.02]' : ''}
+                        ${index === 0 ? 'mt-4' : ''}
                       `}
                     >
                       <item.icon 
