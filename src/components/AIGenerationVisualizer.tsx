@@ -76,8 +76,8 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-50 overflow-hidden">
-      <div ref={containerRef} className="relative w-[28rem] h-[28rem]">
+    <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-50 overflow-hidden">
+      <div ref={containerRef} className="relative w-[20rem] h-[20rem]">
         <svg className="w-full h-full" viewBox="0 0 100 100">
           <defs>
             <linearGradient id="spinner-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -125,7 +125,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
           <div className="relative">
             <motion.div
               ref={textRef}
-              className="text-4xl font-bold whitespace-nowrap"
+              className="text-2xl font-bold whitespace-nowrap"
               style={{
                 background: "linear-gradient(90deg, #1E3D59, #17A2B8, #1E3D59)",
                 backgroundSize: "200% 100%",
@@ -134,7 +134,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
               }}
               animate={textControls}
             >
-              Generating...
+              生成中...
             </motion.div>
             {particles.map((particle, index) => (
               <motion.div
