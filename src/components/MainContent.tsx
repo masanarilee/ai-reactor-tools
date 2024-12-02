@@ -114,7 +114,9 @@ export function MainContent() {
           {/* Input Column */}
           <div className="space-y-8 bg-white p-8 rounded-lg shadow-sm">
             <div>
-              <h3 className="text-lg font-medium text-[#1E3D59] mb-4 h-[28px]">ファイルアップロード</h3>
+              <div className="h-[60px] flex items-center">
+                <h3 className="text-lg font-medium text-[#1E3D59]">ファイルアップロード</h3>
+              </div>
               <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 bg-gray-50">
                 <FileUploader 
                   onError={handleError}
@@ -155,8 +157,8 @@ export function MainContent() {
 
           {/* Preview Column */}
           <div className="bg-white p-10 rounded-lg shadow-sm">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-lg font-medium text-[#1E3D59] h-[28px]">プレビュー</h3>
+            <div className="h-[60px] flex items-center justify-between">
+              <h3 className="text-lg font-medium text-[#1E3D59]">プレビュー</h3>
               <Button
                 variant="outline"
                 size="sm"
