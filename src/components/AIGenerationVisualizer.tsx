@@ -76,8 +76,8 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
   }
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center z-50">
-      <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
+    <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+      <div className="absolute inset-0 ml-[var(--sidebar-width)] bg-white/80 backdrop-blur-sm" />
       <div ref={containerRef} className="relative w-[16rem] h-[16rem] z-10">
         <svg className="w-full h-full" viewBox="0 0 100 100">
           <defs>
