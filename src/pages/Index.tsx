@@ -1,16 +1,16 @@
-import ChatInterface from "@/components/ChatInterface";
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/AppSidebar"
+import { MainContent } from "@/components/MainContent"
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-ai-background p-4">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 text-ai-foreground">
-          AI チャットアシスタント
-        </h1>
-        <ChatInterface />
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar />
+        <MainContent />
       </div>
-    </div>
-  );
-};
+    </SidebarProvider>
+  )
+}
 
-export default Index;
+export default Index
