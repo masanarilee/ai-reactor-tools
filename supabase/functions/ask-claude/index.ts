@@ -12,8 +12,13 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, file } = await req.json()
-    
+    const { prompt } = await req.json()
+    console.log('Received prompt:', prompt)
+
+    if (!prompt) {
+      throw new Error('No prompt provided')
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -26,36 +31,46 @@ serve(async (req) => {
         max_tokens: 1000,
         messages: [
           { 
-            role: 'user', 
-            content: [
-              {
-                type: 'text',
-                text: prompt
-              },
-              {
-                type: 'file',
-                file_id: file
-              }
-            ]
+            role: 'user',
+            content: prompt
           }
         ]
       })
-    });
+    })
 
     if (!response.ok) {
-      throw new Error('API request failed')
+      const errorData = await response.text()
+      console.error('Claude API error:', errorData)
+      throw new Error(`Claude API request failed: ${response.status}`)
     }
 
     const data = await response.json()
+    console.log('Claude API response received')
+
     return new Response(
       JSON.stringify({ text: data.content[0].text }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        } 
+      }
     )
+
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error in ask-claude function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      JSON.stringify({ 
+        error: error instanceof Error ? error.message : 'Unknown error occurred',
+        details: error
+      }),
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        },
+        status: 500 
+      }
     )
   }
 })
