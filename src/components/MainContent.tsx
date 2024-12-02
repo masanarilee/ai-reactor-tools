@@ -100,28 +100,32 @@ export function MainContent() {
               onSuccess={handleFileUploadSuccess}
               acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
             />
-            <TextInput 
-              label="補足情報"
-              placeholder="補足情報を入力してください"
-              value={supplementaryInfo}
-              onChange={(e) => setSupplementaryInfo(e.target.value)}
-            />
-            <div className="flex gap-4">
-              <Button 
-                onClick={handleProcess}
-                disabled={isProcessing}
-                className="flex-1 bg-[#1E3D59] hover:bg-[#17A2B8]"
-              >
-                {isProcessing ? "生成中..." : "サマリを生成"}
-              </Button>
-              <Button
-                onClick={handleReset}
-                variant="outline"
-                className="flex-none px-6 border-[#1E3D59] text-[#1E3D59] hover:bg-[#1E3D59] hover:text-white"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                リセット
-              </Button>
+            <div className="space-y-6">
+              <TextInput 
+                label="補足情報"
+                placeholder="補足情報を入力してください"
+                value={supplementaryInfo}
+                onChange={(e) => setSupplementaryInfo(e.target.value)}
+              />
+            </div>
+            <div className="pt-4">
+              <div className="flex gap-4">
+                <Button 
+                  onClick={handleProcess}
+                  disabled={isProcessing}
+                  className="flex-1 bg-[#1E3D59] hover:bg-[#17A2B8]"
+                >
+                  {isProcessing ? "生成中..." : "サマリを生成"}
+                </Button>
+                <Button
+                  onClick={handleReset}
+                  variant="outline"
+                  className="flex-none px-6 border-[#1E3D59] text-[#1E3D59] hover:bg-[#1E3D59] hover:text-white"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  リセット
+                </Button>
+              </div>
             </div>
           </div>
 
