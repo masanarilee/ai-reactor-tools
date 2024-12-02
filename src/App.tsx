@@ -52,23 +52,18 @@ const pageTransitionVariants = {
 // レイアウトコンポーネント
 const Layout = () => {
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
   return (
     <div className="min-h-screen flex w-full bg-background overflow-hidden">
       <AppSidebar />
       <div className="flex-1 relative">
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-50">
+            <LoadingSpinner />
+          </div>
+        )}
         <AnimatePresence mode="wait" initial={false}>
-          {isLoading && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-50"
-            >
-              <LoadingSpinner />
-            </motion.div>
-          )}
           <motion.div
             key={location.pathname}
             variants={pageTransitionVariants}
