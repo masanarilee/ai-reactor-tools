@@ -41,7 +41,7 @@ const menuItems = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <div className="flex items-center justify-between px-4 py-3">
@@ -55,8 +55,8 @@ export function AppSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-sm py-8">
-                      <item.icon className="w-8 h-8" />
+                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-base py-8">
+                      <item.icon className="w-10 h-10" />
                       <span className="ml-4">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
