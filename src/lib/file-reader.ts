@@ -5,7 +5,10 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 
 // Initialize pdf.js worker
 if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+  const worker = new Worker(
+    new URL('pdfjs-dist/build/pdf.worker.mjs', import.meta.url)
+  );
+  pdfjsLib.GlobalWorkerOptions.workerPort = worker;
 }
 
 export const readFileContent = async (file: File): Promise<string> => {
@@ -20,8 +23,6 @@ export const readFileContent = async (file: File): Promise<string> => {
       try {
         const pdf = await pdfjsLib.getDocument({
           data: arrayBuffer,
-          useWorkerFetch: false,
-          isEvalSupported: true,
           useSystemFonts: true
         }).promise;
         
