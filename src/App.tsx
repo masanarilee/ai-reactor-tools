@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AnimatePresence, motion } from "framer-motion";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { useState } from "react";
 import Index from "./pages/Index";
 import TalentSummary from "./pages/TalentSummary";
 import JobSummary from "./pages/JobSummary";
@@ -50,12 +52,23 @@ const pageTransitionVariants = {
 // レイアウトコンポーネント
 const Layout = () => {
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
   
   return (
     <div className="min-h-screen flex w-full bg-background overflow-hidden">
       <AppSidebar />
       <div className="flex-1 relative">
         <AnimatePresence mode="wait" initial={false}>
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-50"
+            >
+              <LoadingSpinner />
+            </motion.div>
+          )}
           <motion.div
             key={location.pathname}
             variants={pageTransitionVariants}
@@ -63,6 +76,8 @@ const Layout = () => {
             animate="animate"
             exit="exit"
             className="h-full w-full absolute inset-0"
+            onAnimationStart={() => setIsLoading(true)}
+            onAnimationComplete={() => setIsLoading(false)}
           >
             <Outlet />
           </motion.div>
