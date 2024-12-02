@@ -4,13 +4,14 @@ import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { SidebarTrigger } from "./ui/sidebar"
-import { Copy } from "lucide-react"
+import { Copy, RefreshCw } from "lucide-react"
 
 export function MainContent() {
   const { toast } = useToast()
   const [isProcessing, setIsProcessing] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [previewContent, setPreviewContent] = useState("")
+  const [supplementaryInfo, setSupplementaryInfo] = useState("")
 
   const handleError = (error: Error) => {
     toast({
@@ -58,6 +59,16 @@ export function MainContent() {
     }
   }
 
+  const handleReset = () => {
+    setUploadedFiles([])
+    setPreviewContent("")
+    setSupplementaryInfo("")
+    toast({
+      title: "リセット完了",
+      description: "すべての情報を削除しました"
+    })
+  }
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(previewContent)
@@ -92,14 +103,26 @@ export function MainContent() {
             <TextInput 
               label="補足情報"
               placeholder="補足情報を入力してください"
+              value={supplementaryInfo}
+              onChange={(e) => setSupplementaryInfo(e.target.value)}
             />
-            <Button 
-              onClick={handleProcess}
-              disabled={isProcessing}
-              className="w-full bg-[#1E3D59] hover:bg-[#17A2B8]"
-            >
-              {isProcessing ? "生成中..." : "サマリを生成"}
-            </Button>
+            <div className="flex gap-4">
+              <Button 
+                onClick={handleProcess}
+                disabled={isProcessing}
+                className="flex-1 bg-[#1E3D59] hover:bg-[#17A2B8]"
+              >
+                {isProcessing ? "生成中..." : "サマリを生成"}
+              </Button>
+              <Button
+                onClick={handleReset}
+                variant="outline"
+                className="flex-none px-6 border-[#1E3D59] text-[#1E3D59] hover:bg-[#1E3D59] hover:text-white"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                リセット
+              </Button>
+            </div>
           </div>
 
           {/* Preview Column */}
