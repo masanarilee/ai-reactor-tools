@@ -28,7 +28,7 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 209 54% 23%;
+    --border: 209 54% 90%;  /* Changed this line to make the border color lighter */
     --input: 209 54% 23%;
     --ring: 191 78% 41%;
 
