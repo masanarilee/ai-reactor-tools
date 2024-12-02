@@ -29,11 +29,11 @@ const MainContentComponent = () => {
   const location = useLocation()
 
   const menuTitles: { [key: string]: string } = {
-    "/talent-summary": "人材サマリ生成",
-    "/job-summary": "案件サマリ生成",
-    "/counseling": "カウンセリング支援",
-    "/scout": "スカウト文生成",
-    "/": "人材サマリ生成"
+    "/talent-summary": "Talent Summary Generation",
+    "/job-summary": "Job Summary Generation",
+    "/counseling": "Counseling Support",
+    "/scout": "Scout Message Generation",
+    "/": "Talent Summary Generation"
   }
 
   const currentMenuTitle = menuTitles[location.pathname]
@@ -41,7 +41,7 @@ const MainContentComponent = () => {
   const handleError = (error: Error) => {
     toast({
       variant: "destructive",
-      title: "エラーが発生しました",
+      title: "An error occurred",
       description: error.message
     })
   }
@@ -54,8 +54,8 @@ const MainContentComponent = () => {
     if (uploadedFiles.length === 0) {
       toast({
         variant: "destructive",
-        title: "ファイルが必要です",
-        description: "サマリを生成するにはファイルをアップロードしてください"
+        title: "File is required",
+        description: "Please upload a file to generate a summary"
       })
       return
     }
@@ -67,8 +67,8 @@ const MainContentComponent = () => {
       setPreviewContent(summary);
       
       toast({
-        title: "完了",
-        description: "サマリが生成されました"
+        title: "Completed",
+        description: "The summary has been generated"
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -84,8 +84,8 @@ const MainContentComponent = () => {
     setPreviewContent("")
     setSupplementaryInfo("")
     toast({
-      title: "リセット完了",
-      description: "すべての情報を削除しました"
+      title: "Reset completed",
+      description: "All information has been cleared"
     })
   }
 
@@ -93,14 +93,14 @@ const MainContentComponent = () => {
     try {
       await navigator.clipboard.writeText(previewContent)
       toast({
-        title: "コピー完了",
-        description: "内容をクリップボードにコピーしました"
+        title: "Copy completed",
+        description: "Content has been copied to the clipboard"
       })
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "コピーに失敗しました",
-        description: "クリップボードへのアクセスが拒否されました"
+        title: "Copy failed",
+        description: "Access to the clipboard was denied"
       })
     }
   }
@@ -121,7 +121,7 @@ const MainContentComponent = () => {
         </div>
         <Separator className="mb-6" />
         
-        <Suspense fallback={<div className="animate-pulse">読み込み中...</div>}>
+        <Suspense fallback={<div className="animate-pulse">Loading...</div>}>
           <div className="grid lg:grid-cols-2 gap-8 mt-8">
             {/* Input Column */}
             <motion.div
@@ -132,7 +132,7 @@ const MainContentComponent = () => {
             >
               <div>
                 <div className="h-[60px] flex items-center">
-                  <h3 className="text-lg font-medium text-[#1E3D59]">ファイルアップロード</h3>
+                  <h3 className="text-lg font-medium text-[#1E3D59]">File Upload</h3>
                 </div>
                 <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 bg-gray-50">
                   <FileUploader 
@@ -143,10 +143,10 @@ const MainContentComponent = () => {
                 </div>
               </div>
               <div className="space-y-6">
-                <h3 className="text-lg font-medium text-[#1E3D59] mb-4">補足情報</h3>
+                <h3 className="text-lg font-medium text-[#1E3D59] mb-4">Supplementary Information</h3>
                 <TextInput 
                   label=""
-                  placeholder="補足情報を入力してください"
+                  placeholder="Please enter supplementary information"
                   value={supplementaryInfo}
                   onChange={(e) => setSupplementaryInfo(e.target.value)}
                 />
@@ -158,7 +158,7 @@ const MainContentComponent = () => {
                     disabled={isProcessing}
                     className="flex-1 bg-[#1E3D59] hover:bg-[#17A2B8]"
                   >
-                    {isProcessing ? "生成中..." : "サマリを生成"}
+                    {isProcessing ? "Generating..." : "Generate Summary"}
                   </Button>
                   <Button
                     onClick={handleReset}
@@ -166,7 +166,7 @@ const MainContentComponent = () => {
                     className="flex-none px-6 border-[#1E3D59] text-[#1E3D59] hover:bg-[#1E3D59] hover:text-white"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
-                    リセット
+                    Reset
                   </Button>
                 </div>
               </div>
@@ -180,7 +180,7 @@ const MainContentComponent = () => {
               className="bg-white p-10 rounded-lg shadow-sm"
             >
               <div className="h-[60px] flex items-center justify-between">
-                <h3 className="text-lg font-medium text-[#1E3D59]">プレビュー</h3>
+                <h3 className="text-lg font-medium text-[#1E3D59]">Preview</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -188,11 +188,11 @@ const MainContentComponent = () => {
                   className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
                 >
                   <Copy className="w-4 h-4 mr-2" />
-                  コピー
+                  Copy
                 </Button>
               </div>
               <div className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed">
-                {previewContent || "生成されたサマリがここに表示されます"}
+                {previewContent || "The generated summary will be displayed here"}
               </div>
             </motion.div>
           </div>
