@@ -99,7 +99,7 @@ export function MainContent() {
           {/* Input Column */}
           <div className="space-y-8 bg-white p-8 rounded-lg shadow-sm">
             <div>
-              <h3 className="text-xl font-medium text-[#1E3D59] mb-4">ファイルアップロード</h3>
+              <h3 className="text-lg font-medium text-[#1E3D59] mb-4">ファイルアップロード</h3>
               <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 bg-gray-50">
                 <FileUploader 
                   onError={handleError}
@@ -109,8 +109,9 @@ export function MainContent() {
               </div>
             </div>
             <div className="space-y-6">
+              <h3 className="text-lg font-medium text-[#1E3D59] mb-4">補足情報</h3>
               <TextInput 
-                label="補足情報"
+                label=""
                 placeholder="補足情報を入力してください"
                 value={supplementaryInfo}
                 onChange={(e) => setSupplementaryInfo(e.target.value)}
