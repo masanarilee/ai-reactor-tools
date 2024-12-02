@@ -59,6 +59,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        sidebar: {
+          DEFAULT: "#F0F8FF",  // Very light blue color
+          foreground: "#1E293B",
+          border: "#E2E8F0",
+          accent: "#EDF2F7",
+          "accent-foreground": "#1E293B"
+        }
       },
       keyframes: {
         'bounce-dot': {
