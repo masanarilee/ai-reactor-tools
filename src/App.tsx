@@ -25,18 +25,29 @@ const queryClient = new QueryClient({
 const pageTransitionVariants = {
   initial: { 
     opacity: 0,
-    y: 10,
-    scale: 0.99
+    y: 5,
+    scale: 0.995
   },
   animate: { 
     opacity: 1,
     y: 0,
-    scale: 1
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 380,
+      damping: 30,
+      mass: 0.1,
+      velocity: 2
+    }
   },
   exit: { 
     opacity: 0,
-    y: -10,
-    scale: 0.99
+    y: -5,
+    scale: 0.995,
+    transition: {
+      duration: 0.1,
+      ease: "easeOut"
+    }
   },
 };
 
@@ -55,12 +66,6 @@ const Layout = () => {
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ 
-              type: "spring",
-              stiffness: 350,
-              damping: 35,
-              duration: 0.15
-            }}
             className="h-full w-full absolute inset-0"
           >
             <Outlet />
