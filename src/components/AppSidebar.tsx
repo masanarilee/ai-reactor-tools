@@ -13,7 +13,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger
+  SidebarTrigger,
+  useSidebar
 } from "@/components/ui/sidebar"
 
 const menuItems = [
@@ -40,23 +41,26 @@ const menuItems = [
 ]
 
 export function AppSidebar() {
+  const { state } = useSidebar();
+  
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <div className="flex items-center justify-between px-4 py-3">
+          <div className={`flex items-center px-4 py-3 ${state === 'collapsed' ? 'hidden' : ''}`}>
             <span className="text-3xl font-bold font-['Gotham']">
               <span className="text-[#1E3D59]">Biz</span>
               <span className="text-[#17A2B8]">Assist</span>
             </span>
+            <SidebarTrigger className="ml-2" />
           </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-base py-8">
-                      <item.icon className="w-10 h-10" />
+                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-lg py-8">
+                      <item.icon className="w-12 h-12" />
                       <span className="ml-4">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
