@@ -9,7 +9,6 @@ interface AIGenerationVisualizerProps {
 
 const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGenerating }) => {
   const [particles, setParticles] = useState<Array<{ x: number; y: number; size: number; color: string }>>([])
-  const [percentage, setPercentage] = useState(0)
   const spinnerControls = useAnimation()
   const textControls = useAnimation()
   const centerElementControls = useAnimation()
@@ -18,11 +17,6 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
 
   useEffect(() => {
     if (isGenerating) {
-      // Random percentage update - now every 0.1 seconds
-      const percentageInterval = setInterval(() => {
-        setPercentage(Math.floor(Math.random() * 99) + 1) // 1-99
-      }, 100) // Changed from 800 to 100 (0.1 seconds)
-
       const interval = setInterval(() => {
         setParticles(prevParticles => {
           const newParticle = generateParticle()
@@ -48,11 +42,9 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
 
       return () => {
         clearInterval(interval)
-        clearInterval(percentageInterval)
       }
     } else {
       setParticles([])
-      setPercentage(0)
     }
   }, [isGenerating, spinnerControls, textControls, centerElementControls])
 
@@ -132,15 +124,15 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
               ))}
             </motion.g>
             
-            {/* Percentage Text */}
+            {/* Center Text */}
             <text
               x="50"
               y="50"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="text-4xl font-bold fill-[#1E3D59]"
+              className="text-2xl font-bold fill-[#1E3D59]"
             >
-              {percentage}%
+              Generating...
             </text>
           </svg>
 
@@ -169,7 +161,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
           </div>
         </div>
 
-        {/* Generating Text - Now with larger size and proper spacing */}
+        {/* Bottom Text */}
         <motion.div
           ref={textRef}
           className="text-5xl font-bold whitespace-nowrap mt-8"
