@@ -48,23 +48,23 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <div className={`flex items-center px-4 py-3 ${state === 'collapsed' ? 'hidden' : ''}`}>
-            <span className="text-3xl font-bold font-['Gotham']">
+            <span className="text-4xl font-bold font-['Gotham']">
               <span className="text-[#1E3D59]">Biz</span>
               <span className="text-[#17A2B8]">Assist</span>
             </span>
-            <SidebarTrigger className="ml-2" />
+            <SidebarTrigger className="ml-2 scale-125" />
           </div>
           <div className={`flex justify-center py-2 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
-            <SidebarTrigger />
+            <SidebarTrigger className="scale-125" />
           </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-2xl py-10">
-                      <item.icon className="w-16 h-16" />
-                      <span className="ml-4">{item.title}</span>
+                    <a href={item.path} className="text-[#1E3D59] hover:text-[#17A2B8] text-2xl py-12">
+                      <item.icon className="w-20 h-20" />
+                      <span className="ml-4 text-3xl">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
