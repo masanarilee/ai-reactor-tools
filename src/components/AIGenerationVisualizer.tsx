@@ -135,7 +135,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
               }}
               animate={textControls}
             >
-              生成中...
+              Generating...
             </motion.div>
             {particles.map((particle, index) => (
               <motion.div
