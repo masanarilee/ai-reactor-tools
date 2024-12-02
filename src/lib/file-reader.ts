@@ -3,7 +3,7 @@ import * as mammoth from 'mammoth';
 import * as pdfjsLib from 'pdfjs-dist';
 
 // Initialize pdf.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'node_modules/pdfjs-dist/build/pdf.worker.min.js';
 
 export const readFileContent = async (file: File): Promise<string> => {
   try {
@@ -19,7 +19,8 @@ export const readFileContent = async (file: File): Promise<string> => {
           data: arrayBuffer,
           useWorkerFetch: false,
           isEvalSupported: false,
-          useSystemFonts: true
+          useSystemFonts: true,
+          standardFontDataUrl: 'node_modules/pdfjs-dist/standard_fonts/'
         }).promise;
         
         let fullText = '';
