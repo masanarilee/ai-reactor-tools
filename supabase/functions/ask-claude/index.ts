@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt } = await req.json()
+    const { prompt, file } = await req.json()
     
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -24,7 +24,21 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'claude-3-opus-20240229',
         max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
+        messages: [
+          { 
+            role: 'user', 
+            content: [
+              {
+                type: 'text',
+                text: prompt
+              },
+              {
+                type: 'file',
+                file_id: file
+              }
+            ]
+          }
+        ]
       })
     });
 

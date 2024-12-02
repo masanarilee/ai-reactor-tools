@@ -1,13 +1,17 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
 
-export async function generateTalentSummary(fileContent: string, supplementaryInfo: string) {
+export async function generateTalentSummary(file: File, supplementaryInfo: string) {
   try {
-    console.log('Generating summary with content length:', fileContent.length);
+    console.log('Generating summary for file:', file.name);
     
-    if (!fileContent || fileContent.trim().length === 0) {
-      throw new Error('経歴書の内容を読み取れませんでした');
+    if (!file) {
+      throw new Error('ファイルが見つかりません');
     }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('supplementaryInfo', supplementaryInfo);
 
     const prompt = `
 以下の経歴書と補足情報から、人材サマリを生成してください。
@@ -19,15 +23,12 @@ export async function generateTalentSummary(fileContent: string, supplementaryIn
 - 強み
 - 特記事項
 
-経歴書：
-${fileContent}
-
 補足情報：
 ${supplementaryInfo}
 `
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
-      body: { prompt }
+      body: { prompt, file }
     })
 
     if (error) {
