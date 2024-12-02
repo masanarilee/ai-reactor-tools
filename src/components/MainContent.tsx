@@ -75,15 +75,15 @@ export function MainContent() {
   }
 
   return (
-    <main className="flex-1 p-6 bg-gray-50">
+    <main className="flex-1 p-6 bg-gray-50 min-h-screen">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-6">
           <SidebarTrigger className="lg:hidden" />
         </div>
         
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-8">
           {/* Input Column */}
-          <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm">
+          <div className="space-y-8 bg-white p-8 rounded-lg shadow-sm">
             <FileUploader 
               onError={handleError}
               onSuccess={handleFileUploadSuccess}
@@ -103,9 +103,9 @@ export function MainContent() {
           </div>
 
           {/* Preview Column */}
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium text-[#1E3D59]">プレビュー</h3>
+          <div className="bg-white p-8 rounded-lg shadow-sm">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-medium text-[#1E3D59]">プレビュー</h3>
               <Button
                 variant="outline"
                 size="sm"
@@ -116,7 +116,7 @@ export function MainContent() {
                 コピー
               </Button>
             </div>
-            <div className="min-h-[400px] p-4 bg-gray-50 rounded border border-gray-200 font-mono text-sm">
+            <div className="min-h-[600px] p-6 bg-gray-50 rounded border border-gray-200 font-mono text-sm">
               {previewContent || "生成されたサマリがここに表示されます"}
             </div>
           </div>
