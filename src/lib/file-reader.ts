@@ -2,8 +2,8 @@ import * as XLSX from 'xlsx';
 import * as mammoth from 'mammoth';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Initialize pdf.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'node_modules/pdfjs-dist/build/pdf.worker.min.js';
+// Initialize pdf.js worker with a CDN URL that's known to work
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 export const readFileContent = async (file: File): Promise<string> => {
   try {
@@ -17,10 +17,9 @@ export const readFileContent = async (file: File): Promise<string> => {
       try {
         const pdf = await pdfjsLib.getDocument({
           data: arrayBuffer,
-          useWorkerFetch: false,
-          isEvalSupported: false,
-          useSystemFonts: true,
-          standardFontDataUrl: 'node_modules/pdfjs-dist/standard_fonts/'
+          useWorkerFetch: true,
+          isEvalSupported: true,
+          useSystemFonts: true
         }).promise;
         
         let fullText = '';
