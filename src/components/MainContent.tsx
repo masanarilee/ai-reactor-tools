@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { SidebarTrigger } from "./ui/sidebar"
 import { Copy, RefreshCw } from "lucide-react"
+import { AIGenerationVisualizer } from "./AIGenerationVisualizer"
 
 export function MainContent() {
   const { toast } = useToast()
@@ -149,6 +150,9 @@ export function MainContent() {
           </div>
         </div>
       </div>
+
+      {/* Loading Indicator */}
+      {isProcessing && <AIGenerationVisualizer isGenerating={isProcessing} />}
     </main>
   )
 }
