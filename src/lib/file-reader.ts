@@ -5,7 +5,7 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 
 // Initialize pdf.js worker
 if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsLib.getDocument.workerSrc || `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
 }
 
 export const readFileContent = async (file: File): Promise<string> => {
