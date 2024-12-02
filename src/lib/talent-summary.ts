@@ -5,6 +5,10 @@ export async function generateTalentSummary(fileContent: string, supplementaryIn
   try {
     console.log('Generating summary with content length:', fileContent.length);
     
+    if (!fileContent || fileContent.trim().length === 0) {
+      throw new Error('経歴書の内容を読み取れませんでした');
+    }
+
     const prompt = `
 以下の経歴書と補足情報から、人材サマリを生成してください。
 できるだけ具体的な情報を含め、以下の項目に分けて記載してください：
@@ -36,7 +40,7 @@ ${supplementaryInfo}
 
   } catch (error) {
     console.error('Error generating summary:', error);
-    toast.error("サマリの生成に失敗しました。");
+    toast.error("サマリの生成に失敗しました。" + (error as Error).message);
     throw error;
   }
 }

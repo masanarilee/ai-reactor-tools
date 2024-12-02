@@ -1,36 +1,62 @@
-export const readFileContent = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    
-    reader.onload = (event) => {
-      if (event.target?.result) {
-        console.log('File type:', file.type);
-        console.log('File name:', file.name);
-        console.log('File content preview:', 
-          typeof event.target.result === 'string' 
-            ? event.target.result.substring(0, 100) 
-            : 'Binary content'
-        );
-        
-        // For now, return the raw content
-        resolve(event.target.result as string);
-      } else {
-        reject(new Error('ファイルの読み込みに失敗しました'));
-      }
-    };
-    
-    reader.onerror = () => {
-      console.error('File reading error:', reader.error);
-      reject(new Error('ファイルの読み込みに失敗しました'));
-    };
+import * as XLSX from 'xlsx';
+import * as mammoth from 'mammoth';
+import * as pdfParse from 'pdf-parse';
 
-    // PDFやWord文書の場合はバイナリとして読み込む
-    if (file.type === 'application/pdf' || 
-        file.type === 'application/msword' || 
-        file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-      reader.readAsArrayBuffer(file);
-    } else {
-      reader.readAsText(file);
+export const readFileContent = async (file: File): Promise<string> => {
+  try {
+    console.log('Reading file:', file.name);
+    console.log('File type:', file.type);
+
+    // PDFファイルの処理
+    if (file.type === 'application/pdf') {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfData = await pdfParse(new Uint8Array(arrayBuffer));
+      console.log('PDF content length:', pdfData.text.length);
+      return pdfData.text;
     }
-  });
+
+    // Excelファイルの処理
+    if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.type === 'application/vnd.ms-excel') {
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const text = XLSX.utils.sheet_to_txt(worksheet);
+      console.log('Excel content length:', text.length);
+      return text;
+    }
+
+    // Word文書の処理
+    if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        file.type === 'application/msword') {
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.extractRawText({ arrayBuffer });
+      console.log('Word content length:', result.value.length);
+      return result.value;
+    }
+
+    // その他のテキストファイル
+    const text = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          resolve(event.target.result as string);
+        } else {
+          reject(new Error('ファイルの読み込みに失敗しました'));
+        }
+      };
+      reader.onerror = () => {
+        console.error('File reading error:', reader.error);
+        reject(new Error('ファイルの読み込みに失敗しました'));
+      };
+      reader.readAsText(file);
+    });
+
+    console.log('Text content length:', text.length);
+    return text;
+
+  } catch (error) {
+    console.error('Error reading file:', error);
+    throw new Error('ファイルの読み込みに失敗しました: ' + (error as Error).message);
+  }
 };
