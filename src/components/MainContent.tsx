@@ -115,9 +115,9 @@ const MainContentComponent = () => {
       animate="animate"
       exit="exit"
       transition={{ duration: 0.2 }}
-      className="flex-1 p-6 bg-gray-50 min-h-screen"
+      className="flex-1 p-6 bg-gray-50 min-h-screen w-full"
     >
-      <div className="container mx-auto">
+      <div className="container mx-auto max-w-7xl">
         <div className="flex items-center justify-between mb-2">
           <SidebarTrigger className="lg:hidden" />
           <h1 className="text-2xl font-bold text-[#1E3D59] ml-4">{currentMenuTitle}</h1>

@@ -53,7 +53,7 @@ export function AppSidebar() {
   const location = useLocation();
   
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="border-r border-gray-200">
       <SidebarContent>
         <SidebarGroup>
           <div className={`flex items-center justify-between px-3 py-2 mb-6 ${state === 'collapsed' ? 'hidden' : ''}`}>
@@ -77,7 +77,7 @@ export function AppSidebar() {
                         text-[#1E3D59] hover:text-[#17A2B8] text-base py-8 font-['Noto Sans JP'] tracking-wide 
                         transition-all duration-300 ease-in-out hover:bg-[#F8FAFC] rounded-lg hover:scale-[1.02] 
                         hover:shadow-sm relative group
-                        ${location.pathname === item.path ? 'bg-[#F8FAFC] text-[#17A2B8] shadow-sm scale-[1.02]' : ''}
+                        ${location.pathname === item.path ? 'bg-[#F8FAFC] text-[#17A2B8] shadow-md scale-[1.02] border-l-4 border-[#17A2B8]' : ''}
                         ${index === 0 ? 'mt-4' : ''}
                       `}
                     >
