@@ -1,3 +1,5 @@
+'use client'
+
 import { FileUploader } from "./FileUploader"
 import { TextInput } from "./TextInput"
 import { useToast } from "@/components/ui/use-toast"
@@ -5,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { SidebarTrigger } from "./ui/sidebar"
 import { Copy, RefreshCw } from "lucide-react"
-import { AIGenerationVisualizer } from "./AIGenerationVisualizer"
+import AIGenerationVisualizer from "./AIGenerationVisualizer"
 
 export function MainContent() {
   const { toast } = useToast()
