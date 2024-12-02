@@ -2,15 +2,15 @@ import { FileUploader } from "./FileUploader"
 import { TextInput } from "./TextInput"
 import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import ChatInterface from "./ChatInterface"
 import { useState } from "react"
 import { SidebarTrigger } from "./ui/sidebar"
+import { Copy } from "lucide-react"
 
 export function MainContent() {
   const { toast } = useToast()
   const [isProcessing, setIsProcessing] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  const [previewContent, setPreviewContent] = useState("")
 
   const handleError = (error: Error) => {
     toast({
@@ -41,7 +41,9 @@ export function MainContent() {
         description: "サマリを生成しています..."
       })
       
+      // Simulate processing
       await new Promise(resolve => setTimeout(resolve, 1000))
+      setPreviewContent("生成されたサマリの内容がここに表示されます。")
       
       toast({
         title: "完了",
@@ -56,6 +58,22 @@ export function MainContent() {
     }
   }
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(previewContent)
+      toast({
+        title: "コピー完了",
+        description: "内容をクリップボードにコピーしました"
+      })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "コピーに失敗しました",
+        description: "クリップボードへのアクセスが拒否されました"
+      })
+    }
+  }
+
   return (
     <main className="flex-1 p-6 bg-gray-50">
       <div className="container mx-auto">
@@ -63,48 +81,46 @@ export function MainContent() {
           <SidebarTrigger className="lg:hidden" />
         </div>
         
-        <Tabs defaultValue="talent" className="space-y-6">
-          <TabsList className="bg-white border border-[#1E3D59]/10">
-            <TabsTrigger value="talent" className="text-[#1E3D59] data-[state=active]:bg-[#17A2B8]/10">人材サマリ生成</TabsTrigger>
-            <TabsTrigger value="job" className="text-[#1E3D59] data-[state=active]:bg-[#17A2B8]/10">案件サマリ生成</TabsTrigger>
-            <TabsTrigger value="counseling" className="text-[#1E3D59] data-[state=active]:bg-[#17A2B8]/10">カウンセリング支援</TabsTrigger>
-            <TabsTrigger value="scout" className="text-[#1E3D59] data-[state=active]:bg-[#17A2B8]/10">スカウト文生成</TabsTrigger>
-          </TabsList>
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Input Column */}
+          <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm">
+            <FileUploader 
+              onError={handleError}
+              onSuccess={handleFileUploadSuccess}
+              acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
+            />
+            <TextInput 
+              label="補足情報"
+              placeholder="補足情報を入力してください"
+            />
+            <Button 
+              onClick={handleProcess}
+              disabled={isProcessing}
+              className="w-full bg-[#1E3D59] hover:bg-[#17A2B8]"
+            >
+              {isProcessing ? "生成中..." : "サマリを生成"}
+            </Button>
+          </div>
 
-          {["talent", "job", "counseling", "scout"].map((tab) => (
-            <TabsContent key={tab} value={tab} className="space-y-6">
-              <div className="grid lg:grid-cols-2 gap-6">
-                {/* Input Column */}
-                <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm">
-                  <FileUploader 
-                    onError={handleError}
-                    onSuccess={handleFileUploadSuccess}
-                    acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-                  />
-                  <TextInput 
-                    label="補足情報"
-                    placeholder={`${tab === 'talent' ? '面談メモや補足情報' : 
-                                 tab === 'job' ? '案件に関する補足情報' :
-                                 tab === 'counseling' ? 'カウンセリングに関する補足情報' :
-                                 'スカウトに関する補足情報'}を入力してください`}
-                  />
-                  <Button 
-                    onClick={handleProcess}
-                    disabled={isProcessing}
-                    className="w-full bg-[#1E3D59] hover:bg-[#17A2B8]"
-                  >
-                    {isProcessing ? "生成中..." : "サマリを生成"}
-                  </Button>
-                </div>
-
-                {/* Output Column */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
-                  <ChatInterface />
-                </div>
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+          {/* Preview Column */}
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium text-[#1E3D59]">プレビュー</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleCopy}
+                className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                コピー
+              </Button>
+            </div>
+            <div className="min-h-[400px] p-4 bg-gray-50 rounded border border-gray-200 font-mono text-sm">
+              {previewContent || "生成されたサマリがここに表示されます"}
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   )
