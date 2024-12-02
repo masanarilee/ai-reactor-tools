@@ -2,11 +2,8 @@ import * as XLSX from 'xlsx';
 import * as mammoth from 'mammoth';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Initialize pdf.js worker using the bundled worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url,
-).toString();
+// Initialize pdf.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
 
 export const readFileContent = async (file: File): Promise<string> => {
   try {
@@ -16,21 +13,33 @@ export const readFileContent = async (file: File): Promise<string> => {
     // PDFファイルの処理
     if (file.type === 'application/pdf') {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      let fullText = '';
       
-      // Extract text from all pages
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items
-          .map((item: any) => item.str)
-          .join(' ');
-        fullText += pageText + '\n';
+      try {
+        const pdf = await pdfjsLib.getDocument({
+          data: arrayBuffer,
+          useWorkerFetch: false,
+          isEvalSupported: false,
+          useSystemFonts: true
+        }).promise;
+        
+        let fullText = '';
+        
+        // Extract text from all pages
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items
+            .map((item: any) => item.str)
+            .join(' ');
+          fullText += pageText + '\n';
+        }
+        
+        console.log('PDF content length:', fullText.length);
+        return fullText;
+      } catch (pdfError) {
+        console.error('PDF processing error:', pdfError);
+        throw new Error('PDFファイルの処理中にエラーが発生しました: ' + (pdfError as Error).message);
       }
-      
-      console.log('PDF content length:', fullText.length);
-      return fullText;
     }
 
     // Excelファイルの処理
