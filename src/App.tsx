@@ -18,6 +18,7 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: Infinity,
       refetchOnWindowFocus: false,
+      cacheTime: 1000 * 60 * 60 * 24, // 24時間のキャッシュ
     },
   },
 });
