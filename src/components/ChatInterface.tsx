@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Message from './Message';
 import MessageInput from './MessageInput';
 import LoadingDots from './LoadingDots';
+import { askClaude } from '@/lib/claude';
 
 interface ChatMessage {
   content: string;
@@ -13,15 +14,13 @@ const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendMessage = async (content: string) => {
-    // ユーザーメッセージを追加
     setMessages(prev => [...prev, { content, isAi: false }]);
     setIsLoading(true);
 
     try {
-      // ここにAI応答の処理を実装
-      await new Promise(resolve => setTimeout(resolve, 1000)); // デモ用の遅延
+      const response = await askClaude(content);
       setMessages(prev => [...prev, {
-        content: "申し訳ありませんが、現在AIモデルは接続されていません。",
+        content: response,
         isAi: true
       }]);
     } catch (error) {
