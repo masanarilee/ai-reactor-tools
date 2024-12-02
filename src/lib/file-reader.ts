@@ -5,7 +5,11 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 
 // Initialize pdf.js worker
 if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
+  const pdfjsWorker = new URL(
+    'pdfjs-dist/build/pdf.worker.min.js',
+    import.meta.url
+  );
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker.toString();
 }
 
 export const readFileContent = async (file: File): Promise<string> => {
