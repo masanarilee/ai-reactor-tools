@@ -9,9 +9,41 @@ interface FileUploaderProps {
 
 export function FileUploader({ onError, acceptedFileTypes }: FileUploaderProps) {
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    // ファイルアップロード処理をここに実装
-    console.log(acceptedFiles)
-  }, [])
+    try {
+      if (acceptedFiles.length === 0) {
+        throw new Error("ファイルが選択されていません")
+      }
+
+      // ファイルサイズチェック (10MB制限)
+      const maxSize = 10 * 1024 * 1024 // 10MB
+      const oversizedFiles = acceptedFiles.filter(file => file.size > maxSize)
+      if (oversizedFiles.length > 0) {
+        throw new Error("ファイルサイズは10MB以下にしてください")
+      }
+
+      // ファイル形式チェック
+      const invalidFiles = acceptedFiles.filter(file => {
+        const fileExtension = file.name.split('.').pop()?.toLowerCase()
+        return !acceptedFileTypes.some(type => 
+          type.toLowerCase().includes(fileExtension || '')
+        )
+      })
+      if (invalidFiles.length > 0) {
+        throw new Error(`対応していないファイル形式です: ${invalidFiles.map(f => f.name).join(', ')}`)
+      }
+
+      console.log("アップロードされたファイル:", acceptedFiles)
+      // TODO: ここでファイルを処理する
+      // 例: APIにアップロード、ローカルで解析など
+
+    } catch (error) {
+      if (error instanceof Error) {
+        onError(error)
+      } else {
+        onError(new Error("ファイルアップロード中にエラーが発生しました"))
+      }
+    }
+  }, [acceptedFileTypes, onError])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
