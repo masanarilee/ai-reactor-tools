@@ -9,6 +9,7 @@ import JobSummary from "./pages/JobSummary"
 import Counseling from "./pages/Counseling"
 import CompanyAnalysis from "./pages/CompanyAnalysis"
 import Scout from "./pages/Scout"
+import TopPage from "./pages/TopPage"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,8 +28,8 @@ function App() {
           <SidebarProvider defaultOpen>
             <div className="flex min-h-screen w-full">
               <Routes>
+                <Route path="/" element={<TopPage />} />
                 <Route element={<RootLayout />}>
-                  <Route path="/" element={<Navigate to="/talent-summary" replace />} />
                   <Route path="/talent-summary" element={<TalentSummary />} />
                   <Route path="/job-summary" element={<JobSummary />} />
                   <Route path="/counseling" element={<Counseling />} />
