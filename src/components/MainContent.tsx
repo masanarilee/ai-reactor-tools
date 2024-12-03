@@ -18,12 +18,12 @@ const contentVariants = {
 }
 
 const menuTitles: { [key: string]: string } = {
-  "/talent-summary": "人材サマリー生成",
-  "/job-summary": "求人サマリー生成",
+  "/talent-summary": "人材サマリ生成",
+  "/job-summary": "求人サマリ生成",
   "/counseling": "カウンセリングサポート",
   "/scout": "スカウトメッセージ生成",
   "/company-analysis": "企業分析",
-  "/": "人材サマリー生成"
+  "/": "人材サマリ生成"
 }
 
 const MainContentComponent = () => {
