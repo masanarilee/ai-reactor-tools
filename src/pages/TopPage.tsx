@@ -28,9 +28,12 @@ const TopPage = () => {
           onClick={() => navigate("/talent-summary")}
           className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
-            flex items-center gap-4 rounded-xl group"
+            flex items-center gap-4 rounded-xl group relative"
         >
-          人材要約
+          <span className="relative">
+            人材サマリ生成
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
+          </span>
           <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
@@ -38,9 +41,12 @@ const TopPage = () => {
           onClick={() => navigate("/job-summary")}
           className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
-            flex items-center gap-4 rounded-xl group"
+            flex items-center gap-4 rounded-xl group relative"
         >
-          求人要約
+          <span className="relative">
+            案件サマリ生成
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
+          </span>
           <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
@@ -48,9 +54,12 @@ const TopPage = () => {
           onClick={() => navigate("/counseling")}
           className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
-            flex items-center gap-4 rounded-xl group"
+            flex items-center gap-4 rounded-xl group relative"
         >
-          カウンセリング
+          <span className="relative">
+            カウンセリング支援
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
+          </span>
           <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
@@ -58,9 +67,12 @@ const TopPage = () => {
           onClick={() => navigate("/company-analysis")}
           className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
-            flex items-center gap-4 rounded-xl group"
+            flex items-center gap-4 rounded-xl group relative"
         >
-          企業分析
+          <span className="relative">
+            企業分析
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
+          </span>
           <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
@@ -68,9 +80,12 @@ const TopPage = () => {
           onClick={() => navigate("/scout")}
           className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
-            flex items-center gap-4 rounded-xl group"
+            flex items-center gap-4 rounded-xl group relative"
         >
-          スカウト
+          <span className="relative">
+            スカウト文生成
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
+          </span>
           <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
       </div>
