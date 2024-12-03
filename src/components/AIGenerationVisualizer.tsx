@@ -88,7 +88,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="absolute inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
       <div className="relative p-8 rounded-lg">
         <div ref={containerRef} className="relative w-[20rem] h-[20rem]">
