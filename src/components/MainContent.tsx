@@ -23,9 +23,9 @@ const MainContentComponent = ({ title, children }: MainContentProps) => {
       animate="animate"
       exit="exit"
       transition={{ duration: 0.2 }}
-      className="flex-1 p-6 bg-gray-50 min-h-screen w-full"
+      className="flex-1 p-4 md:p-6 bg-gray-50 min-h-screen w-full"
     >
-      <div className="w-full px-4">
+      <div className="w-full">
         <PageHeader title={title} />
         {children}
       </div>
