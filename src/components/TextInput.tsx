@@ -12,7 +12,7 @@ interface TextInputProps {
 export function TextInput({ label, placeholder, value, onChange, align = 'center' }: TextInputProps) {
   return (
     <div className={`space-y-2 ${align === 'left' ? 'text-left' : 'text-center'}`}>
-      <Label>{label}</Label>
+      <Label className="text-base font-medium text-[#1E3D59]">{label}</Label>
       <Textarea 
         placeholder={placeholder}
         className="min-h-[100px] bg-white"
