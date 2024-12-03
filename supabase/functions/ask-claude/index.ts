@@ -24,6 +24,7 @@ serve(async (req) => {
       throw new Error('CLAUDE_API_KEY environment variable is not set')
     }
 
+    console.log('Making request to Claude API...')
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -35,7 +36,7 @@ serve(async (req) => {
         model: 'claude-3-opus-20240229',
         max_tokens: 4000,
         messages: [
-          { 
+          {
             role: 'user',
             content: prompt
           }
@@ -45,12 +46,12 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorData = await response.text()
-      console.error('Claude API error:', errorData)
+      console.error('Claude API error response:', errorData)
       throw new Error(`Claude API request failed: ${response.status}`)
     }
 
     const data = await response.json()
-    console.log('Claude API response received')
+    console.log('Claude API response received successfully')
 
     return new Response(
       JSON.stringify({ text: data.content[0].text }),
