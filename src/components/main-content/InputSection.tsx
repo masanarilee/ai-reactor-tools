@@ -32,15 +32,15 @@ export const InputSection = ({
 
   return (
     <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-sm">
-      <div className="text-left">
-        <h3 className="text-lg font-medium text-[#1E3D59] mb-4">経歴書アップロード</h3>
-        <FileUploader 
-          onError={handleError} 
-          onSuccess={handleFileUploadSuccess}
-          acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-          resetTrigger={resetTrigger}
-        />
+      <div className="text-left h-[60px] flex items-center">
+        <h3 className="text-base font-medium text-[#1E3D59]">経歴書アップロード</h3>
       </div>
+      <FileUploader 
+        onError={handleError} 
+        onSuccess={handleFileUploadSuccess}
+        acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
+        resetTrigger={resetTrigger}
+      />
       <TextInput
         label="面談メモ"
         value={supplementaryInfo}
