@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <QueryClientProvider client={queryClient}>
         <Router>
           <SidebarProvider>
