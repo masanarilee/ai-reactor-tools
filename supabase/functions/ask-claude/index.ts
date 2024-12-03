@@ -29,8 +29,8 @@ serve(async (req) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
         model: 'claude-3-opus-20240229',
@@ -47,11 +47,15 @@ serve(async (req) => {
     if (!response.ok) {
       const errorData = await response.text()
       console.error('Claude API error response:', errorData)
-      throw new Error(`Claude API request failed: ${response.status}`)
+      throw new Error(`Claude API request failed: ${response.status} - ${errorData}`)
     }
 
     const data = await response.json()
     console.log('Claude API response received successfully')
+
+    if (!data.content || !data.content[0] || !data.content[0].text) {
+      throw new Error('Unexpected response format from Claude API')
+    }
 
     return new Response(
       JSON.stringify({ text: data.content[0].text }),
