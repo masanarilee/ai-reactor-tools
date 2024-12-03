@@ -24,14 +24,16 @@ export const AppSidebar = memo(function AppSidebar() {
           <div className="flex flex-col px-3 py-2 mb-6">
             <div className="flex items-center justify-between">
               <SidebarLogo state={state} />
-              <div className="flex items-center justify-center w-8">
-                <SidebarTrigger className="scale-90" />
+              <div className="flex items-center justify-center w-8 h-8">
+                <SidebarTrigger 
+                  className="scale-90 hover:bg-sidebar-hover-bg transition-colors duration-200" 
+                />
               </div>
             </div>
             <Separator className="mt-4" />
           </div>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="px-2">
               {MENU_ITEMS.map((item, index) => (
                 <SidebarMenuItemComponent 
                   key={item.path} 

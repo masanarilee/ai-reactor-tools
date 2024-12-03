@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { MenuItem } from "./types"
 import {
   SidebarMenuItem as BaseSidebarMenuItem,
-  SidebarMenuButton
+  SidebarMenuButton,
+  useSidebar
 } from "@/components/ui/sidebar"
 
 interface SidebarMenuItemProps {
@@ -17,12 +18,14 @@ export const SidebarMenuItemComponent = memo(function SidebarMenuItemComponent({
 }: SidebarMenuItemProps) {
   const location = useLocation()
   const navigate = useNavigate()
+  const { setOpenMobile } = useSidebar()
   const isActive = location.pathname === item.path
   
   const handleClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
     navigate(item.path)
-  }, [navigate, item.path])
+    setOpenMobile(false) // Close mobile menu after navigation
+  }, [navigate, item.path, setOpenMobile])
   
   return (
     <BaseSidebarMenuItem>
@@ -38,15 +41,16 @@ export const SidebarMenuItemComponent = memo(function SidebarMenuItemComponent({
             hover:shadow-sm relative group
             ${isActive ? 'bg-sidebar-hover-bg text-[#17A2B8] shadow-md scale-[1.02] border-l-4 border-[#17A2B8]' : ''}
             ${index === 0 ? 'mt-4' : ''}
+            md:py-6 py-4 w-full flex items-center px-4
           `}
         >
           <item.icon 
             className={`
-              w-38 h-38 transition-transform duration-300 
+              w-6 h-6 transition-transform duration-300 flex-shrink-0
               ${isActive ? 'text-[#17A2B8] scale-110' : 'text-[#1E3D59] group-hover:text-[#17A2B8] group-hover:scale-110'}
             `} 
           />
-          <span className="ml-4 text-base relative">
+          <span className="ml-4 text-base relative whitespace-nowrap">
             {item.title}
             <span 
               className={`absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left ${
