@@ -37,7 +37,7 @@ async function readExcelContent(file: File): Promise<string> {
   workbook.SheetNames.forEach(sheetName => {
     const worksheet = workbook.Sheets[sheetName];
     text += `Sheet: ${sheetName}\n`;
-    text += XLSX.utils.sheet_to_string(worksheet, { header: 1 }) + '\n\n';
+    text += XLSX.utils.sheet_to_csv(worksheet) + '\n\n';
   });
 
   return text;
