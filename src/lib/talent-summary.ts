@@ -155,8 +155,3 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
     throw error;
   }
 }
-
-async function readFileContent(file: File): Promise<string> {
-  const text = await file.text();
-  return text;
-}
