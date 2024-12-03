@@ -1,5 +1,5 @@
 import { toast } from "sonner"
-import * as pdfParse from 'pdf-parse'
+import * as PDFJS from 'pdfjs-dist'
 import * as mammoth from 'mammoth'
 
 // テキストを文章単位で切り詰める関数
@@ -51,9 +51,19 @@ function extractKeyInformation(text: string): string {
 // PDFファイルを読み込む関数
 async function readPDFContent(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
-  const uint8Array = new Uint8Array(arrayBuffer);
-  const data = await pdfParse(uint8Array);
-  return data.text;
+  const pdf = await PDFJS.getDocument({ data: arrayBuffer }).promise;
+  let text = '';
+  
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items
+      .map((item: any) => item.str)
+      .join(' ');
+    text += pageText + '\n';
+  }
+  
+  return text;
 }
 
 // Wordファイルを読み込む関数
