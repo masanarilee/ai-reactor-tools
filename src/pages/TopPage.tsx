@@ -7,13 +7,13 @@ const TopPage = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-[#e6e9f0] to-[#eef1f5]">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-200 via-[#e6e9f0] to-[#eef1f5]">
       <div 
         className="cursor-pointer transform hover:scale-105 transition-transform duration-300 mb-4 relative"
         onClick={() => navigate("/")}
       >
         <LogoParticles />
-        <span className="text-7xl font-extrabold tracking-tight font-sans">
+        <span className="text-7xl font-extrabold tracking-wider font-sans">
           <span className="text-[#1E3D59] drop-shadow-lg">Biz</span>
           <span className="text-[#17A2B8] drop-shadow-lg">Assist</span>
         </span>
