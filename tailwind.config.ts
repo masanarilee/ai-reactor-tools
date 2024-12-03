@@ -54,10 +54,10 @@ export default {
         },
         sidebar: {
           DEFAULT: "#F0F8FF",      // Very light blue color
-          foreground: "#1A1F2C",   // Dark purple
+          foreground: "#1A1F2C",   // Dark blue
           border: "#E2E8F0",       // Light gray
-          accent: "#E5DEFF",       // Soft purple
-          "accent-foreground": "#1A1F2C"
+          hover: "#17A2B8",        // Hover blue color
+          "hover-bg": "#F8FAFC"    // Very light blue for hover background
         }
       },
       keyframes: {
