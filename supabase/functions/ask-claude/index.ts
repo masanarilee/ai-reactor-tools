@@ -28,7 +28,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'claude-3-opus-20240229',
-        max_tokens: 1000,
+        max_tokens: 4000,
         messages: [
           { 
             role: 'user',
