@@ -23,10 +23,14 @@ export const InputSection = ({
 }: InputSectionProps) => {
   return (
     <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-sm">
-      <FileUploader onError={handleError} onSuccess={handleFileUploadSuccess} />
+      <FileUploader 
+        onError={handleError} 
+        onSuccess={handleFileUploadSuccess}
+        acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
+      />
       <TextInput
         value={supplementaryInfo}
-        onChange={onSupplementaryInfoChange}
+        onChange={(e) => onSupplementaryInfoChange(e.target.value)}
         placeholder="補足情報を入力してください"
       />
       <div className="flex gap-4 justify-end">
