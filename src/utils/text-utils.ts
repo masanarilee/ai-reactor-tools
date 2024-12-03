@@ -3,22 +3,31 @@ import * as PDFJS from 'pdfjs-dist'
 import * as mammoth from 'mammoth'
 import * as XLSX from 'xlsx'
 
+// PDFJSワーカーを初期化
+PDFJS.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.min.js`;
+
 // PDFファイルを読み込む関数
 async function readPDFContent(file: File): Promise<string> {
-  const arrayBuffer = await file.arrayBuffer();
-  const pdf = await PDFJS.getDocument({ data: arrayBuffer }).promise;
-  let text = '';
-  
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    const pageText = content.items
-      .map((item: any) => item.str)
-      .join(' ');
-    text += pageText + '\n';
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await PDFJS.getDocument({ data: arrayBuffer }).promise;
+    let text = '';
+    
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const pageText = content.items
+        .filter((item: any) => 'str' in item)
+        .map((item: any) => item.str)
+        .join(' ');
+      text += pageText + '\n';
+    }
+    
+    return text;
+  } catch (error) {
+    console.error('Error reading PDF:', error);
+    throw new Error('PDFファイルの読み込みに失敗しました');
   }
-  
-  return text;
 }
 
 // Wordファイルを読み込む関数
@@ -104,7 +113,8 @@ export async function readFileContent(file: File): Promise<string> {
       text = await readWordContent(file);
     } else if (
       fileType === 'application/vnd.ms-excel' ||
-      fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+      fileType === 'application/octet-stream' // Some Excel files might be detected as this
     ) {
       text = await readExcelContent(file);
     } else {
@@ -125,7 +135,6 @@ export async function readFileContent(file: File): Promise<string> {
     return truncated;
   } catch (error) {
     console.error('Error reading file:', error);
-    toast.error("ファイルの読み込みに失敗しました: " + (error instanceof Error ? error.message : '不明なエラー'));
     throw error;
   }
 }
