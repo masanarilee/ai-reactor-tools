@@ -44,7 +44,7 @@ export const CompanyPreviewSection = () => {
           すべてコピー
         </Button>
       </div>
-      <div className="space-y-6 bg-gray-50 rounded border border-gray-200 p-6">
+      <div className="space-y-6">
         {sections.map((section, index) => (
           <div key={index} className="space-y-4">
             <div className="flex justify-between items-center">
