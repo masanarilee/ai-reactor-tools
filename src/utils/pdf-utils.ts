@@ -5,13 +5,12 @@ import { MAX_FILE_SIZE } from './constants'
 // PDFワーカーの初期化を関数化して、より柔軟に対応
 const initializePdfWorker = () => {
   try {
-    // CDNを使用してワーカーを初期化（複数のCDNをフォールバックとして用意）
-    const workerSrc = 
-      `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.min.js` ||
-      `https://unpkg.com/pdfjs-dist@${PDFJS.version}/build/pdf.worker.min.js` ||
-      `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS.version}/build/pdf.worker.min.js`;
+    // Import the worker directly from node_modules
+    PDFJS.GlobalWorkerOptions.workerSrc = new URL(
+      'pdfjs-dist/build/pdf.worker.min.js',
+      import.meta.url
+    ).toString();
     
-    PDFJS.GlobalWorkerOptions.workerSrc = workerSrc;
     return true;
   } catch (error) {
     console.error('PDF Worker initialization failed:', error);
