@@ -5,3 +5,7 @@ export interface MenuItem {
   path: string
   icon: LucideIcon
 }
+
+export type MenuItems = readonly MenuItem[]
+
+export type SidebarState = "expanded" | "collapsed"
