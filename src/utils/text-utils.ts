@@ -4,8 +4,7 @@ import * as mammoth from 'mammoth'
 import * as XLSX from 'xlsx'
 
 // PDFJSワーカーを初期化
-const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
-PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+PDFJS.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${PDFJS.version}/build/pdf.worker.min.js`;
 
 // PDFファイルを読み込む関数
 async function readPDFContent(file: File): Promise<string> {
@@ -63,7 +62,6 @@ export function truncateText(text: string, maxLength: number): string {
   return text.slice(0, lastPeriod + 1);
 }
 
-// 重要な情報を抽出する関数
 function extractKeyInformation(text: string): string {
   const sections: string[] = [];
   
