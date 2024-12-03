@@ -13,7 +13,7 @@ const TopPage = () => {
         onClick={() => navigate("/")}
       >
         <LogoParticles />
-        <span className="text-7xl font-bold font-['Gotham'] tracking-tight">
+        <span className="text-7xl font-extrabold font-['Gotham'] tracking-tight">
           <span className="text-[#1E3D59] drop-shadow-lg">Biz</span>
           <span className="text-[#17A2B8] drop-shadow-lg">Assist</span>
         </span>
