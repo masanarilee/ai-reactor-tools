@@ -24,17 +24,19 @@ function App() {
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <SidebarProvider>
-            <Routes>
-              <Route element={<RootLayout />}>
-                <Route path="/" element={<Navigate to="/talent-summary" replace />} />
-                <Route path="/talent-summary" element={<TalentSummary />} />
-                <Route path="/job-summary" element={<JobSummary />} />
-                <Route path="/counseling" element={<Counseling />} />
-                <Route path="/company-analysis" element={<CompanyAnalysis />} />
-                <Route path="/scout" element={<Scout />} />
-              </Route>
-            </Routes>
+          <SidebarProvider defaultOpen>
+            <div className="flex min-h-screen w-full">
+              <Routes>
+                <Route element={<RootLayout />}>
+                  <Route path="/" element={<Navigate to="/talent-summary" replace />} />
+                  <Route path="/talent-summary" element={<TalentSummary />} />
+                  <Route path="/job-summary" element={<JobSummary />} />
+                  <Route path="/counseling" element={<Counseling />} />
+                  <Route path="/company-analysis" element={<CompanyAnalysis />} />
+                  <Route path="/scout" element={<Scout />} />
+                </Route>
+              </Routes>
+            </div>
           </SidebarProvider>
         </Router>
       </QueryClientProvider>

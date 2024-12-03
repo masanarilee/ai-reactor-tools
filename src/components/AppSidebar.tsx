@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react"
 import {
   Users,
   Briefcase,
@@ -10,7 +11,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -46,13 +46,13 @@ const menuItems = [
     icon: Send,
     path: "/scout"
   }
-]
+] as const
 
-export function AppSidebar() {
-  const { state } = useSidebar();
-  const location = useLocation();
+export const AppSidebar = memo(() => {
+  const { state } = useSidebar()
+  const location = useLocation()
   
-  return (
+  const sidebarContent = useMemo(() => (
     <Sidebar collapsible="icon" className="border-r border-gray-200">
       <SidebarContent>
         <SidebarGroup>
@@ -65,7 +65,7 @@ export function AppSidebar() {
           </div>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item, index) => (
+              {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a 
@@ -78,7 +78,7 @@ export function AppSidebar() {
                         hover:shadow-sm relative group
                         ${location.pathname === item.path ? 
                           'bg-sidebar-hover-bg text-[#17A2B8] shadow-md scale-[1.02] border-l-4 border-[#17A2B8]' : ''}
-                        ${index === 0 ? 'mt-4' : ''}
+                        ${menuItems.indexOf(item) === 0 ? 'mt-4' : ''}
                       `}
                     >
                       <item.icon 
@@ -104,5 +104,9 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
-}
+  ), [state, location.pathname])
+
+  return sidebarContent
+})
+
+AppSidebar.displayName = "AppSidebar"
