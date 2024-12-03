@@ -5,10 +5,10 @@ import "./App.css"
 import { RootLayout } from "./components/layouts/RootLayout"
 import { SidebarProvider } from "./components/ui/sidebar"
 import { TalentSummary } from "./pages/TalentSummary"
-import { JobSummary } from "./pages/JobSummary"
-import { Counseling } from "./pages/Counseling"
-import { CompanyAnalysis } from "./pages/CompanyAnalysis"
-import { Scout } from "./pages/Scout"
+import JobSummary from "./pages/JobSummary"
+import Counseling from "./pages/Counseling"
+import CompanyAnalysis from "./pages/CompanyAnalysis"
+import Scout from "./pages/Scout"
 
 const queryClient = new QueryClient({
   defaultOptions: {
