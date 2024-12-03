@@ -29,6 +29,7 @@ export const InputSection = ({
         acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
       />
       <TextInput
+        label="補足情報"
         value={supplementaryInfo}
         onChange={(e) => onSupplementaryInfoChange(e.target.value)}
         placeholder="補足情報を入力してください"
