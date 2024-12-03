@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { ArrowRight } from "lucide-react"
+import { Users, Briefcase, MessageCircle, Building2, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import LogoParticles from "@/components/LogoParticles"
 
@@ -30,11 +30,11 @@ const TopPage = () => {
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
             flex items-center gap-4 rounded-xl group relative"
         >
+          <Users className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
           <span className="relative">
             人材サマリ生成
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
           </span>
-          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
         <Button
@@ -43,11 +43,11 @@ const TopPage = () => {
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
             flex items-center gap-4 rounded-xl group relative"
         >
+          <Briefcase className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
           <span className="relative">
             案件サマリ生成
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
           </span>
-          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
         <Button
@@ -56,11 +56,11 @@ const TopPage = () => {
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
             flex items-center gap-4 rounded-xl group relative"
         >
+          <MessageCircle className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
           <span className="relative">
             カウンセリング支援
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
           </span>
-          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
         <Button
@@ -69,11 +69,11 @@ const TopPage = () => {
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
             flex items-center gap-4 rounded-xl group relative"
         >
+          <Building2 className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
           <span className="relative">
             企業分析
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
           </span>
-          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
         <Button
@@ -82,11 +82,11 @@ const TopPage = () => {
             bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
             flex items-center gap-4 rounded-xl group relative"
         >
+          <Send className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
           <span className="relative">
             スカウト文生成
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#17A2B8] transform transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100" />
           </span>
-          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
       </div>
     </div>
