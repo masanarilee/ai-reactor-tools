@@ -24,7 +24,7 @@ export const SidebarMenuItemComponent = memo(function SidebarMenuItemComponent({
   const handleClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
     navigate(item.path)
-    setOpenMobile(false) // Close mobile menu after navigation
+    setOpenMobile(false) // モバイルメニューを閉じる
   }, [navigate, item.path, setOpenMobile])
   
   return (
@@ -42,6 +42,7 @@ export const SidebarMenuItemComponent = memo(function SidebarMenuItemComponent({
             ${isActive ? 'bg-sidebar-hover-bg text-[#17A2B8] shadow-md scale-[1.02] border-l-4 border-[#17A2B8]' : ''}
             ${index === 0 ? 'mt-4' : ''}
             md:py-6 py-4 w-full flex items-center px-4
+            touch-manipulation
           `}
         >
           <item.icon 
