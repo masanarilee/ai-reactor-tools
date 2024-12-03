@@ -2,6 +2,7 @@ import { FileUploader } from "../FileUploader"
 import { TextInput } from "../TextInput"
 import { Button } from "../ui/button"
 import { RotateCcw, FileText } from "lucide-react"
+import { useState } from "react"
 
 interface InputSectionProps {
   isProcessing: boolean
@@ -22,12 +23,22 @@ export const InputSection = ({
   handleError,
   handleFileUploadSuccess,
 }: InputSectionProps) => {
+  const [resetFiles, setResetFiles] = useState(false)
+
+  const handleReset = () => {
+    setResetFiles(true)
+    onReset()
+    // Reset the flag after a short delay
+    setTimeout(() => setResetFiles(false), 100)
+  }
+
   return (
     <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-sm">
       <FileUploader 
         onError={handleError} 
         onSuccess={handleFileUploadSuccess}
         acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
+        resetFiles={resetFiles}
       />
       <TextInput
         label="補足情報"
@@ -46,7 +57,7 @@ export const InputSection = ({
         </Button>
         <Button
           variant="outline"
-          onClick={onReset}
+          onClick={handleReset}
           className="w-32 h-10"
           disabled={isProcessing}
         >

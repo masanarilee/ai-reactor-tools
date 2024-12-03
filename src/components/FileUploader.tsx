@@ -8,11 +8,19 @@ interface FileUploaderProps {
   onError: (error: Error) => void
   onSuccess: (files: File[]) => void
   acceptedFileTypes: string[]
+  resetFiles?: boolean
 }
 
-export function FileUploader({ onError, onSuccess, acceptedFileTypes }: FileUploaderProps) {
+export function FileUploader({ onError, onSuccess, acceptedFileTypes, resetFiles }: FileUploaderProps) {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [isDragging, setIsDragging] = useState(false)
+
+  // Reset files when resetFiles prop changes
+  useCallback(() => {
+    if (resetFiles) {
+      setUploadedFiles([])
+    }
+  }, [resetFiles])
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     try {
