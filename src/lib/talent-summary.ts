@@ -20,7 +20,18 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
 
     let fileContent = '';
     if (file) {
-      fileContent = await readFileContent(file);
+      const rawContent = await readFileContent(file);
+      // Limit file content to ~50k characters to stay well within token limits
+      fileContent = truncateText(rawContent, 50000);
+      if (fileContent.length < rawContent.length) {
+        toast.warning("ファイルが大きすぎるため、一部のみを処理します");
+      }
+    }
+
+    // Also truncate supplementary info if needed
+    const truncatedSupplementaryInfo = supplementaryInfo ? truncateText(supplementaryInfo, 10000) : '';
+    if (truncatedSupplementaryInfo.length < supplementaryInfo.length) {
+      toast.warning("補足情報が大きすぎるため、一部のみを処理します");
     }
 
     const prompt = `注意：ハルシネーションを極力避けてください。
@@ -31,7 +42,7 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
 ${fileContent ? fileContent : '提供なし'}
 
 補足情報：
-${supplementaryInfo ? supplementaryInfo : '提供なし'}
+${truncatedSupplementaryInfo ? truncatedSupplementaryInfo : '提供なし'}
 
 以下の形式で情報を整理して出力してください。
 【経験コメント】と【お人柄】の部分は「です・ます」調で記載してください：
