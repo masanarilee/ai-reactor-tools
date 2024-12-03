@@ -3,6 +3,7 @@ import { FileUploader } from "../FileUploader"
 import { TextInput } from "../TextInput"
 import { Button } from "../ui/button"
 import { RotateCcw, FileText } from "lucide-react"
+import { useLocation } from "react-router-dom"
 
 interface InputSectionProps {
   isProcessing: boolean
@@ -24,16 +25,29 @@ export const InputSection = ({
   handleFileUploadSuccess,
 }: InputSectionProps) => {
   const [resetTrigger, setResetTrigger] = useState(false)
+  const location = useLocation()
 
   const handleReset = () => {
     setResetTrigger(prev => !prev)
     onReset()
   }
 
+  const getUploadTitle = () => {
+    return location.pathname === "/job-summary" 
+      ? "案件情報/求人票アップロード"
+      : "経歴書アップロード"
+  }
+
+  const getMemoTitle = () => {
+    return location.pathname === "/job-summary"
+      ? "案件情報"
+      : "面談メモ"
+  }
+
   return (
     <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-sm">
       <div className="text-left h-[60px] flex items-center">
-        <h3 className="text-base font-medium text-[#1E3D59]">経歴書アップロード</h3>
+        <h3 className="text-base font-medium text-[#1E3D59]">{getUploadTitle()}</h3>
       </div>
       <FileUploader 
         onError={handleError} 
@@ -42,10 +56,10 @@ export const InputSection = ({
         resetTrigger={resetTrigger}
       />
       <TextInput
-        label="面談メモ"
+        label={getMemoTitle()}
         value={supplementaryInfo}
         onChange={(e) => onSupplementaryInfoChange(e.target.value)}
-        placeholder="面談メモを入力してください"
+        placeholder={`${getMemoTitle()}を入力してください`}
         align="left"
       />
       <div className="flex gap-4 justify-end">
