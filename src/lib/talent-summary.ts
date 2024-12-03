@@ -1,16 +1,7 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
-
-// Helper function to truncate text while preserving complete sentences
-function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  
-  // Find the last period before maxLength
-  const lastPeriod = text.lastIndexOf('.', maxLength);
-  if (lastPeriod === -1) return text.slice(0, maxLength);
-  
-  return text.slice(0, lastPeriod + 1);
-}
+import { readFileContent, processSupplementaryInfo } from "@/utils/text-utils"
+import { TALENT_SUMMARY_PROMPT } from "./prompts"
 
 export async function generateTalentSummary(file: File | null, supplementaryInfo: string) {
   try {
@@ -18,58 +9,24 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
       throw new Error('職務経歴書または補足情報のいずれかが必要です');
     }
 
-    let fileContent = '';
-    if (file) {
-      const rawContent = await readFileContent(file);
-      // Limit file content to ~50k characters to stay well within token limits
-      fileContent = truncateText(rawContent, 50000);
-      if (fileContent.length < rawContent.length) {
-        toast.warning("ファイルが大きすぎるため、一部のみを処理します");
-      }
-    }
+    // ファイルの内容を読み込む
+    const fileContent = file ? await readFileContent(file) : '';
+    
+    // 補足情報を処理
+    const processedInfo = processSupplementaryInfo(supplementaryInfo);
 
-    // Also truncate supplementary info if needed
-    const truncatedSupplementaryInfo = supplementaryInfo ? truncateText(supplementaryInfo, 10000) : '';
-    if (truncatedSupplementaryInfo.length < supplementaryInfo.length) {
-      toast.warning("補足情報が大きすぎるため、一部のみを処理します");
-    }
+    // プロンプトを準備
+    const prompt = TALENT_SUMMARY_PROMPT
+      .replace('{resume}', fileContent || '提供なし')
+      .replace('{supplementaryInfo}', processedInfo || '提供なし');
 
-    const prompt = `注意：ハルシネーションを極力避けてください。
-以下の職務経歴書と面談メモから、人材サマリを作成してください：
-面談メモのみの場合でも可能な限りフォーマットに沿ってアウトプットをしてください。
-
-職務経歴書：
-${fileContent ? fileContent : '提供なし'}
-
-補足情報：
-${truncatedSupplementaryInfo ? truncatedSupplementaryInfo : '提供なし'}
-
-以下の形式で情報を整理して出力してください。
-【経験コメント】と【お人柄】の部分は「です・ます」調で記載してください：
-
-【ID】
-【年齢】歳
-【性別】
-【国籍】
-【所属】弊社個人事業主
-【住まい】
-【稼働形態】
-【稼動開始日】
-【稼働率】
-【稼働例】
-【希望単金】
-【経験スキル】
-【希望案件】
-【NG案件】
-【経験コメント】
-【お人柄】`
-
+    // Claude APIを呼び出し
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { prompt }
-    })
+    });
 
-    if (error) throw error
-    return data.text
+    if (error) throw error;
+    return data.text;
 
   } catch (error) {
     console.error('Error generating summary:', error);
