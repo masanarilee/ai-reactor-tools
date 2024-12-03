@@ -12,6 +12,7 @@ import {
 import { MENU_ITEMS } from "./sidebar/constants"
 import { SidebarLogo } from "./sidebar/SidebarLogo"
 import { SidebarMenuItemComponent } from "./sidebar/SidebarMenuItem"
+import { Separator } from "./ui/separator"
 
 export const AppSidebar = memo(function AppSidebar() {
   const { state } = useSidebar()
@@ -20,9 +21,12 @@ export const AppSidebar = memo(function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r border-gray-200">
       <SidebarContent>
         <SidebarGroup>
-          <div className="flex items-center justify-between px-3 py-2 mb-6">
-            <SidebarLogo state={state} />
-            <SidebarTrigger className="scale-125" />
+          <div className="flex flex-col px-3 py-2 mb-6">
+            <div className="flex items-center justify-between">
+              <SidebarLogo state={state} />
+              <SidebarTrigger className="scale-125" />
+            </div>
+            <Separator className="mt-4" />
           </div>
           <SidebarGroupContent>
             <SidebarMenu>
