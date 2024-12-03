@@ -3,20 +3,20 @@ import { Copy } from "lucide-react"
 import { motion } from "framer-motion"
 import { useToast } from "@/components/ui/use-toast"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
+import { AnalysisResult } from "@/pages/CompanyAnalysis"
 
-interface PreviewSection {
-  title: string
-  content: string
+interface CompanyPreviewSectionProps {
+  analysisResult: AnalysisResult
 }
 
-export const CompanyPreviewSection = () => {
+export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionProps) => {
   const { toast } = useToast()
-  const sections: PreviewSection[] = [
-    { title: "企業概要", content: "" },
-    { title: "市場分析", content: "" },
-    { title: "課題仮説", content: "" },
-    { title: "提案内容", content: "" },
-    { title: "人材想定", content: "" },
+  const sections = [
+    { title: "企業概要", content: analysisResult.overview },
+    { title: "市場分析", content: analysisResult.marketAnalysis },
+    { title: "課題仮説", content: analysisResult.challenges },
+    { title: "提案内容", content: analysisResult.proposal },
+    { title: "人材想定", content: analysisResult.talentProfile },
   ]
 
   const handleCopy = (content: string, title: string) => {
