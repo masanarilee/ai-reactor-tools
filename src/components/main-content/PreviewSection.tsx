@@ -67,10 +67,10 @@ export const CounselingPreview = ({ sections, onCopy }: CounselingPreviewProps) 
       <div className="h-[60px] flex items-center">
         <h3 className="text-base font-medium text-[#1E3D59]">プレビュー</h3>
       </div>
-      <div className="bg-gray-50 rounded border border-gray-200 p-6">
+      <div className="space-y-6 bg-gray-50 rounded border border-gray-200 p-6">
         {sectionsList.map((section, index) => (
-          <div key={index} className="mb-6 last:mb-0">
-            <div className="flex justify-between items-center mb-4">
+          <div key={index} className="space-y-4">
+            <div className="flex justify-between items-center">
               <h4 className="font-medium text-[#1E3D59]">{section.title}</h4>
               <Button
                 variant="outline"
@@ -86,7 +86,7 @@ export const CounselingPreview = ({ sections, onCopy }: CounselingPreviewProps) 
               {section.content || `${section.title}が生成されるとここに表示されます`}
             </pre>
             {index < sectionsList.length - 1 && (
-              <div className="border-b border-gray-200 my-6" />
+              <div className="border-b border-gray-200" />
             )}
           </div>
         ))}
