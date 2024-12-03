@@ -63,7 +63,14 @@ export async function generateJobSummary(file: File | null, supplementaryInfo: s
 
     let fileContent = '';
     if (file) {
-      fileContent = await readFileContent(file);
+      try {
+        fileContent = await readFileContent(file);
+        toast.success("ファイルの読み込みが完了しました");
+      } catch (error) {
+        console.error('Error reading file:', error);
+        toast.error("ファイルの読み込みに失敗しました");
+        throw error;
+      }
     }
 
     const prompt = JOB_SUMMARY_PROMPT
@@ -99,7 +106,14 @@ export async function generateCounselingReport(file: File | null, supplementaryI
 
     let fileContent = '';
     if (file) {
-      fileContent = await readFileContent(file);
+      try {
+        fileContent = await readFileContent(file);
+        toast.success("ファイルの読み込みが完了しました");
+      } catch (error) {
+        console.error('Error reading file:', error);
+        toast.error("ファイルの読み込みに失敗しました");
+        throw error;
+      }
     }
 
     const prompt = `
@@ -132,10 +146,17 @@ ${file ? `ファイル名：${file.name}` : ''}
 ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
-      body: { prompt }
-    })
+      body: { 
+        prompt,
+        options: {
+          model: 'claude-3-sonnet-20240229',
+          max_tokens: 4096,
+          temperature: 0.7
+        }
+      }
+    });
 
-    if (error) throw error
+    if (error) throw error;
 
     // Split the response into sections
     const sections = data.text.split(/\d\.\s+/);
