@@ -1,13 +1,16 @@
 import { toast } from "sonner"
 import * as PDFJS from 'pdfjs-dist'
 import { MAX_FILE_SIZE } from './constants'
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
 
 // PDFワーカーの初期化を関数化して、より柔軟に対応
 const initializePdfWorker = () => {
   try {
-    // Set worker source directly using the worker entry point
-    PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    // Set worker source using a dynamic import
+    const workerSrc = new URL(
+      'pdfjs-dist/build/pdf.worker.mjs',
+      import.meta.url
+    ).toString();
+    PDFJS.GlobalWorkerOptions.workerSrc = workerSrc;
     return true;
   } catch (error) {
     console.error('PDF Worker initialization failed:', error);
