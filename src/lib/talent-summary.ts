@@ -1,12 +1,15 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
 
-export async function generateTalentSummary(file: File, supplementaryInfo: string) {
+export async function generateTalentSummary(file: File | null, supplementaryInfo: string) {
   try {
-    console.log('Generating summary for file:', file.name);
-    
-    if (!file) {
-      throw new Error('ファイルが見つかりません');
+    if (!file && !supplementaryInfo) {
+      throw new Error('職務経歴書または面談メモのいずれかが必要です');
+    }
+
+    let fileContent = '';
+    if (file) {
+      fileContent = await readFileContent(file);
     }
 
     const prompt = `
@@ -52,24 +55,24 @@ Excel,PDF,Wordの職務経歴書を読み取るか面談メモの内容を分析
 #面談メモ
 ${supplementaryInfo}
 
-ファイル名：${file.name}
-`
+${file ? `ファイル名：${file.name}` : ''}
+${fileContent ? `#職務経歴書の内容\n${fileContent}` : ''}`
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { prompt }
     })
 
-    if (error) {
-      console.error('Supabase function error:', error);
-      throw error;
-    }
-    
-    console.log('Summary generated successfully');
-    return data.text;
+    if (error) throw error
+    return data.text
 
   } catch (error) {
     console.error('Error generating summary:', error);
-    toast.error("サマリの生成に失敗しました。" + (error as Error).message);
+    toast.error("サマリの生成に失敗しました。" + (error instanceof Error ? error.message : '不明なエラーが発生しました'));
     throw error;
   }
+}
+
+async function readFileContent(file: File): Promise<string> {
+  const text = await file.text();
+  return text; // Add the logic to read file content as needed
 }

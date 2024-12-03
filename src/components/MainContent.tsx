@@ -49,19 +49,21 @@ const MainContentComponent = () => {
   }
 
   const handleProcess = async () => {
-    if (uploadedFiles.length === 0) {
+    if (uploadedFiles.length === 0 && !supplementaryInfo) {
       toast({
         variant: "destructive",
-        title: "ファイルが必要です",
-        description: "サマリーを生成するにはファイルをアップロードしてください"
+        title: "入力が必要です",
+        description: "サマリーを生成するには職務経歴書または面談メモを入力してください"
       })
       return
     }
 
     setIsProcessing(true)
     try {
-      const fileContent = await readFileContent(uploadedFiles[0])
-      const summary = await generateTalentSummary(fileContent, supplementaryInfo)
+      const summary = await generateTalentSummary(
+        uploadedFiles.length > 0 ? uploadedFiles[0] : null, 
+        supplementaryInfo
+      )
       setPreviewContent(summary)
       
       toast({
