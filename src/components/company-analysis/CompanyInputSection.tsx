@@ -38,10 +38,10 @@ export const CompanyInputSection = ({
         align="left"
       />
       <TextInput
-        label="対象サービス"
+        label="提供サービス"
         value={companyData.targetService}
         onChange={(e) => setCompanyData({ ...companyData, targetService: e.target.value })}
-        placeholder="対象サービスを入力してください"
+        placeholder="提供サービスを入力してください"
         align="left"
       />
       <div className="flex gap-4 justify-end">
