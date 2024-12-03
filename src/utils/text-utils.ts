@@ -4,20 +4,27 @@ import * as mammoth from 'mammoth'
 import * as XLSX from 'xlsx'
 
 // PDFJSワーカーを初期化
-PDFJS.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url
-).toString();
+const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+// PDFワーカーの設定
+const workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.min.js`;
+PDFJS.GlobalWorkerOptions.workerSrc = workerSrc;
 
 // PDFファイルを読み込む関数
 async function readPDFContent(file: File): Promise<string> {
   try {
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error('ファイルサイズが大きすぎます（上限: 10MB）');
+    }
+
     const arrayBuffer = await file.arrayBuffer();
     const loadingTask = PDFJS.getDocument({ data: arrayBuffer });
     const pdf = await loadingTask.promise;
     let text = '';
     
-    for (let i = 1; i <= pdf.numPages; i++) {
+    const totalPages = pdf.numPages;
+    for (let i = 1; i <= totalPages; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
       const pageText = content.items
@@ -25,6 +32,11 @@ async function readPDFContent(file: File): Promise<string> {
         .map((item: any) => item.str)
         .join(' ');
       text += pageText + '\n';
+
+      // 進捗状況の通知
+      if (totalPages > 1) {
+        toast.info(`PDFの処理中... (${i}/${totalPages}ページ)`);
+      }
     }
     
     return text;
@@ -37,6 +49,10 @@ async function readPDFContent(file: File): Promise<string> {
 // Wordファイルを読み込む関数
 async function readWordContent(file: File): Promise<string> {
   try {
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error('ファイルサイズが大きすぎます（上限: 10MB）');
+    }
+
     const arrayBuffer = await file.arrayBuffer();
     const result = await mammoth.extractRawText({ arrayBuffer });
     return result.value;
@@ -49,14 +65,24 @@ async function readWordContent(file: File): Promise<string> {
 // Excelファイルを読み込む関数
 async function readExcelContent(file: File): Promise<string> {
   try {
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error('ファイルサイズが大きすぎます（上限: 10MB）');
+    }
+
     const arrayBuffer = await file.arrayBuffer();
     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
     let text = '';
 
-    workbook.SheetNames.forEach(sheetName => {
+    const totalSheets = workbook.SheetNames.length;
+    workbook.SheetNames.forEach((sheetName, index) => {
       const worksheet = workbook.Sheets[sheetName];
       text += `Sheet: ${sheetName}\n`;
       text += XLSX.utils.sheet_to_csv(worksheet) + '\n\n';
+
+      // 進捗状況の通知
+      if (totalSheets > 1) {
+        toast.info(`Excelの処理中... (${index + 1}/${totalSheets}シート)`);
+      }
     });
 
     return text;
@@ -113,6 +139,11 @@ export async function readFileContent(file: File): Promise<string> {
       throw new Error('ファイルが選択されていません');
     }
 
+    // ファイルサイズのチェック
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error('ファイルサイズが大きすぎます（上限: 10MB）');
+    }
+
     let text = '';
     const fileType = file.type.toLowerCase();
     const fileName = file.name.toLowerCase();
@@ -139,9 +170,7 @@ export async function readFileContent(file: File): Promise<string> {
       text = await readExcelContent(file);
       toast.success("Excelファイルの読み込みが完了しました");
     } else {
-      // その他のファイルタイプはテキストとして読み込む
-      text = await file.text();
-      toast.success("テキストファイルの読み込みが完了しました");
+      throw new Error('対応していないファイル形式です');
     }
     
     // 重要な情報を抽出
@@ -156,7 +185,7 @@ export async function readFileContent(file: File): Promise<string> {
     return truncated;
   } catch (error) {
     console.error('Error reading file:', error);
-    toast.error("ファイルの読み込みに失敗しました");
+    toast.error(error instanceof Error ? error.message : "ファイルの読み込みに失敗しました");
     throw error;
   }
 }
