@@ -7,7 +7,7 @@ const TopPage = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-25 via-white to-purple-50">
       <div 
         className="cursor-pointer relative"
         onClick={() => navigate("/")}
