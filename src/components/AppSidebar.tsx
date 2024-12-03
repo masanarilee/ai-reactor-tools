@@ -24,7 +24,9 @@ export const AppSidebar = memo(function AppSidebar() {
           <div className="flex flex-col px-3 py-2 mb-6">
             <div className="flex items-center justify-between">
               <SidebarLogo state={state} />
-              <SidebarTrigger className="scale-125" />
+              <div className="flex items-center justify-center w-7">
+                <SidebarTrigger />
+              </div>
             </div>
             <Separator className="mt-4" />
           </div>
