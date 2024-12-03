@@ -87,7 +87,7 @@ export function AppSidebar() {
                       <item.icon 
                         className={`
                           w-38 h-38 transition-transform duration-300 
-                          ${location.pathname === item.path ? 'text-[#17A2B8] scale-110' : 'group-hover:scale-110'}
+                          ${location.pathname === item.path ? 'text-[#17A2B8] scale-110' : 'text-[#1E3D59] group-hover:text-[#17A2B8] group-hover:scale-110'}
                         `} 
                       />
                       <span className="ml-4 text-base relative">
