@@ -31,6 +31,7 @@ const MainContentComponent = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [previewContent, setPreviewContent] = useState("")
   const [supplementaryInfo, setSupplementaryInfo] = useState("")
+  const [resetTrigger, setResetTrigger] = useState(false)
   const location = useLocation()
 
   const currentMenuTitle = menuTitles[location.pathname]
@@ -91,6 +92,7 @@ const MainContentComponent = () => {
     setUploadedFiles([])
     setPreviewContent("")
     setSupplementaryInfo("")
+    setResetTrigger(prev => !prev)
     toast({
       title: "リセット完了",
       description: "すべての情報がクリアされました"
@@ -135,6 +137,7 @@ const MainContentComponent = () => {
               onReset={handleReset}
               handleError={handleError}
               handleFileUploadSuccess={handleFileUploadSuccess}
+              resetTrigger={resetTrigger}
             />
 
             <PreviewSection 
