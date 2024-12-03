@@ -1,8 +1,8 @@
+import { useState } from "react"
 import { FileUploader } from "../FileUploader"
 import { TextInput } from "../TextInput"
 import { Button } from "../ui/button"
 import { RotateCcw, FileText } from "lucide-react"
-import { useState } from "react"
 
 interface InputSectionProps {
   isProcessing: boolean
@@ -23,13 +23,11 @@ export const InputSection = ({
   handleError,
   handleFileUploadSuccess,
 }: InputSectionProps) => {
-  const [resetFiles, setResetFiles] = useState(false)
+  const [resetTrigger, setResetTrigger] = useState(false)
 
   const handleReset = () => {
-    setResetFiles(true)
+    setResetTrigger(prev => !prev) // トリガーの切り替え
     onReset()
-    // Reset the flag after a short delay
-    setTimeout(() => setResetFiles(false), 100)
   }
 
   return (
@@ -38,7 +36,7 @@ export const InputSection = ({
         onError={handleError} 
         onSuccess={handleFileUploadSuccess}
         acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-        resetFiles={resetFiles}
+        resetTrigger={resetTrigger}
       />
       <TextInput
         label="補足情報"
@@ -52,7 +50,7 @@ export const InputSection = ({
           className="w-32 h-10"
           disabled={isProcessing}
         >
-          <FileText className="w-4 h-4" />
+          <FileText className="w-4 h-4 mr-2" />
           サマリ生成
         </Button>
         <Button
@@ -61,7 +59,7 @@ export const InputSection = ({
           className="w-32 h-10"
           disabled={isProcessing}
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-4 h-4 mr-2" />
           リセット
         </Button>
       </div>
