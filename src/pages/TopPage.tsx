@@ -9,7 +9,7 @@ const TopPage = () => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-200 via-[#e6e9f0] to-[#eef1f5]">
       <div 
-        className="cursor-pointer transform hover:scale-105 transition-transform duration-300 mb-4 relative"
+        className="cursor-pointer relative"
         onClick={() => navigate("/")}
       >
         <LogoParticles />
