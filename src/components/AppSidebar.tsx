@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar"
 import { MENU_ITEMS } from "./sidebar/constants"
 import { SidebarLogo } from "./sidebar/SidebarLogo"
+import { SidebarMenuItemComponent } from "./sidebar/SidebarMenuItem"
 import { Separator } from "./ui/separator"
 
 export const AppSidebar = memo(function AppSidebar() {
