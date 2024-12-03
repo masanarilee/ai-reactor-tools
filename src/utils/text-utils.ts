@@ -1,4 +1,6 @@
 import { toast } from "sonner"
+import * as pdfParse from 'pdf-parse'
+import * as mammoth from 'mammoth'
 
 // テキストを文章単位で切り詰める関数
 export function truncateText(text: string, maxLength: number): string {
@@ -18,7 +20,8 @@ function extractKeyInformation(text: string): string {
   // 経歴書や職務経歴書の重要なセクションを探す
   const keyPhrases = [
     '職務経歴', '業務経験', 'スキル', '資格', '学歴',
-    '開発環境', '技術スタック', 'プロジェクト'
+    '開発環境', '技術スタック', 'プロジェクト', '案件',
+    '単価', '期間', '勤務地', '面談'
   ];
   
   // テキストを行に分割
@@ -45,10 +48,39 @@ function extractKeyInformation(text: string): string {
   return sections.join('\n\n');
 }
 
+// PDFファイルを読み込む関数
+async function readPDFContent(file: File): Promise<string> {
+  const arrayBuffer = await file.arrayBuffer();
+  const uint8Array = new Uint8Array(arrayBuffer);
+  const data = await pdfParse(uint8Array);
+  return data.text;
+}
+
+// Wordファイルを読み込む関数
+async function readWordContent(file: File): Promise<string> {
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer });
+  return result.value;
+}
+
 // ファイルの内容を読み込む関数
 export async function readFileContent(file: File): Promise<string> {
   try {
-    const text = await file.text();
+    let text = '';
+    const fileType = file.type.toLowerCase();
+    
+    // ファイルタイプに応じて適切な処理を実行
+    if (fileType === 'application/pdf') {
+      text = await readPDFContent(file);
+    } else if (
+      fileType === 'application/msword' || 
+      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ) {
+      text = await readWordContent(file);
+    } else {
+      // その他のファイルタイプはテキストとして読み込む
+      text = await file.text();
+    }
     
     // 重要な情報を抽出
     const extractedInfo = extractKeyInformation(text);
@@ -63,6 +95,7 @@ export async function readFileContent(file: File): Promise<string> {
     return truncated;
   } catch (error) {
     console.error('Error reading file:', error);
+    toast.error("ファイルの読み込みに失敗しました: " + (error instanceof Error ? error.message : '不明なエラー'));
     throw new Error('ファイルの読み込みに失敗しました');
   }
 }
