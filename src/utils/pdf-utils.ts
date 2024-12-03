@@ -5,12 +5,8 @@ import { MAX_FILE_SIZE } from './constants'
 // PDFワーカーの初期化を関数化して、より柔軟に対応
 const initializePdfWorker = () => {
   try {
-    // Import the worker directly from node_modules
-    PDFJS.GlobalWorkerOptions.workerSrc = new URL(
-      'pdfjs-dist/build/pdf.worker.min.js',
-      import.meta.url
-    ).toString();
-    
+    // Set worker source directly using the bundled worker
+    PDFJS.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.min.js`;
     return true;
   } catch (error) {
     console.error('PDF Worker initialization failed:', error);
@@ -51,7 +47,7 @@ export async function readPDFContent(file: File): Promise<string> {
     // PDFドキュメントの読み込み
     const loadingTask = PDFJS.getDocument({ 
       data: arrayBuffer,
-      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS.version}/cmaps/',
+      cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS.version}/cmaps/`,
       cMapPacked: true,
     });
 
