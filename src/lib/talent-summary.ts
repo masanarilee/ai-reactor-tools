@@ -72,7 +72,63 @@ ${fileContent ? `#職務経歴書の内容\n${fileContent}` : ''}`
   }
 }
 
+export async function generateJobSummary(file: File | null, supplementaryInfo: string) {
+  try {
+    if (!file && !supplementaryInfo) {
+      throw new Error('案件情報/求人票または案件情報のいずれかが必要です');
+    }
+
+    let fileContent = '';
+    if (file) {
+      fileContent = await readFileContent(file);
+    }
+
+    const prompt = `
+メッセージが送信された場合や求人情報が添付された場合、URLが貼り付けられた場合はその内容を読み取って以下の#フォーマット に沿って#案件 をアウトプットしてください。
+また、複数の案件情報が含まれた情報をインプットした場合は、複数の案件情報をアウトプットしてください
+
+■商流：
+■案件名：
+■案件概要：
+
+■開発環境：
+
+■必須スキル：
+
+■歓迎スキル：
+
+■期間：
+■勤務地：
+■募集人数：
+■単価：
+■精算幅：
+■面談回数：
+■就業時間：
+■年齢：
+■支払いサイト：
+■備考：
+
+#案件情報
+${supplementaryInfo}
+
+${file ? `ファイル名：${file.name}` : ''}
+${fileContent ? `#添付ファイルの内容\n${fileContent}` : ''}`
+
+    const { data, error } = await supabase.functions.invoke('ask-claude', {
+      body: { prompt }
+    })
+
+    if (error) throw error
+    return data.text
+
+  } catch (error) {
+    console.error('Error generating job summary:', error);
+    toast.error("案件サマリの生成に失敗しました。" + (error instanceof Error ? error.message : '不明なエラーが発生しました'));
+    throw error;
+  }
+}
+
 async function readFileContent(file: File): Promise<string> {
   const text = await file.text();
-  return text; // Add the logic to read file content as needed
+  return text;
 }

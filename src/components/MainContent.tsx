@@ -4,8 +4,7 @@ import { useState, memo, Suspense } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { useLocation } from "react-router-dom"
 import { motion } from "framer-motion"
-import { generateTalentSummary } from "@/lib/talent-summary"
-import { readFileContent } from "@/lib/file-reader"
+import { generateTalentSummary, generateJobSummary } from "@/lib/talent-summary"
 import AIGenerationVisualizer from "./AIGenerationVisualizer"
 import { InputSection } from "./main-content/InputSection"
 import { PreviewSection } from "./main-content/PreviewSection"
@@ -53,17 +52,25 @@ const MainContentComponent = () => {
       toast({
         variant: "destructive",
         title: "入力が必要です",
-        description: "サマリーを生成するには職務経歴書または面談メモを入力してください"
+        description: location.pathname === "/job-summary" 
+          ? "サマリーを生成するには案件情報/求人票または案件情報を入力してください"
+          : "サマリーを生成するには職務経歴書または面談メモを入力してください"
       })
       return
     }
 
     setIsProcessing(true)
     try {
-      const summary = await generateTalentSummary(
-        uploadedFiles.length > 0 ? uploadedFiles[0] : null, 
-        supplementaryInfo
-      )
+      const summary = location.pathname === "/job-summary"
+        ? await generateJobSummary(
+            uploadedFiles.length > 0 ? uploadedFiles[0] : null, 
+            supplementaryInfo
+          )
+        : await generateTalentSummary(
+            uploadedFiles.length > 0 ? uploadedFiles[0] : null, 
+            supplementaryInfo
+          )
+      
       setPreviewContent(summary)
       
       toast({
