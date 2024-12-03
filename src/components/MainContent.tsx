@@ -1,24 +1,30 @@
 'use client'
 
-import { FileUploader } from "./FileUploader"
-import { TextInput } from "./TextInput"
-import { useToast } from "@/components/ui/use-toast"
-import { Button } from "@/components/ui/button"
 import { useState, memo, Suspense } from "react"
-import { SidebarTrigger } from "./ui/sidebar"
-import { Copy, RefreshCw } from "lucide-react"
-import AIGenerationVisualizer from "./AIGenerationVisualizer"
+import { useToast } from "@/components/ui/use-toast"
 import { useLocation } from "react-router-dom"
-import { Separator } from "./ui/separator"
 import { motion } from "framer-motion"
 import { generateTalentSummary } from "@/lib/talent-summary"
 import { readFileContent } from "@/lib/file-reader"
+import AIGenerationVisualizer from "./AIGenerationVisualizer"
+import { InputSection } from "./main-content/InputSection"
+import { PreviewSection } from "./main-content/PreviewSection"
+import { PageHeader } from "./main-content/PageHeader"
 
 const contentVariants = {
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -10 }
-};
+}
+
+const menuTitles: { [key: string]: string } = {
+  "/talent-summary": "人材サマリー生成",
+  "/job-summary": "求人サマリー生成",
+  "/counseling": "カウンセリングサポート",
+  "/scout": "スカウトメッセージ生成",
+  "/company-analysis": "企業分析",
+  "/": "人材サマリー生成"
+}
 
 const MainContentComponent = () => {
   const { toast } = useToast()
@@ -27,15 +33,6 @@ const MainContentComponent = () => {
   const [previewContent, setPreviewContent] = useState("")
   const [supplementaryInfo, setSupplementaryInfo] = useState("")
   const location = useLocation()
-
-  const menuTitles: { [key: string]: string } = {
-    "/talent-summary": "人材サマリー生成",
-    "/job-summary": "求人サマリー生成",
-    "/counseling": "カウンセリングサポート",
-    "/scout": "スカウトメッセージ生成",
-    "/company-analysis": "企業分析",
-    "/": "人材サマリー生成"
-  }
 
   const currentMenuTitle = menuTitles[location.pathname]
 
@@ -63,16 +60,16 @@ const MainContentComponent = () => {
 
     setIsProcessing(true)
     try {
-      const fileContent = await readFileContent(uploadedFiles[0]);
-      const summary = await generateTalentSummary(fileContent, supplementaryInfo);
-      setPreviewContent(summary);
+      const fileContent = await readFileContent(uploadedFiles[0])
+      const summary = await generateTalentSummary(fileContent, supplementaryInfo)
+      setPreviewContent(summary)
       
       toast({
         title: "完了",
         description: "サマリーが生成されました"
       })
     } catch (error) {
-      console.error('Error in handleProcess:', error);
+      console.error('Error in handleProcess:', error)
       if (error instanceof Error) {
         handleError(error)
       }
@@ -117,86 +114,24 @@ const MainContentComponent = () => {
       className="flex-1 p-6 bg-gray-50 min-h-screen w-full"
     >
       <div className="container mx-auto max-w-7xl">
-        <div className="flex items-center justify-between mb-2">
-          <SidebarTrigger className="lg:hidden" />
-          <h1 className="text-2xl font-bold text-[#1E3D59] ml-4">{currentMenuTitle}</h1>
-        </div>
-        <Separator className="mb-6" />
+        <PageHeader title={currentMenuTitle} />
         
         <Suspense fallback={<div className="animate-pulse">読み込み中...</div>}>
           <div className="grid lg:grid-cols-2 gap-8 mt-8">
-            {/* Input Column */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              className="space-y-8 bg-white p-8 rounded-lg shadow-sm"
-            >
-              <div>
-                <div className="h-[60px] flex items-center">
-                  <h3 className="text-lg font-medium text-[#1E3D59]">ファイルアップロード</h3>
-                </div>
-                <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 bg-gray-50">
-                  <FileUploader 
-                    onError={handleError}
-                    onSuccess={handleFileUploadSuccess}
-                    acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-                  />
-                </div>
-              </div>
-              <div className="space-y-6">
-                <h3 className="text-lg font-medium text-[#1E3D59] mb-4">補足情報</h3>
-                <TextInput 
-                  label=""
-                  placeholder="補足情報を入力してください"
-                  value={supplementaryInfo}
-                  onChange={(e) => setSupplementaryInfo(e.target.value)}
-                />
-              </div>
-              <div className="pt-4">
-                <div className="flex gap-4">
-                  <Button 
-                    onClick={handleProcess}
-                    disabled={isProcessing}
-                    className="flex-1 bg-[#1E3D59] hover:bg-[#17A2B8] text-white"
-                  >
-                    {isProcessing ? "生成中..." : "サマリー生成"}
-                  </Button>
-                  <Button
-                    onClick={handleReset}
-                    variant="outline"
-                    className="flex-none px-6 border-[#1E3D59] text-[#1E3D59] hover:bg-[#1E3D59] hover:text-white"
-                  >
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    リセット
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
+            <InputSection 
+              isProcessing={isProcessing}
+              supplementaryInfo={supplementaryInfo}
+              onSupplementaryInfoChange={setSupplementaryInfo}
+              onProcess={handleProcess}
+              onReset={handleReset}
+              handleError={handleError}
+              handleFileUploadSuccess={handleFileUploadSuccess}
+            />
 
-            {/* Preview Column */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-white p-10 rounded-lg shadow-sm"
-            >
-              <div className="h-[60px] flex items-center justify-between">
-                <h3 className="text-lg font-medium text-[#1E3D59]">プレビュー</h3>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleCopy}
-                  className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
-                >
-                  <Copy className="w-4 h-4 mr-2" />
-                  コピー
-                </Button>
-              </div>
-              <div className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed">
-                {previewContent || "生成されたサマリーがここに表示されます"}
-              </div>
-            </motion.div>
+            <PreviewSection 
+              previewContent={previewContent}
+              onCopy={handleCopy}
+            />
           </div>
         </Suspense>
       </div>
@@ -206,4 +141,4 @@ const MainContentComponent = () => {
   )
 }
 
-export const MainContent = memo(MainContentComponent);
+export const MainContent = memo(MainContentComponent)
