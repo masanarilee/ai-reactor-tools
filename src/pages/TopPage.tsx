@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import LogoParticles from "@/components/LogoParticles"
 
 const TopPage = () => {
   const navigate = useNavigate()
@@ -8,9 +9,10 @@ const TopPage = () => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-[#e6e9f0] to-[#eef1f5]">
       <div 
-        className="cursor-pointer transform hover:scale-105 transition-transform duration-300 mb-4"
+        className="cursor-pointer transform hover:scale-105 transition-transform duration-300 mb-4 relative"
         onClick={() => navigate("/")}
       >
+        <LogoParticles />
         <span className="text-7xl font-bold font-['Gotham'] tracking-tight">
           <span className="text-[#1E3D59] drop-shadow-lg">Biz</span>
           <span className="text-[#17A2B8] drop-shadow-lg">Assist</span>
