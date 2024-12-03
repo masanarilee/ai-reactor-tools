@@ -9,8 +9,17 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
       throw new Error('職務経歴書または補足情報のいずれかが必要です');
     }
 
-    // ファイルの内容を読み込む
-    const fileContent = file ? await readFileContent(file) : '';
+    let fileContent = '';
+    if (file) {
+      try {
+        fileContent = await readFileContent(file);
+        toast.success("ファイルの読み込みが完了しました");
+      } catch (error) {
+        console.error('Error reading file:', error);
+        toast.error("ファイルの読み込みに失敗しました");
+        throw error;
+      }
+    }
     
     // 補足情報を処理
     const processedInfo = processSupplementaryInfo(supplementaryInfo);
@@ -22,10 +31,21 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
 
     // Claude APIを呼び出し
     const { data, error } = await supabase.functions.invoke('ask-claude', {
-      body: { prompt }
+      body: { 
+        prompt,
+        options: {
+          model: 'claude-3-sonnet-20240229',
+          max_tokens: 4096,
+          temperature: 0.7
+        }
+      }
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('API Error:', error);
+      throw error;
+    }
+
     return data.text;
 
   } catch (error) {

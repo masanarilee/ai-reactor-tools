@@ -1,52 +1,7 @@
 import { toast } from "sonner"
 import * as PDFJS from 'pdfjs-dist'
 import * as mammoth from 'mammoth'
-
-// テキストを文章単位で切り詰める関数
-export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  
-  // 最後の完全な文で切る
-  const lastPeriod = text.lastIndexOf('.', maxLength);
-  if (lastPeriod === -1) return text.slice(0, maxLength);
-  
-  return text.slice(0, lastPeriod + 1);
-}
-
-// 重要な情報を抽出する関数
-function extractKeyInformation(text: string): string {
-  const sections: string[] = [];
-  
-  // 経歴書や職務経歴書の重要なセクションを探す
-  const keyPhrases = [
-    '職務経歴', '業務経験', 'スキル', '資格', '学歴',
-    '開発環境', '技術スタック', 'プロジェクト', '案件',
-    '単価', '期間', '勤務地', '面談'
-  ];
-  
-  // テキストを行に分割
-  const lines = text.split('\n');
-  let currentSection = '';
-  
-  lines.forEach(line => {
-    // 重要なセクションを見つけた場合
-    if (keyPhrases.some(phrase => line.includes(phrase))) {
-      if (currentSection) {
-        sections.push(currentSection);
-      }
-      currentSection = line + '\n';
-    } else if (currentSection && line.trim()) {
-      currentSection += line + '\n';
-    }
-  });
-  
-  if (currentSection) {
-    sections.push(currentSection);
-  }
-  
-  // 抽出したセクションを結合
-  return sections.join('\n\n');
-}
+import * as XLSX from 'xlsx'
 
 // PDFファイルを読み込む関数
 async function readPDFContent(file: File): Promise<string> {
@@ -73,9 +28,69 @@ async function readWordContent(file: File): Promise<string> {
   return result.value;
 }
 
+// Excelファイルを読み込む関数
+async function readExcelContent(file: File): Promise<string> {
+  const arrayBuffer = await file.arrayBuffer();
+  const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+  let text = '';
+
+  workbook.SheetNames.forEach(sheetName => {
+    const worksheet = workbook.Sheets[sheetName];
+    text += `Sheet: ${sheetName}\n`;
+    text += XLSX.utils.sheet_to_string(worksheet, { header: 1 }) + '\n\n';
+  });
+
+  return text;
+}
+
+// テキストを文章単位で切り詰める関数
+export function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  
+  const lastPeriod = text.lastIndexOf('.', maxLength);
+  if (lastPeriod === -1) return text.slice(0, maxLength);
+  
+  return text.slice(0, lastPeriod + 1);
+}
+
+// 重要な情報を抽出する関数
+function extractKeyInformation(text: string): string {
+  const sections: string[] = [];
+  
+  const keyPhrases = [
+    '職務経歴', '業務経験', 'スキル', '資格', '学歴',
+    '開発環境', '技術スタック', 'プロジェクト', '案件',
+    '単価', '期間', '勤務地', '面談'
+  ];
+  
+  const lines = text.split('\n');
+  let currentSection = '';
+  
+  lines.forEach(line => {
+    if (keyPhrases.some(phrase => line.includes(phrase))) {
+      if (currentSection) {
+        sections.push(currentSection);
+      }
+      currentSection = line + '\n';
+    } else if (currentSection && line.trim()) {
+      currentSection += line + '\n';
+    }
+  });
+  
+  if (currentSection) {
+    sections.push(currentSection);
+  }
+  
+  return sections.join('\n\n');
+}
+
 // ファイルの内容を読み込む関数
 export async function readFileContent(file: File): Promise<string> {
   try {
+    if (!file) {
+      throw new Error('ファイルが選択されていません');
+    }
+
     let text = '';
     const fileType = file.type.toLowerCase();
     
@@ -87,6 +102,11 @@ export async function readFileContent(file: File): Promise<string> {
       fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ) {
       text = await readWordContent(file);
+    } else if (
+      fileType === 'application/vnd.ms-excel' ||
+      fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ) {
+      text = await readExcelContent(file);
     } else {
       // その他のファイルタイプはテキストとして読み込む
       text = await file.text();
@@ -106,7 +126,7 @@ export async function readFileContent(file: File): Promise<string> {
   } catch (error) {
     console.error('Error reading file:', error);
     toast.error("ファイルの読み込みに失敗しました: " + (error instanceof Error ? error.message : '不明なエラー'));
-    throw new Error('ファイルの読み込みに失敗しました');
+    throw error;
   }
 }
 

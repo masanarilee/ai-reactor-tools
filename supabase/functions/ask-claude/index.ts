@@ -6,13 +6,12 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    const { prompt } = await req.json()
+    const { prompt, options = {} } = await req.json()
     console.log('Received prompt:', prompt)
 
     if (!prompt) {
@@ -24,6 +23,12 @@ serve(async (req) => {
       throw new Error('CLAUDE_API_KEY environment variable is not set')
     }
 
+    const {
+      model = 'claude-3-sonnet-20240229',
+      max_tokens = 4096,
+      temperature = 0.7
+    } = options;
+
     console.log('Making request to Claude API...')
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -33,8 +38,9 @@ serve(async (req) => {
         'x-api-key': apiKey,
       },
       body: JSON.stringify({
-        model: 'claude-3-opus-20240229',
-        max_tokens: 4000,
+        model,
+        max_tokens,
+        temperature,
         messages: [
           {
             role: 'user',
