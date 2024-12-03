@@ -13,6 +13,7 @@ interface InputSectionProps {
   onReset: () => void
   handleError: (error: Error) => void
   handleFileUploadSuccess: (files: File[]) => void
+  resetTrigger: boolean
 }
 
 export const InputSection = ({
@@ -23,12 +24,11 @@ export const InputSection = ({
   onReset,
   handleError,
   handleFileUploadSuccess,
+  resetTrigger,
 }: InputSectionProps) => {
-  const [resetTrigger, setResetTrigger] = useState(false)
   const location = useLocation()
 
   const handleReset = () => {
-    setResetTrigger(prev => !prev)
     onReset()
   }
 
