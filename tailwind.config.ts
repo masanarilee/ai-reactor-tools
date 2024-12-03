@@ -20,11 +20,11 @@ export default {
     extend: {
       colors: {
         ai: {
-          primary: '#4F46E5',
-          secondary: '#818CF8',
-          accent: '#6366F1',
-          background: '#F8FAFC',
-          foreground: '#1E293B'
+          primary: '#8B5CF6',    // ビビッドな紫
+          secondary: '#D946EF',  // マゼンタピンク
+          accent: '#F97316',     // ブライトオレンジ
+          background: '#F8FAFC', // 薄いグレー
+          foreground: '#1A1F2C'  // ダークパープル
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -60,11 +60,11 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         sidebar: {
-          DEFAULT: "#F0F8FF",  // Very light blue color
-          foreground: "#1E293B",
-          border: "#E2E8F0",
-          accent: "#EDF2F7",
-          "accent-foreground": "#1E293B"
+          DEFAULT: "#F0F8FF",      // Very light blue color
+          foreground: "#1A1F2C",   // Dark purple
+          border: "#E2E8F0",       // Light gray
+          accent: "#E5DEFF",       // Soft purple
+          "accent-foreground": "#1A1F2C"
         }
       },
       keyframes: {
