@@ -19,11 +19,16 @@ serve(async (req) => {
       throw new Error('No prompt provided')
     }
 
+    const apiKey = Deno.env.get('CLAUDE_API_KEY')
+    if (!apiKey) {
+      throw new Error('CLAUDE_API_KEY environment variable is not set')
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': Deno.env.get('CLAUDE_API_KEY') || '',
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
