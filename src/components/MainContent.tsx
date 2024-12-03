@@ -113,7 +113,7 @@ const MainContentComponent = () => {
       transition={{ duration: 0.2 }}
       className="flex-1 p-6 bg-gray-50 min-h-screen w-full"
     >
-      <div className="container mx-auto max-w-7xl">
+      <div className="w-full px-4">
         <PageHeader title={currentMenuTitle} />
         
         <Suspense fallback={<div className="animate-pulse">読み込み中...</div>}>
