@@ -26,42 +26,52 @@ const TopPage = () => {
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8">
         <Button
           onClick={() => navigate("/talent-summary")}
-          className="px-8 py-10 text-lg font-['Noto Sans JP'] bg-white text-gray-800 hover:bg-gray-50 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 rounded-xl"
+          className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
+            bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
+            flex items-center gap-4 rounded-xl group"
         >
           人材要約
-          <ArrowRight className="w-5 h-5" />
+          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
         <Button
           onClick={() => navigate("/job-summary")}
-          className="px-8 py-10 text-lg font-['Noto Sans JP'] bg-white text-gray-800 hover:bg-gray-50 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 rounded-xl"
+          className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
+            bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
+            flex items-center gap-4 rounded-xl group"
         >
           求人要約
-          <ArrowRight className="w-5 h-5" />
+          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
         <Button
           onClick={() => navigate("/counseling")}
-          className="px-8 py-10 text-lg font-['Noto Sans JP'] bg-white text-gray-800 hover:bg-gray-50 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 rounded-xl"
+          className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
+            bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
+            flex items-center gap-4 rounded-xl group"
         >
           カウンセリング
-          <ArrowRight className="w-5 h-5" />
+          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
         <Button
           onClick={() => navigate("/company-analysis")}
-          className="px-8 py-10 text-lg font-['Noto Sans JP'] bg-white text-gray-800 hover:bg-gray-50 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 rounded-xl"
+          className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
+            bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
+            flex items-center gap-4 rounded-xl group"
         >
           企業分析
-          <ArrowRight className="w-5 h-5" />
+          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
 
         <Button
           onClick={() => navigate("/scout")}
-          className="px-8 py-10 text-lg font-['Noto Sans JP'] bg-white text-gray-800 hover:bg-gray-50 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 rounded-xl"
+          className="px-8 py-10 text-lg font-['Noto Sans JP'] text-[#1E3D59] hover:text-[#17A2B8] 
+            bg-white hover:bg-sidebar-hover-bg shadow-lg hover:shadow-xl transition-all duration-300 
+            flex items-center gap-4 rounded-xl group"
         >
           スカウト
-          <ArrowRight className="w-5 h-5" />
+          <ArrowRight className="w-6 h-6 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#17A2B8]" />
         </Button>
       </div>
     </div>
