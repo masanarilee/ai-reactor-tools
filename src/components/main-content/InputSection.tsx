@@ -26,23 +26,27 @@ export const InputSection = ({
   const [resetTrigger, setResetTrigger] = useState(false)
 
   const handleReset = () => {
-    setResetTrigger(prev => !prev) // トリガーの切り替え
+    setResetTrigger(prev => !prev)
     onReset()
   }
 
   return (
     <div className="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-sm">
-      <FileUploader 
-        onError={handleError} 
-        onSuccess={handleFileUploadSuccess}
-        acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
-        resetTrigger={resetTrigger}
-      />
+      <div className="text-left">
+        <h3 className="text-lg font-medium text-[#1E3D59] mb-4">経歴書アップロード</h3>
+        <FileUploader 
+          onError={handleError} 
+          onSuccess={handleFileUploadSuccess}
+          acceptedFileTypes={[".pdf", ".doc", ".docx", ".xls", ".xlsx"]}
+          resetTrigger={resetTrigger}
+        />
+      </div>
       <TextInput
-        label="補足情報"
+        label="面談メモ"
         value={supplementaryInfo}
         onChange={(e) => onSupplementaryInfoChange(e.target.value)}
-        placeholder="補足情報を入力してください"
+        placeholder="面談メモを入力してください"
+        align="left"
       />
       <div className="flex gap-4 justify-end">
         <Button

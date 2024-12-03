@@ -13,9 +13,9 @@ export const PreviewSection = ({ previewContent, onCopy }: PreviewSectionProps) 
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white p-10 rounded-lg shadow-sm"
+      className="bg-white p-6 rounded-lg shadow-sm"
     >
-      <div className="h-[60px] flex items-center justify-between">
+      <div className="h-[60px] flex items-center justify-between mb-4">
         <h3 className="text-lg font-medium text-[#1E3D59]">プレビュー</h3>
         <Button
           variant="outline"

@@ -6,11 +6,12 @@ interface TextInputProps {
   placeholder?: string
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+  align?: 'left' | 'center'
 }
 
-export function TextInput({ label, placeholder, value, onChange }: TextInputProps) {
+export function TextInput({ label, placeholder, value, onChange, align = 'center' }: TextInputProps) {
   return (
-    <div className="space-y-2">
+    <div className={`space-y-2 ${align === 'left' ? 'text-left' : 'text-center'}`}>
       <Label>{label}</Label>
       <Textarea 
         placeholder={placeholder}
