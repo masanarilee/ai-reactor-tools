@@ -15,27 +15,22 @@ function truncateText(text: string, maxLength: number): string {
 export async function generateTalentSummary(file: File | null, supplementaryInfo: string) {
   try {
     if (!file && !supplementaryInfo) {
-      throw new Error('職務経歴書または面談メモのいずれかが必要です');
+      throw new Error('職務経歴書または補足情報のいずれかが必要です');
     }
 
     let fileContent = '';
     if (file) {
-      const rawContent = await readFileContent(file);
-      // Limit file content to ~100k characters to stay well within token limits
-      fileContent = truncateText(rawContent, 100000);
-      if (fileContent.length < rawContent.length) {
-        toast.warning("ファイルが大きすぎるため、一部のみを処理します");
-      }
+      fileContent = await readFileContent(file);
     }
 
-    const prompt = `
+    const prompt = `注意：ハルシネーションを極力避けてください。
 以下の職務経歴書と面談メモから、人材サマリを作成してください：
 面談メモのみの場合でも可能な限りフォーマットに沿ってアウトプットをしてください。
 
 職務経歴書：
 ${fileContent ? fileContent : '提供なし'}
 
-面談メモ：
+補足情報：
 ${supplementaryInfo ? supplementaryInfo : '提供なし'}
 
 以下の形式で情報を整理して出力してください。
