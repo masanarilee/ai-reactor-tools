@@ -1,11 +1,7 @@
 import { LucideIcon } from "lucide-react"
 
-export type MenuItem = {
+export interface MenuItem {
   title: string
-  icon: LucideIcon
   path: string
+  icon: LucideIcon
 }
-
-export type MenuItems = readonly MenuItem[]
-
-export type SidebarState = "expanded" | "collapsed"
