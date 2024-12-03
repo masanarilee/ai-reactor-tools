@@ -11,7 +11,7 @@ export const SidebarLogo = memo(function SidebarLogo({ state }: SidebarLogoProps
 
   return (
     <span 
-      className={`text-3xl font-bold font-['Gotham'] cursor-pointer ${state === 'collapsed' ? 'hidden' : ''}`}
+      className={`text-3xl font-extrabold font-sans cursor-pointer ${state === 'collapsed' ? 'hidden' : ''}`}
       onClick={() => navigate("/")}
     >
       <span className="text-[#1E3D59]">Biz</span>
