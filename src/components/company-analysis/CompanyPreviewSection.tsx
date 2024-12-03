@@ -35,7 +35,7 @@ export const CompanyPreviewSection = () => {
       <div className="h-[60px] flex items-center">
         <h3 className="text-base font-medium text-[#1E3D59]">プレビュー</h3>
       </div>
-      <div className="space-y-6">
+      <div className="space-y-6 bg-gray-50 rounded border border-gray-200 p-6">
         {sections.map((section, index) => (
           <div key={index} className="space-y-4">
             <div className="flex justify-between items-center">
@@ -50,7 +50,7 @@ export const CompanyPreviewSection = () => {
                 コピー
               </Button>
             </div>
-            <pre className="bg-white rounded-lg border border-gray-200 p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left">
+            <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left">
               {section.content || `${section.title}が生成されるとここに表示されます`}
             </pre>
             {index < sections.length - 1 && (
