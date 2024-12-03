@@ -40,7 +40,7 @@ export const CompanyPreviewSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 * index }}
         >
-          <Card className="bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
+          <Card className="bg-white shadow-sm hover:shadow-md transition-shadow duration-200 min-h-[300px] flex flex-col">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <h4 className="font-medium text-[#1E3D59]">{section.title}</h4>
               <Button
@@ -53,8 +53,8 @@ export const CompanyPreviewSection = () => {
                 コピー
               </Button>
             </CardHeader>
-            <CardContent>
-              <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left bg-gray-50 p-4 rounded-md">
+            <CardContent className="flex-1 flex">
+              <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left bg-gray-50 p-4 rounded-md w-full h-full min-h-[200px]">
                 {section.content || `${section.title}が生成されるとここに表示されます`}
               </pre>
             </CardContent>
