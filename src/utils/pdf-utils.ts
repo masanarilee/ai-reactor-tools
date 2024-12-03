@@ -3,7 +3,7 @@ import * as PDFJS from 'pdfjs-dist'
 import { MAX_FILE_SIZE } from './constants'
 
 // Initialize PDF.js worker
-PDFJS.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${PDFJS.version}/build/pdf.worker.min.js`;
+PDFJS.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.min.js`;
 
 export async function readPDFContent(file: File): Promise<string> {
   try {
