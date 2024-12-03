@@ -4,8 +4,8 @@ import * as mammoth from 'mammoth'
 import * as XLSX from 'xlsx'
 
 // PDFJSワーカーを初期化
-const pdfWorkerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.js`;
-PDFJS.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.entry'
+PDFJS.GlobalWorkerOptions.workerSrc = pdfWorker
 
 // PDFファイルを読み込む関数
 async function readPDFContent(file: File): Promise<string> {
