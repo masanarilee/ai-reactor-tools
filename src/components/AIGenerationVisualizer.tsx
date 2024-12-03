@@ -88,104 +88,106 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
   }
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm z-50">
-      <div ref={containerRef} className="relative w-[20rem] h-[20rem]">
-        <svg className="w-full h-full" viewBox="0 0 100 100">
-          <defs>
-            <linearGradient id="spinner-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#1E3D59" />
-              <stop offset="100%" stopColor="#17A2B8" />
-            </linearGradient>
-          </defs>
-          <motion.circle
-            cx="50"
-            cy="50"
-            r="45"
-            stroke="url(#spinner-gradient)"
-            strokeWidth="4"
-            fill="none"
-            strokeLinecap="round"
-            animate={spinnerControls}
-          />
-          <motion.g animate={centerElementControls}>
-            {[0, 1, 2].map((index) => (
-              <motion.circle
-                key={index}
-                cx="50"
-                cy="50"
-                r="40"
-                fill="none"
-                stroke="#17A2B8"
-                strokeWidth="1"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{
-                  scale: [0, 1.2, 1.2],
-                  opacity: [0, 0.6, 0]
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  delay: index * 0.8,
-                  ease: "easeInOut"
-                }}
-              />
-            ))}
-          </motion.g>
-          <motion.text
-            x="50"
-            y="50"
-            textAnchor="middle"
-            dominantBaseline="central"
-            fill="#1E3D59"
-            fontSize="20"
-            fontWeight="bold"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.1 }}
-          >
-            {percentage}%
-          </motion.text>
-        </svg>
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 z-50">
+      <div className="backdrop-blur-sm p-8 rounded-lg">
+        <div ref={containerRef} className="relative w-[20rem] h-[20rem]">
+          <svg className="w-full h-full" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="spinner-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#1E3D59" />
+                <stop offset="100%" stopColor="#17A2B8" />
+              </linearGradient>
+            </defs>
+            <motion.circle
+              cx="50"
+              cy="50"
+              r="45"
+              stroke="url(#spinner-gradient)"
+              strokeWidth="4"
+              fill="none"
+              strokeLinecap="round"
+              animate={spinnerControls}
+            />
+            <motion.g animate={centerElementControls}>
+              {[0, 1, 2].map((index) => (
+                <motion.circle
+                  key={index}
+                  cx="50"
+                  cy="50"
+                  r="40"
+                  fill="none"
+                  stroke="#17A2B8"
+                  strokeWidth="1"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{
+                    scale: [0, 1.2, 1.2],
+                    opacity: [0, 0.6, 0]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: index * 0.8,
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
+            </motion.g>
+            <motion.text
+              x="50"
+              y="50"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill="#1E3D59"
+              fontSize="20"
+              fontWeight="bold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.1 }}
+            >
+              {percentage}%
+            </motion.text>
+          </svg>
 
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative">
-            {particles.map((particle, index) => (
-              <motion.div
-                key={index}
-                className="absolute rounded-full"
-                style={{
-                  left: `calc(50% + ${particle.x}px)`,
-                  top: `calc(50% + ${particle.y}px)`,
-                  width: particle.size,
-                  height: particle.size,
-                  backgroundColor: particle.color
-                }}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: [0, 1, 0.5], scale: [0, 1, 0.8] }}
-                transition={{ 
-                  duration: 4,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut"
-                }}
-              />
-            ))}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="relative">
+              {particles.map((particle, index) => (
+                <motion.div
+                  key={index}
+                  className="absolute rounded-full"
+                  style={{
+                    left: `calc(50% + ${particle.x}px)`,
+                    top: `calc(50% + ${particle.y}px)`,
+                    width: particle.size,
+                    height: particle.size,
+                    backgroundColor: particle.color
+                  }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: [0, 1, 0.5], scale: [0, 1, 0.8] }}
+                  transition={{ 
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
+        <motion.div
+          ref={textRef}
+          className="text-3xl font-bold whitespace-nowrap mt-8 text-center"
+          style={{
+            background: "linear-gradient(90deg, #1E3D59, #17A2B8, #1E3D59)",
+            backgroundSize: "200% 100%",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+          animate={textControls}
+        >
+          Generating...
+        </motion.div>
       </div>
-      <motion.div
-        ref={textRef}
-        className="text-3xl font-bold whitespace-nowrap mt-8"
-        style={{
-          background: "linear-gradient(90deg, #1E3D59, #17A2B8, #1E3D59)",
-          backgroundSize: "200% 100%",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent"
-        }}
-        animate={textControls}
-      >
-        Generating...
-      </motion.div>
     </div>
   )
 }

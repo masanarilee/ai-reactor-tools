@@ -25,8 +25,10 @@ export function FileUploader({ onError, onSuccess, acceptedFileTypes, resetTrigg
       'application/msword': ['.doc'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
       'application/vnd.ms-excel': ['.xls'],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
-    }
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+      'application/octet-stream': ['.xls', '.xlsx'] // For some Excel files that might be detected differently
+    },
+    maxSize: 10 * 1024 * 1024 // 10MB limit
   })
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export function FileUploader({ onError, onSuccess, acceptedFileTypes, resetTrigg
           ドラッグ＆ドロップ、またはクリックしてファイルを選択
         </p>
         <p className="mt-1 text-xs text-gray-500">
-          対応ファイル: {acceptedFileTypes.join(", ")}
+          対応ファイル: PDF, Word (doc/docx), Excel (xls/xlsx)
         </p>
       </div>
 
