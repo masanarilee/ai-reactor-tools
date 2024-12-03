@@ -11,7 +11,7 @@ const TopPage = () => {
         className="cursor-pointer transform hover:scale-105 transition-transform duration-300 mb-4"
         onClick={() => navigate("/")}
       >
-        <span className="text-8xl font-bold font-['Gotham'] tracking-tight">
+        <span className="text-7xl font-bold font-['Gotham'] tracking-tight">
           <span className="text-[#1E3D59] drop-shadow-lg">Biz</span>
           <span className="text-[#17A2B8] drop-shadow-lg">Assist</span>
         </span>
