@@ -32,17 +32,8 @@ export const CompanyPreviewSection = () => {
       transition={{ delay: 0.2 }}
       className="bg-white p-6 rounded-lg shadow-sm"
     >
-      <div className="h-[60px] flex items-center justify-between">
+      <div className="h-[60px] flex items-center">
         <h3 className="text-base font-medium text-[#1E3D59]">プレビュー</h3>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => handleCopy(sections.map(s => `${s.title}\n${s.content || "内容が生成されていません"}\n\n`).join(""), "すべての内容")}
-          className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
-        >
-          <Copy className="w-4 h-4 mr-2" />
-          すべてコピー
-        </Button>
       </div>
       <div className="space-y-6">
         {sections.map((section, index) => (
