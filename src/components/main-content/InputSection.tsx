@@ -51,7 +51,7 @@ export const InputSection = ({
       <div className="flex gap-4 justify-end">
         <Button
           onClick={onProcess}
-          className="w-32 h-10"
+          className="w-32 h-10 bg-[#1E3D59] hover:bg-[#17A2B8]"
           disabled={isProcessing}
         >
           <FileText className="w-4 h-4 mr-2" />
