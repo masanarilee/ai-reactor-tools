@@ -41,7 +41,7 @@ export const InputSection = ({
   const getMemoTitle = () => {
     return location.pathname === "/job-summary"
       ? "案件情報"
-      : "面談メモ"
+      : "補足情報"
   }
 
   return (
