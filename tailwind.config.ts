@@ -19,13 +19,6 @@ export default {
     },
     extend: {
       colors: {
-        ai: {
-          primary: '#8B5CF6',    // ビビッドな紫
-          secondary: '#D946EF',  // マゼンタピンク
-          accent: '#F97316',     // ブライトオレンジ
-          background: '#F3F4F6', // より柔らかいグレー
-          foreground: '#1A1F2C'  // ダークパープル
-        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
