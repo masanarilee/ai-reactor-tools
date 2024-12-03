@@ -1,5 +1,5 @@
-import { memo } from "react"
-import { useLocation } from "react-router-dom"
+import { memo, useCallback } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { MenuItem } from "./types"
 import {
   SidebarMenuItem as BaseSidebarMenuItem,
@@ -16,13 +16,20 @@ export const SidebarMenuItemComponent = memo(function SidebarMenuItemComponent({
   index 
 }: SidebarMenuItemProps) {
   const location = useLocation()
+  const navigate = useNavigate()
   const isActive = location.pathname === item.path
+  
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    navigate(item.path)
+  }, [navigate, item.path])
   
   return (
     <BaseSidebarMenuItem>
       <SidebarMenuButton asChild>
         <a 
-          href={item.path} 
+          href={item.path}
+          onClick={handleClick}
           className={`
             text-[#1E3D59] hover:text-[#17A2B8] 
             text-base py-8 font-['Noto Sans JP'] tracking-wide 
