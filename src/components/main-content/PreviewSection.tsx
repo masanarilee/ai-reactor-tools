@@ -27,9 +27,9 @@ export const PreviewSection = ({ previewContent, onCopy }: PreviewSectionProps) 
           コピー
         </Button>
       </div>
-      <div className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed">
+      <pre className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words">
         {previewContent || "生成されたサマリーがここに表示されます"}
-      </div>
+      </pre>
     </motion.div>
   )
 }
