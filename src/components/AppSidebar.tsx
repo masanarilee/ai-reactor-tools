@@ -56,14 +56,11 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r border-gray-200">
       <SidebarContent>
         <SidebarGroup>
-          <div className={`flex items-center justify-between px-3 py-2 mb-6 ${state === 'collapsed' ? 'hidden' : ''}`}>
-            <span className="text-3xl font-bold font-['Gotham']">
+          <div className="flex items-center justify-between px-3 py-2 mb-6">
+            <span className={`text-3xl font-bold font-['Gotham'] ${state === 'collapsed' ? 'hidden' : ''}`}>
               <span className="text-[#1E3D59]">Biz</span>
               <span className="text-[#17A2B8]">Assist</span>
             </span>
-            <SidebarTrigger className="scale-125" />
-          </div>
-          <div className={`flex justify-center px-3 py-1.5 mb-6 ${state === 'collapsed' ? 'block' : 'hidden'}`}>
             <SidebarTrigger className="scale-125" />
           </div>
           <SidebarGroupContent>
