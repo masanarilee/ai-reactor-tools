@@ -88,8 +88,9 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
   }
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 z-50">
-      <div className="backdrop-blur-sm p-8 rounded-lg">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
+      <div className="relative p-8 rounded-lg">
         <div ref={containerRef} className="relative w-[20rem] h-[20rem]">
           <svg className="w-full h-full" viewBox="0 0 100 100">
             <defs>
@@ -176,7 +177,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
         </div>
         <motion.div
           ref={textRef}
-          className="text-3xl font-bold whitespace-nowrap mt-8 text-center"
+          className="text-4xl font-bold whitespace-nowrap mt-8 text-center"
           style={{
             background: "linear-gradient(90deg, #1E3D59, #17A2B8, #1E3D59)",
             backgroundSize: "200% 100%",
