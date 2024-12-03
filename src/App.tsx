@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { ThemeProvider } from "next-themes"
 import "./App.css"
 import { RootLayout } from "./components/layouts/RootLayout"
@@ -27,16 +27,16 @@ function App() {
         <Router>
           <SidebarProvider defaultOpen>
             <div className="flex min-h-screen w-full">
-              <Routes>
-                <Route path="/" element={<TopPage />} />
-                <Route element={<RootLayout />}>
+              <RootLayout>
+                <Routes>
+                  <Route path="/" element={<TopPage />} />
                   <Route path="/talent-summary" element={<TalentSummary />} />
                   <Route path="/job-summary" element={<JobSummary />} />
                   <Route path="/counseling" element={<Counseling />} />
                   <Route path="/company-analysis" element={<CompanyAnalysis />} />
                   <Route path="/scout" element={<Scout />} />
-                </Route>
-              </Routes>
+                </Routes>
+              </RootLayout>
             </div>
           </SidebarProvider>
         </Router>

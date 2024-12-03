@@ -1,13 +1,12 @@
 import { memo } from "react"
-import { Outlet } from "react-router-dom"
 import { AppSidebar } from "../AppSidebar"
 import { Toaster } from "../ui/sonner"
 
-export const RootLayout = memo(() => {
+export const RootLayout = memo(({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <AppSidebar />
-      <Outlet />
+      {children}
       <Toaster />
     </>
   )
