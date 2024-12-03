@@ -4,16 +4,15 @@ import * as mammoth from 'mammoth'
 import * as XLSX from 'xlsx'
 
 // PDFJSワーカーを初期化
-PDFJS.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url
-).toString();
+const pdfWorkerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.js`;
+PDFJS.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
 
 // PDFファイルを読み込む関数
 async function readPDFContent(file: File): Promise<string> {
   try {
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFJS.getDocument({ data: arrayBuffer }).promise;
+    const loadingTask = PDFJS.getDocument({ data: arrayBuffer });
+    const pdf = await loadingTask.promise;
     let text = '';
     
     for (let i = 1; i <= pdf.numPages; i++) {
@@ -35,24 +34,34 @@ async function readPDFContent(file: File): Promise<string> {
 
 // Wordファイルを読み込む関数
 async function readWordContent(file: File): Promise<string> {
-  const arrayBuffer = await file.arrayBuffer();
-  const result = await mammoth.extractRawText({ arrayBuffer });
-  return result.value;
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    return result.value;
+  } catch (error) {
+    console.error('Error reading Word document:', error);
+    throw new Error('Wordファイルの読み込みに失敗しました');
+  }
 }
 
 // Excelファイルを読み込む関数
 async function readExcelContent(file: File): Promise<string> {
-  const arrayBuffer = await file.arrayBuffer();
-  const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-  let text = '';
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+    let text = '';
 
-  workbook.SheetNames.forEach(sheetName => {
-    const worksheet = workbook.Sheets[sheetName];
-    text += `Sheet: ${sheetName}\n`;
-    text += XLSX.utils.sheet_to_csv(worksheet) + '\n\n';
-  });
+    workbook.SheetNames.forEach(sheetName => {
+      const worksheet = workbook.Sheets[sheetName];
+      text += `Sheet: ${sheetName}\n`;
+      text += XLSX.utils.sheet_to_csv(worksheet) + '\n\n';
+    });
 
-  return text;
+    return text;
+  } catch (error) {
+    console.error('Error reading Excel file:', error);
+    throw new Error('Excelファイルの読み込みに失敗しました');
+  }
 }
 
 // テキストを文章単位で切り詰める関数
@@ -104,24 +113,33 @@ export async function readFileContent(file: File): Promise<string> {
 
     let text = '';
     const fileType = file.type.toLowerCase();
+    const fileName = file.name.toLowerCase();
     
-    // ファイルタイプに応じて適切な処理を実行
-    if (fileType === 'application/pdf') {
+    // ファイルタイプとファイル名の拡張子に基づいて処理を決定
+    if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
       text = await readPDFContent(file);
+      toast.success("PDFファイルの読み込みが完了しました");
     } else if (
       fileType === 'application/msword' || 
-      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      fileName.endsWith('.doc') || 
+      fileName.endsWith('.docx')
     ) {
       text = await readWordContent(file);
+      toast.success("Wordファイルの読み込みが完了しました");
     } else if (
       fileType === 'application/vnd.ms-excel' ||
       fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-      fileType === 'application/octet-stream' // Some Excel files might be detected as this
+      fileType === 'application/octet-stream' ||
+      fileName.endsWith('.xls') ||
+      fileName.endsWith('.xlsx')
     ) {
       text = await readExcelContent(file);
+      toast.success("Excelファイルの読み込みが完了しました");
     } else {
       // その他のファイルタイプはテキストとして読み込む
       text = await file.text();
+      toast.success("テキストファイルの読み込みが完了しました");
     }
     
     // 重要な情報を抽出
@@ -129,7 +147,6 @@ export async function readFileContent(file: File): Promise<string> {
     
     // 15,000文字に制限（トークン数を考慮）
     const truncated = truncateText(extractedInfo, 15000);
-    
     if (truncated.length < extractedInfo.length) {
       toast.warning("ファイルが大きいため、重要な部分のみを処理します");
     }
@@ -137,6 +154,7 @@ export async function readFileContent(file: File): Promise<string> {
     return truncated;
   } catch (error) {
     console.error('Error reading file:', error);
+    toast.error("ファイルの読み込みに失敗しました");
     throw error;
   }
 }
