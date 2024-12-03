@@ -1,12 +1,13 @@
 import { toast } from "sonner"
 import * as PDFJS from 'pdfjs-dist'
 import { MAX_FILE_SIZE } from './constants'
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
 
 // PDFワーカーの初期化を関数化して、より柔軟に対応
 const initializePdfWorker = () => {
   try {
-    // Set worker source directly using the bundled worker
-    PDFJS.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.min.js`;
+    // Set worker source directly using the worker entry point
+    PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     return true;
   } catch (error) {
     console.error('PDF Worker initialization failed:', error);
@@ -47,7 +48,7 @@ export async function readPDFContent(file: File): Promise<string> {
     // PDFドキュメントの読み込み
     const loadingTask = PDFJS.getDocument({ 
       data: arrayBuffer,
-      cMapUrl: `//cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS.version}/cmaps/`,
+      cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS.version}/cmaps/`,
       cMapPacked: true,
     });
 
