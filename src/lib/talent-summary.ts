@@ -1,6 +1,17 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
 
+// Helper function to truncate text while preserving complete sentences
+function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  
+  // Find the last period before maxLength
+  const lastPeriod = text.lastIndexOf('.', maxLength);
+  if (lastPeriod === -1) return text.slice(0, maxLength);
+  
+  return text.slice(0, lastPeriod + 1);
+}
+
 export async function generateTalentSummary(file: File | null, supplementaryInfo: string) {
   try {
     if (!file && !supplementaryInfo) {
@@ -9,7 +20,12 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
 
     let fileContent = '';
     if (file) {
-      fileContent = await readFileContent(file);
+      const rawContent = await readFileContent(file);
+      // Limit file content to ~100k characters to stay well within token limits
+      fileContent = truncateText(rawContent, 100000);
+      if (fileContent.length < rawContent.length) {
+        toast.warning("ファイルが大きすぎるため、一部のみを処理します");
+      }
     }
 
     const prompt = `
