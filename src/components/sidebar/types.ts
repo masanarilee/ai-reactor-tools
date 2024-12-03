@@ -7,3 +7,5 @@ export type MenuItem = {
 }
 
 export type MenuItems = readonly MenuItem[]
+
+export type SidebarState = "expanded" | "collapsed"
