@@ -36,16 +36,15 @@ export const useFileUpload = ({ onError, onSuccess, acceptedFileTypes }: UseFile
 
       setUploadedFiles(acceptedFiles)
       onSuccess(acceptedFiles)
-      toast("ファイルアップロード完了", {
+      toast.success("ファイルアップロード完了", {
         description: `${acceptedFiles.map(f => f.name).join(', ')}をアップロードしました`
       })
 
     } catch (error) {
       if (error instanceof Error) {
         onError(error)
-        toast("エラー", {
-          description: error.message,
-          variant: "destructive"
+        toast.error("エラー", {
+          description: error.message
         })
       } else {
         onError(new Error("ファイルアップロード中にエラーが発生しました"))

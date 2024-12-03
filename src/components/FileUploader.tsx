@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
 import { useDropzone } from "react-dropzone"
 import { Upload } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -29,8 +29,7 @@ export function FileUploader({ onError, onSuccess, acceptedFileTypes, resetTrigg
     }
   })
 
-  // Reset files when resetTrigger changes
-  useCallback(() => {
+  useEffect(() => {
     if (resetTrigger) {
       resetFiles()
     }
