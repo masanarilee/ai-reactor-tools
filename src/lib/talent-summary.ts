@@ -1,7 +1,7 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
 import { readFileContent, processSupplementaryInfo } from "@/utils/text-utils"
-import { TALENT_SUMMARY_PROMPT } from "./prompts"
+import { TALENT_SUMMARY_PROMPT, JOB_SUMMARY_PROMPT } from "./prompts"
 
 export async function generateTalentSummary(file: File | null, supplementaryInfo: string) {
   try {
@@ -66,46 +66,23 @@ export async function generateJobSummary(file: File | null, supplementaryInfo: s
       fileContent = await readFileContent(file);
     }
 
-    const prompt = `
-あなたは求人情報を整理して案件サマリを作成する専門家です。
-以下の情報から、案件の詳細を抽出・整理し、フォーマットに沿ってまとめてください。
-著作権に配慮しながら、事実に基づいて情報を整理してください。
-
-以下のフォーマットで出力してください：
-
-■商流：
-■案件名：
-■案件概要：
-
-■開発環境：
-
-■必須スキル：
-
-■歓迎スキル：
-
-■期間：
-■勤務地：
-■募集人数：
-■単価：
-■精算幅：
-■面談回数：
-■就業時間：
-■年齢：
-■支払いサイト：
-■備考：
-
-#案件情報
-${supplementaryInfo}
-
-${file ? `ファイル名：${file.name}` : ''}
-${fileContent ? `#添付ファイルの内容\n${fileContent}` : ''}`
+    const prompt = JOB_SUMMARY_PROMPT
+      .replace('{fileContent}', fileContent || '提供なし')
+      .replace('{supplementaryInfo}', supplementaryInfo || '提供なし');
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
-      body: { prompt }
-    })
+      body: { 
+        prompt,
+        options: {
+          model: 'claude-3-sonnet-20240229',
+          max_tokens: 4096,
+          temperature: 0.7
+        }
+      }
+    });
 
-    if (error) throw error
-    return data.text
+    if (error) throw error;
+    return data.text;
 
   } catch (error) {
     console.error('Error generating job summary:', error);
