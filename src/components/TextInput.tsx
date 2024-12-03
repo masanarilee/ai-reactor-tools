@@ -14,7 +14,7 @@ export function TextInput({ label, placeholder, value, onChange }: TextInputProp
       <Label>{label}</Label>
       <Textarea 
         placeholder={placeholder}
-        className="min-h-[100px]"
+        className="min-h-[100px] bg-white"
         value={value}
         onChange={onChange}
       />
