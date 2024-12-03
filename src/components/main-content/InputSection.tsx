@@ -1,6 +1,7 @@
 import { FileUploader } from "../FileUploader"
 import { TextInput } from "../TextInput"
 import { Button } from "../ui/button"
+import { RotateCcw, FileText } from "lucide-react"
 
 interface InputSectionProps {
   isProcessing: boolean
@@ -36,19 +37,21 @@ export const InputSection = ({
       />
       <div className="flex gap-4 justify-end">
         <Button
+          onClick={onProcess}
+          className="w-32 h-10"
+          disabled={isProcessing}
+        >
+          <FileText className="w-4 h-4" />
+          サマリ生成
+        </Button>
+        <Button
           variant="outline"
           onClick={onReset}
           className="w-32 h-10"
           disabled={isProcessing}
         >
+          <RotateCcw className="w-4 h-4" />
           リセット
-        </Button>
-        <Button
-          onClick={onProcess}
-          className="w-32 h-10"
-          disabled={isProcessing}
-        >
-          サマリ生成
         </Button>
       </div>
     </div>
