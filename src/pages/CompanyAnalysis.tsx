@@ -55,9 +55,7 @@ const CompanyAnalysis = () => {
 4）提案内容（${data.targetService}に沿って検討）
 
 5）人材想定（${data.targetService}に沿ってマッチする提案人材を検討）
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
-各セクションの内容を明確に分けて回答してください。`
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝`
   }
 
   const parseClaudeResponse = (response: string): AnalysisResult => {
