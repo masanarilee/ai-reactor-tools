@@ -5,8 +5,8 @@ import { toast } from "sonner"
 // PDFワーカーの初期化
 if (typeof window !== 'undefined' && 'Worker' in window) {
   try {
-    // webpack/viteで動作するように相対パスを使用
-    GlobalWorkerOptions.workerSrc = '/node_modules/pdfjs-dist/build/pdf.worker.min.js'
+    // CDNからPDFワーカーを読み込む
+    GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${getDocument.version}/pdf.worker.min.js`
     console.log('PDF Worker Source:', GlobalWorkerOptions.workerSrc)
   } catch (error) {
     console.error('PDF Worker initialization error:', error)
