@@ -5,9 +5,9 @@ import { toast } from "sonner"
 // PDFワーカーの初期化
 if (typeof window !== 'undefined' && 'Worker' in window) {
   try {
-    // Use unpkg CDN which is more reliable for PDF.js worker
-    GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.js`
-    console.log('PDF Worker Source:', GlobalWorkerOptions.workerSrc)
+    // Warning about fake worker setup for development
+    console.log('Warning: Setting up fake worker.')
+    GlobalWorkerOptions.workerSrc = ''  // This enables the fake worker
   } catch (error) {
     console.error('PDF Worker initialization error:', error)
     toast.error("PDFの初期化に失敗しました")
