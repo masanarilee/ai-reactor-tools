@@ -11,6 +11,13 @@ export interface ScoutData {
   recruiterName: string
 }
 
+const MAX_CONTENT_LENGTH = 50000 // Limiting content length to be safe
+
+const truncateContent = (content: string, maxLength: number) => {
+  if (content.length <= maxLength) return content
+  return content.substring(0, maxLength) + "\n...(truncated for length)"
+}
+
 export default function Scout() {
   const { toast } = useToast()
   const [isProcessing, setIsProcessing] = useState(false)
@@ -24,6 +31,10 @@ export default function Scout() {
   const [resetTrigger, setResetTrigger] = useState(false)
 
   const generatePrompt = async (resumeContent: string, jobContent: string) => {
+    // Truncate contents to prevent token limit issues
+    const truncatedResume = truncateContent(resumeContent, MAX_CONTENT_LENGTH)
+    const truncatedJob = truncateContent(jobContent, MAX_CONTENT_LENGTH)
+
     return `あなたは優秀なヘッドハンターです。
 入力された会社名の担当者名の人間として、以下の情報を元に、個別化された魅力的なスカウト文を作成してください：
 
@@ -32,10 +43,10 @@ export default function Scout() {
 - 担当者名：${scoutData.recruiterName}
 
 求人情報：
-- 求人票：${jobContent}
+- 求人票：${truncatedJob}
 
 候補者情報：
-${resumeContent}
+${truncatedResume}
 
 制約条件：
 1. 最大1000文字以内
@@ -60,10 +71,18 @@ ${scoutData.recruiterName}
   }
 
   const handleError = (error: Error) => {
+    console.error('Error details:', error)
+    let errorMessage = error.message
+    
+    // Check if the error is a token limit error
+    if (errorMessage.includes('prompt is too long')) {
+      errorMessage = "ファイルが大きすぎます。より小さなファイルを使用してください。"
+    }
+    
     toast({
       variant: "destructive",
       title: "エラーが発生しました",
-      description: error.message
+      description: errorMessage
     })
   }
 
