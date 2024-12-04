@@ -29,6 +29,21 @@ export default function Scout() {
   })
   const [previewContent, setPreviewContent] = useState("")
   const [resetTrigger, setResetTrigger] = useState(false)
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(previewContent)
+      toast({
+        title: "コピー完了",
+        description: "クリップボードにコピーしました"
+      })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "コピー失敗",
+        description: "クリップボードへのアクセスが拒否されました"
+      })
+    }
+  }
 
   const generatePrompt = async (resumeContent: string, jobContent: string) => {
     // Truncate contents to prevent token limit issues
