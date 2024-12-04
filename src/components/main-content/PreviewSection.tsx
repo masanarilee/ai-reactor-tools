@@ -58,6 +58,10 @@ export const CounselingPreview = ({ sections, onCopy }: CounselingPreviewProps) 
     { title: "4. キャリアプラン", content: sections.careerPlan }
   ]
 
+  const allContent = sectionsList
+    .map(section => `${section.title}\n${section.content}`)
+    .join('\n\n')
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -65,8 +69,17 @@ export const CounselingPreview = ({ sections, onCopy }: CounselingPreviewProps) 
       transition={{ delay: 0.2 }}
       className="bg-white p-6 rounded-lg shadow-sm"
     >
-      <div className="h-[60px] flex items-center">
+      <div className="h-[60px] flex items-center justify-between">
         <h3 className="text-base font-medium text-[#1E3D59]">プレビュー</h3>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onCopy(allContent, "全ての内容")}
+          className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
+        >
+          <Copy className="w-4 h-4 mr-2" />
+          全てコピー
+        </Button>
       </div>
       <div className="space-y-6 bg-gray-50 rounded border border-gray-200 p-6">
         {sectionsList.map((section, index) => (
