@@ -16,7 +16,7 @@ export interface CompanyAnalysisData {
 export interface AnalysisResult {
   overview: string
   marketAnalysis: string
-  challenges: string
+  divisionAnalysis: string
   proposal: string
 }
 
@@ -30,7 +30,7 @@ const CompanyAnalysis = () => {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult>({
     overview: "",
     marketAnalysis: "",
-    challenges: "",
+    divisionAnalysis: "",
     proposal: "",
   })
   const [isProcessing, setIsProcessing] = useState(false)
@@ -39,35 +39,37 @@ const CompanyAnalysis = () => {
   const generatePrompt = (data: CompanyAnalysisData) => {
     return `
 【分析リクエスト】
+※ハルシネーションに注意してください
 ■会社名：${data.companyName}
 ■事業部名：${data.divisionName || "（指定なし）"}
+■企業URL：${data.websiteUrl || "（指定なし）"}
 ■支援テーマ：${data.targetService}
-■企業HP：${data.websiteUrl || "（指定なし）"}
 
-【分析レポート】
-1. 企業概要
-- 事業内容
-- 規模/成長性
-- 業界ポジション
+【企業分析レポート】
+1. 企業プロファイル（URLを読み込んで参考にしてください）
+- 事業概要
+- 業績/規模
+- 経営方針
 
-2. 市場分析（支援テーマを考慮せず、純粋に対象企業のサービスにおける市場分析をしてください）
+2. 市場環境分析
 - 業界動向
 - 競合状況
 - 成長機会
 
-3. 課題仮説
-- 現状の課題仮説
-- 想定される導入障壁
+3. 事業部分析（指定時）
+- 組織構造
+- 主要施策
+- KPI
 
-4. 提案内容
-- 支援テーマを利用して、上記の課題に対して具体的な提案内容
-- 期待される効果
-- 実装ステップ
+4. 提案内容（支援テーマに基づく）
+- 現状の課題
+- 具体的施策
+- 期待効果
+- 実施スケジュール
 
-【留意点】
-- 支援テーマの特性を踏まえた具体的な提案を行う
-- 業界特有の課題やトレンドを考慮
-- 実現可能性の高い施策を優先`
+【分析基準】
+・1-3は客観的な企業分析のみ実施
+・4のみ支援テーマを考慮した提案を展開`
   }
 
   const parseClaudeResponse = (response: string): AnalysisResult => {
@@ -75,7 +77,7 @@ const CompanyAnalysis = () => {
     return {
       overview: sections[1]?.trim() || "",
       marketAnalysis: sections[2]?.trim() || "",
-      challenges: sections[3]?.trim() || "",
+      divisionAnalysis: sections[3]?.trim() || "",
       proposal: sections[4]?.trim() || "",
     };
   };
@@ -121,7 +123,7 @@ const CompanyAnalysis = () => {
     setAnalysisResult({
       overview: "",
       marketAnalysis: "",
-      challenges: "",
+      divisionAnalysis: "",
       proposal: "",
     })
   }
