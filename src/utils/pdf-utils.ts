@@ -3,7 +3,12 @@ import { MAX_FILE_SIZE } from './constants'
 import { toast } from "sonner"
 
 // PDFワーカーの初期化
-GlobalWorkerOptions.workerSrc = `https://mozilla.github.io/pdf.js/build/pdf.worker.js`;
+if (typeof window !== 'undefined' && 'Worker' in window) {
+  GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.mjs',
+    import.meta.url,
+  ).toString()
+}
 
 // PDFファイルの検証
 const validatePdfFile = (file: File): boolean => {
@@ -43,7 +48,7 @@ export async function readPDFContent(file: File): Promise<string> {
     // PDFドキュメントの読み込み
     const pdf = await getDocument({
       data: arrayBuffer,
-      cMapUrl: 'https://mozilla.github.io/pdf.js/web/cmaps/',
+      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.9.124/cmaps/',
       cMapPacked: true,
     }).promise
 
