@@ -29,17 +29,10 @@ const COMPANY_ANALYSIS_PROMPT = `
 ■支援テーマ：{targetService}
 
 【企業分析レポート】
-1. 公開情報に基づく企業概要
-- 企業の基本情報（所在地/設立年等）
-- 公表されている事業領域
-- 公開されている経営方針・ビジョン
-※数値情報は公開情報のみ記載
-
+1. 企業概要
+企業の基本情報をまとめてください
 2. 市場環境
-- 対象業界の市場規模（出典明記）
-- 業界トレンド（出典明記）
-※個社の競合分析は控え、業界全体の動向を記載
-
+対象企業や対象事業の市場状況をまとめてください
 3. 課題仮説
 - 1,2を考慮して企業が抱える可能性のある課題を分析（支援テーマに依存せず広い範囲で行う）
 - このセクションでは支援テーマに影響されてはならない
@@ -60,9 +53,9 @@ const COMPANY_ANALYSIS_PROMPT = `
 const generatePrompt = (companyData: CompanyAnalysisData) => {
   return COMPANY_ANALYSIS_PROMPT
     .replace('{companyName}', companyData.companyName)
-    .replace('{divisionName}', companyData.divisionName || "（指定なし）")
+    .replace('{divisionName}', companyData.divisionName)
     .replace('{targetService}', companyData.targetService)
-    .replace('{websiteUrl}', companyData.websiteUrl || "（指定なし）")
+    .replace('{websiteUrl}', companyData.websiteUrl)
 }
 
 const CompanyAnalysis = () => {
