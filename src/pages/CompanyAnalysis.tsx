@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { MainContent } from "../../components/layouts/MainContent";
-import { CompanyInputSection } from "@/components/company-analysis/CompanyInputSection"
-import { CompanyPreviewSection } from "@/components/company-analysis/CompanyPreviewSection"
+import { CompanyInputSection } from "../components/company-analysis/CompanyInputSection";
+import { CompanyPreviewSection } from "../components/company-analysis/CompanyPreviewSection";
 import { useToast } from "@/components/ui/use-toast"
 import { askClaude } from "@/lib/api"
 
