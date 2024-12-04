@@ -12,48 +12,36 @@ interface Particle {
 
 const LogoParticles = () => {
   const [particles, setParticles] = useState<Particle[]>([])
-  const [isHovered, setIsHovered] = useState(false)
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    // Increased frequency by reducing interval from 100ms to 50ms
+    const interval = setInterval(() => {
+      // Generate multiple particles per interval
+      const newParticles = Array.from({ length: 3 }).map(() => ({
+        id: Date.now() + Math.random(),
+        // Increased spread range for more dynamic movement
+        x: (Math.random() - 0.5) * 600,
+        y: (Math.random() - 0.5) * 400,
+        size: Math.random() * 6 + 2, // Slightly larger particles
+        color: Math.random() > 0.5 ? '#1E3D59' : '#17A2B8',
+        duration: Math.random() * 2 + 1
+      }));
 
-    if (isHovered) {
-      // Increased frequency by reducing interval from 100ms to 50ms
-      interval = setInterval(() => {
-        // Generate multiple particles per interval
-        const newParticles = Array.from({ length: 3 }).map(() => ({
-          id: Date.now() + Math.random(),
-          // Increased spread range for more dynamic movement
-          x: (Math.random() - 0.5) * 600,
-          y: (Math.random() - 0.5) * 400,
-          size: Math.random() * 6 + 2, // Slightly larger particles
-          color: Math.random() > 0.5 ? '#1E3D59' : '#17A2B8',
-          duration: Math.random() * 2 + 1
-        }));
+      setParticles(prev => [...prev, ...newParticles])
 
-        setParticles(prev => [...prev, ...newParticles])
-
-        // Remove old particles
-        setTimeout(() => {
-          setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)))
-        }, newParticles[0].duration * 1000)
-      }, 50)
-    }
+      // Remove old particles
+      setTimeout(() => {
+        setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)))
+      }, newParticles[0].duration * 1000)
+    }, 50)
 
     return () => {
-      if (interval) clearInterval(interval)
+      clearInterval(interval)
     }
-  }, [isHovered])
+  }, [])
 
   return (
-    <div 
-      className="absolute inset-0 pointer-events-none"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false)
-        setParticles([])
-      }}
-    >
+    <div className="absolute inset-0 pointer-events-none">
       <AnimatePresence>
         {particles.map(particle => (
           <motion.div
