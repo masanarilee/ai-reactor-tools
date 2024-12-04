@@ -74,6 +74,17 @@ const CompanyAnalysis = () => {
 - 実現可能性の高い施策を優先`
   }
 
+  const parseClaudeResponse = (response: string): AnalysisResult => {
+    const sections = response.split(/\d\. /);
+    return {
+      overview: sections[1]?.trim() || "",
+      marketAnalysis: sections[2]?.trim() || "",
+      challenges: sections[3]?.trim() || "",
+      proposal: sections[4]?.trim() || "",
+      talentProfile: sections[5]?.trim() || "",
+    };
+  };
+
   const handleProcess = async () => {
     if (!companyData.companyName || !companyData.targetService) {
       toast({
