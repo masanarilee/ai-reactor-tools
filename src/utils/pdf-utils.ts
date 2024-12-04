@@ -1,4 +1,4 @@
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist"
+import { getDocument, GlobalWorkerOptions, version } from "pdfjs-dist"
 import { MAX_FILE_SIZE } from './constants'
 import { toast } from "sonner"
 
@@ -14,7 +14,7 @@ if (typeof window !== 'undefined' && 'Worker' in window) {
   } catch (error) {
     console.error('PDF Worker initialization error:', error)
     // フォールバックとしてビルトインワーカーを使用
-    GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${getDocument.version}/pdf.worker.min.js`
+    GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.js`
     console.warn('Using fallback PDF worker')
   }
 }
