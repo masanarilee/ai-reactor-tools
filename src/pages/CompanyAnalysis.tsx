@@ -75,26 +75,25 @@ const CompanyAnalysis = () => {
   }
 
   return (
-    <MainContent title="企業分析">
-      <div className="container mx-auto p-6">
-        <div className="grid lg:grid-cols-2 gap-8">
-          <CompanyInputSection
-            companyData={companyData}
-            setCompanyData={setCompanyData}
-            isProcessing={isProcessing}
-            onProcess={handleProcess}
-            onReset={handleReset}
-          />
-          {(analysisResult.overview || 
-            analysisResult.marketAnalysis || 
-            analysisResult.challenges || 
-            analysisResult.proposal) && (
-            <CompanyPreviewSection analysisResult={analysisResult} />
-          )}
-        </div>
+  <MainContent title="企業分析">
+    <div className="container mx-auto p-6">
+      <div className="grid lg:grid-cols-2 gap-8">
+        <CompanyInputSection
+          companyData={companyData}
+          setCompanyData={setCompanyData}
+          isProcessing={isProcessing}
+          onProcess={handleProcess}
+          onReset={handleReset}
+        />
+        {(analysisResult.overview || 
+          analysisResult.marketAnalysis || 
+          analysisResult.challenges || 
+          analysisResult.proposal) && (
+          <CompanyPreviewSection analysisResult={analysisResult} />
+        )}
       </div>
-    </MainContent>
-  )
-}
+    </div>
+  </MainContent>
+)
 
 export default CompanyAnalysis
