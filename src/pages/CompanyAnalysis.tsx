@@ -37,29 +37,45 @@ const CompanyAnalysis = () => {
 
   const generatePrompt = (data: CompanyAnalysisData) => {
     return `
-会社名と事業部名が送信されたら企業情報事業部情報を分析の上、以下のフォーマットで分析結果をアウトプットしてください。
-また、こちらから提供したい提供サービスの情報を加味して、分析を進めてください。
-
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-【事前準備ＦＭＴ】　
+【分析リクエスト】
 ■会社名：${data.companyName}
-■事業部名：${data.divisionName}
+■事業部名：${data.divisionName || "（指定なし）"}
 ■提供サービス：${data.targetService}
 
-1）企業概要
+【分析レポート】
+1. 企業概要
+- 事業内容
+- 規模/成長性
+- 業界ポジション
 
-2）市場分析
+2. 市場分析
+- 業界動向
+- 競合状況
+- 成長機会
 
-3）課題仮説（${data.targetService}に沿って検討）
+3. サービス適合性分析
+- 現状の課題仮説
+- 提供サービスによる解決可能性
+- 想定される導入障壁
 
-4）提案内容（${data.targetService}に沿って検討）
+4. ソリューション提案
+- 具体的な提案内容
+- 期待される効果
+- 実装ステップ
 
-5）人材想定（${data.targetService}に沿ってマッチする提案人材を検討）
-＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝`
+5. 人材要件
+- 必要スキル
+- 経験レベル
+- 適性要件
+
+【留意点】
+- 提供サービスの特性を踏まえた具体的な提案を行う
+- 業界特有の課題やトレンドを考慮
+- 実現可能性の高い施策を優先`
   }
 
   const parseClaudeResponse = (response: string): AnalysisResult => {
-    const sections = response.split(/\d）/);
+    const sections = response.split(/\d\. /);
     return {
       overview: sections[1]?.trim() || "",
       marketAnalysis: sections[2]?.trim() || "",
@@ -70,11 +86,11 @@ const CompanyAnalysis = () => {
   };
 
   const handleProcess = async () => {
-    if (!companyData.companyName || !companyData.divisionName) {
+    if (!companyData.companyName || !companyData.targetService) {
       toast({
         variant: "destructive",
         title: "入力エラー",
-        description: "会社名と事業部名は必須です",
+        description: "会社名と提供サービスは必須項目です",
       })
       return
     }

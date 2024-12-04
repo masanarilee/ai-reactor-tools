@@ -1,7 +1,7 @@
 import { TextInput } from "@/components/TextInput"
 import { Button } from "@/components/ui/button"
 import { RotateCcw, FileText } from "lucide-react"
-import { LoadingSpinner } from "@/components/LoadingSpinner"
+import LoadingDots from "@/components/LoadingDots"
 import { CompanyAnalysisData } from "@/pages/CompanyAnalysis"
 
 interface CompanyInputSectionProps {
@@ -25,7 +25,7 @@ export const CompanyInputSection = ({
         <h3 className="text-base font-medium text-[#1E3D59]">企業情報入力</h3>
       </div>
       <TextInput
-        label="企業名"
+        label="企業名 *"
         value={companyData.companyName}
         onChange={(e) => setCompanyData({ ...companyData, companyName: e.target.value })}
         placeholder="企業名を入力してください"
@@ -35,11 +35,11 @@ export const CompanyInputSection = ({
         label="事業部名"
         value={companyData.divisionName}
         onChange={(e) => setCompanyData({ ...companyData, divisionName: e.target.value })}
-        placeholder="事業部名を入力してください"
+        placeholder="事業部名を入力してください（任意）"
         align="left"
       />
       <TextInput
-        label="提供サービス"
+        label="提供サービス *"
         value={companyData.targetService}
         onChange={(e) => setCompanyData({ ...companyData, targetService: e.target.value })}
         placeholder="提供サービスを入力してください"
@@ -52,7 +52,7 @@ export const CompanyInputSection = ({
           disabled={isProcessing}
         >
           {isProcessing ? (
-            <LoadingSpinner />
+            <LoadingDots />
           ) : (
             <>
               <FileText className="w-4 h-4 mr-2" />
