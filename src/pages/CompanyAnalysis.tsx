@@ -4,6 +4,7 @@ import { CompanyInputSection } from "@/components/company-analysis/CompanyInputS
 import { CompanyPreviewSection } from "@/components/company-analysis/CompanyPreviewSection"
 import { useToast } from "@/components/ui/use-toast"
 import { askClaude } from "@/lib/claude"
+import { LoadingSpinner } from "@/components/LoadingSpinner"
 
 export interface CompanyAnalysisData {
   companyName: string
@@ -48,7 +49,7 @@ const CompanyAnalysis = () => {
 - 規模/成長性
 - 業界ポジション
 
-2. 市場分析
+2. 市場分析（支援テーマに関する分析ではなく、対象企業のサービス事業部の特性をもとに市場を分析してください）
 - 業界動向
 - 競合状況
 - 成長機会
@@ -141,9 +142,15 @@ const CompanyAnalysis = () => {
           onProcess={handleProcess}
           onReset={handleReset}
         />
-        <CompanyPreviewSection
-          analysisResult={analysisResult}
-        />
+        {isProcessing ? (
+          <div className="flex items-center justify-center min-h-[300px] bg-white rounded-lg shadow-sm">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <CompanyPreviewSection
+            analysisResult={analysisResult}
+          />
+        )}
       </div>
     </MainContent>
   )
