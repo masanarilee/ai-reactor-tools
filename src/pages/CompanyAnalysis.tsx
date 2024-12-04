@@ -40,7 +40,7 @@ const CompanyAnalysis = () => {
 【分析リクエスト】
 ■会社名：${data.companyName}
 ■事業部名：${data.divisionName || "（指定なし）"}
-■提供サービス：${data.targetService}
+■支援テーマ：${data.targetService}
 
 【分析レポート】
 1. 企業概要
@@ -55,7 +55,7 @@ const CompanyAnalysis = () => {
 
 3. サービス適合性分析
 - 現状の課題仮説
-- 提供サービスによる解決可能性
+- 支援テーマによる解決可能性
 - 想定される導入障壁
 
 4. ソリューション提案
@@ -69,7 +69,7 @@ const CompanyAnalysis = () => {
 - 適性要件
 
 【留意点】
-- 提供サービスの特性を踏まえた具体的な提案を行う
+- 支援テーマの特性を踏まえた具体的な提案を行う
 - 業界特有の課題やトレンドを考慮
 - 実現可能性の高い施策を優先`
   }
@@ -90,7 +90,7 @@ const CompanyAnalysis = () => {
       toast({
         variant: "destructive",
         title: "入力エラー",
-        description: "会社名と提供サービスは必須項目です",
+        description: "会社名と支援テーマは必須項目です",
       })
       return
     }
