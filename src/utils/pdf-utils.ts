@@ -1,16 +1,21 @@
-import { getDocument, GlobalWorkerOptions, version } from "pdfjs-dist"
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist"
 import { MAX_FILE_SIZE } from './constants'
 import { toast } from "sonner"
 
 // PDFワーカーの初期化
 if (typeof window !== 'undefined' && 'Worker' in window) {
   try {
-    // Warning about fake worker setup for development
-    console.log('Warning: Setting up fake worker.')
-    GlobalWorkerOptions.workerSrc = ''  // This enables the fake worker
+    const workerUrl = new URL(
+      'pdfjs-dist/build/pdf.worker.min.js',
+      import.meta.url,
+    )
+    GlobalWorkerOptions.workerSrc = workerUrl.href
+    console.log('PDF Worker initialized with URL:', workerUrl.href)
   } catch (error) {
     console.error('PDF Worker initialization error:', error)
-    toast.error("PDFの初期化に失敗しました")
+    // フォールバックとしてビルトインワーカーを使用
+    GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${getDocument.version}/pdf.worker.min.js`
+    console.warn('Using fallback PDF worker')
   }
 }
 
@@ -56,7 +61,7 @@ export async function readPDFContent(file: File): Promise<string> {
     // PDFドキュメントの読み込み
     const pdf = await getDocument({
       data: arrayBuffer,
-      cMapUrl: 'https://unpkg.com/pdfjs-dist/cmaps/',
+      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@latest/cmaps/',
       cMapPacked: true,
     }).promise
 
