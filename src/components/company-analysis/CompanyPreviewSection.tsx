@@ -21,7 +21,19 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
   const handleCopy = (content: string, title: string) => {
     navigator.clipboard.writeText(content)
     toast({
-      description: `${title}をコピーしました`,
+      title: "コピー完了",
+      description: `${title}をクリップボードにコピーしました`
+    })
+  }
+
+  const handleCopyAll = () => {
+    const allContent = sections.map(section => 
+      `${section.title}\n${section.content}`
+    ).join('\n\n')
+    navigator.clipboard.writeText(allContent)
+    toast({
+      title: "コピー完了",
+      description: "すべての内容をクリップボードにコピーしました"
     })
   }
 
@@ -30,36 +42,44 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.2 }}
-      className="grid gap-6"
+      className="flex flex-col gap-6"
     >
-      {sections.map((section, index) => (
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 * index }}
+      <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-sm">
+        <h3 className="text-base font-medium text-[#1E3D59]">分析結果</h3>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleCopyAll}
+          className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
         >
-          <Card className="bg-white shadow-sm hover:shadow-md transition-shadow duration-200 min-h-[300px] flex flex-col">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h4 className="font-medium text-[#1E3D59]">{section.title}</h4>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleCopy(section.content || "内容が生成されていません", section.title)}
-                className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
-              >
-                <Copy className="w-4 h-4 mr-2" />
-                Copy
-              </Button>
-            </CardHeader>
-            <CardContent className="flex-1 flex">
-              <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left bg-gray-50 p-4 rounded-md w-full h-full min-h-[200px]">
-                {section.content || `${section.title}が生成されるとここに表示されます`}
-              </pre>
-            </CardContent>
-          </Card>
-        </motion.div>
+          <Copy className="w-4 h-4 mr-2" />
+          All Copy
+        </Button>
+      </div>
+
+      {sections.map((section, index) => (
+        <Card key={index} className="bg-white shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <h4 className="text-sm font-medium text-[#1E3D59]">{section.title}</h4>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleCopy(section.content, section.title)}
+              className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
+            >
+              <Copy className="w-4 h-4 mr-2" />
+              Copy
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <pre className="whitespace-pre-wrap text-sm text-gray-600 font-normal">
+              {section.content}
+            </pre>
+          </CardContent>
+        </Card>
       ))}
     </motion.div>
+  )
+}
   )
 }
