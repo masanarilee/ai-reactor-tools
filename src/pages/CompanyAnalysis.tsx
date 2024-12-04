@@ -129,7 +129,7 @@ const CompanyAnalysis = () => {
 
   return (
     <MainContent title="企業分析">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-8 mt-8">
         <CompanyInputSection
           companyData={companyData}
           setCompanyData={setCompanyData}
