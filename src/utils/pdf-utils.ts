@@ -4,8 +4,14 @@ import { toast } from "sonner"
 
 // PDFワーカーの初期化
 if (typeof window !== 'undefined' && 'Worker' in window) {
-  const workerUrl = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url)
-  GlobalWorkerOptions.workerSrc = workerUrl.href
+  try {
+    // webpack/viteで動作するように相対パスを使用
+    GlobalWorkerOptions.workerSrc = '/node_modules/pdfjs-dist/build/pdf.worker.min.js'
+    console.log('PDF Worker Source:', GlobalWorkerOptions.workerSrc)
+  } catch (error) {
+    console.error('PDF Worker initialization error:', error)
+    toast.error("PDFの初期化に失敗しました")
+  }
 }
 
 // PDFファイルの検証
@@ -37,11 +43,15 @@ export async function readPDFContent(file: File): Promise<string> {
       throw new Error('無効なPDFファイルです')
     }
 
+    console.log('Reading PDF file:', file.name)
+
     // ファイルをArrayBufferとして読み込む
     const arrayBuffer = await file.arrayBuffer()
     if (!arrayBuffer || arrayBuffer.byteLength === 0) {
       throw new Error('ファイルの読み込みに失敗しました')
     }
+
+    console.log('PDF ArrayBuffer loaded, size:', arrayBuffer.byteLength)
 
     // PDFドキュメントの読み込み
     const pdf = await getDocument({
@@ -50,11 +60,14 @@ export async function readPDFContent(file: File): Promise<string> {
       cMapPacked: true,
     }).promise
 
+    console.log('PDF document loaded, pages:', pdf.numPages)
+
     let text = ''
 
     // 全ページのテキストを抽出
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       try {
+        console.log(`Processing page ${pageNumber}/${pdf.numPages}`)
         const page = await pdf.getPage(pageNumber)
         const content = await page.getTextContent()
         
@@ -69,7 +82,7 @@ export async function readPDFContent(file: File): Promise<string> {
         // メモリリークを防ぐためにページを解放
         await page.cleanup()
       } catch (pageError) {
-        console.error(`ページ${pageNumber}の処理中にエラーが発生:`, pageError)
+        console.error(`ページ${pageNumber}の処理中にエラー:`, pageError)
         toast.warning(`ページ${pageNumber}の処理中にエラーが発生しましたが、続行します`)
       }
     }
@@ -78,6 +91,7 @@ export async function readPDFContent(file: File): Promise<string> {
       throw new Error('PDFからテキストを抽出できませんでした')
     }
 
+    console.log('PDF text extraction completed')
     toast.success("PDFファイルの読み込みが完了しました")
     return text
 
