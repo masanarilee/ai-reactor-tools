@@ -12,7 +12,7 @@ interface CompanyPreviewSectionProps {
 export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionProps) => {
   const { toast } = useToast()
   const sections = [
-    { title: "公開情報に基づく企業概要", content: analysisResult.overview },
+    { title: "企業概要", content: analysisResult.overview },
     { title: "市場環境", content: analysisResult.marketAnalysis },
     { title: "課題仮説", content: analysisResult.challenges },
     { title: "提案内容", content: analysisResult.proposal },
@@ -49,7 +49,7 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
                 className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
               >
                 <Copy className="w-4 h-4 mr-2" />
-                コピー
+                Copy
               </Button>
             </CardHeader>
             <CardContent className="flex-1 flex">
