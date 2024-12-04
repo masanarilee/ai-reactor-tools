@@ -29,12 +29,12 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
       .replace('{resume}', fileContent || '提供なし')
       .replace('{supplementaryInfo}', processedInfo || '提供なし');
 
-    // Claude APIを呼び出し
+    // OpenAI APIを呼び出し
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
         prompt,
         options: {
-          model: 'claude-3-sonnet-20240229',
+          model: 'gpt-4o-mini',  // モデルをgpt-4o-miniに変更
           max_tokens: 4096,
           temperature: 0.7
         }
@@ -81,7 +81,7 @@ export async function generateJobSummary(file: File | null, supplementaryInfo: s
       body: { 
         prompt,
         options: {
-          model: 'claude-3-sonnet-20240229',
+          model: 'gpt-4o-mini',
           max_tokens: 4096,
           temperature: 0.7
         }
@@ -149,7 +149,7 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
       body: { 
         prompt,
         options: {
-          model: 'claude-3-sonnet-20240229',
+          model: 'gpt-4o-mini',
           max_tokens: 4096,
           temperature: 0.7
         }
