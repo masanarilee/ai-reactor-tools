@@ -4,7 +4,7 @@ import { CompanyInputSection } from "@/components/company-analysis/CompanyInputS
 import { CompanyPreviewSection } from "@/components/company-analysis/CompanyPreviewSection"
 import { useToast } from "@/components/ui/use-toast"
 import { askClaude } from "@/lib/claude"
-import { LoadingSpinner } from "@/components/LoadingSpinner"
+import AIGenerationVisualizer from "@/components/AIGenerationVisualizer"
 
 export interface CompanyAnalysisData {
   companyName: string
@@ -49,18 +49,17 @@ const CompanyAnalysis = () => {
 - 規模/成長性
 - 業界ポジション
 
-2. 市場分析（支援テーマに関する分析ではなく、対象企業のサービス事業部の特性をもとに市場を分析してください）
+2. 市場分析（支援テーマを考慮せず、純粋に対象企業のサービスにおける市場分析をしてください）
 - 業界動向
 - 競合状況
 - 成長機会
 
-3. サービス適合性分析
+3. 課題仮説
 - 現状の課題仮説
-- 支援テーマによる解決可能性
 - 想定される導入障壁
 
-4. ソリューション提案
-- 具体的な提案内容
+4. 提案内容
+- 支援テーマを利用して、上記の課題に対して具体的な提案内容
 - 期待される効果
 - 実装ステップ
 
@@ -74,17 +73,6 @@ const CompanyAnalysis = () => {
 - 業界特有の課題やトレンドを考慮
 - 実現可能性の高い施策を優先`
   }
-
-  const parseClaudeResponse = (response: string): AnalysisResult => {
-    const sections = response.split(/\d\. /);
-    return {
-      overview: sections[1]?.trim() || "",
-      marketAnalysis: sections[2]?.trim() || "",
-      challenges: sections[3]?.trim() || "",
-      proposal: sections[4]?.trim() || "",
-      talentProfile: sections[5]?.trim() || "",
-    };
-  };
 
   const handleProcess = async () => {
     if (!companyData.companyName || !companyData.targetService) {
@@ -144,7 +132,7 @@ const CompanyAnalysis = () => {
         />
         {isProcessing ? (
           <div className="flex items-center justify-center min-h-[300px] bg-white rounded-lg shadow-sm">
-            <LoadingSpinner />
+            <AIGenerationVisualizer isGenerating={isProcessing} />
           </div>
         ) : (
           <CompanyPreviewSection
