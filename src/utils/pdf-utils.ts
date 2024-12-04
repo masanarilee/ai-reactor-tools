@@ -5,8 +5,8 @@ import { toast } from "sonner"
 // PDFワーカーの初期化
 if (typeof window !== 'undefined' && 'Worker' in window) {
   try {
-    // CDNからPDFワーカーを読み込む
-    GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.js`
+    // Use unpkg CDN which is more reliable for PDF.js worker
+    GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.js`
     console.log('PDF Worker Source:', GlobalWorkerOptions.workerSrc)
   } catch (error) {
     console.error('PDF Worker initialization error:', error)
@@ -56,7 +56,7 @@ export async function readPDFContent(file: File): Promise<string> {
     // PDFドキュメントの読み込み
     const pdf = await getDocument({
       data: arrayBuffer,
-      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.9.124/cmaps/',
+      cMapUrl: 'https://unpkg.com/pdfjs-dist/cmaps/',
       cMapPacked: true,
     }).promise
 
