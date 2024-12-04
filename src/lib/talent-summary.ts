@@ -111,6 +111,7 @@ export async function generateCounselingReport(file: File | null, supplementaryI
 
     const prompt = `
 経歴書を読み取るか補足情報の内容を分析して、次の形式で情報を整理してください：
+アウトプットは‐や*等の記載を避けタイトルと回答を分ける際には【】と・を利用してください。
 
 1. 人材要約：
 ・経験、スキル、強みを簡潔に要約
