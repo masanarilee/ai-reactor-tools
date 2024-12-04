@@ -5,8 +5,8 @@ import { MAX_FILE_SIZE } from './constants'
 // PDFワーカーの初期化を関数化
 const initializePdfWorker = async () => {
   try {
-    // 直接ワーカーのURLを指定
-    PDFJS.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.min.js`;
+    const workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url);
+    PDFJS.GlobalWorkerOptions.workerSrc = workerSrc.href;
     return true;
   } catch (error) {
     console.error('PDF Worker initialization failed:', error);
