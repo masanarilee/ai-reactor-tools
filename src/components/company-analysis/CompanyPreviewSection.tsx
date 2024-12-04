@@ -1,16 +1,23 @@
+// src/components/company-analysis/CompanyPreviewSection.tsx
+
 import { Button } from "@/components/ui/button"
 import { Copy } from "lucide-react"
 import { motion } from "framer-motion"
-import { useToast } from "@/components/ui/use-toast"
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
-import { AnalysisResult } from "@/pages/CompanyAnalysis"
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
 
 interface CompanyPreviewSectionProps {
-  analysisResult: AnalysisResult
+  analysisResult: {
+    overview: string
+    marketAnalysis: string
+    challenges: string
+    proposal: string
+  }
 }
 
 export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionProps) => {
-  const { toast } = useToast()
+  const { copyToClipboard } = useCopyToClipboard()
+  
   const sections = [
     { title: "企業概要", content: analysisResult.overview },
     { title: "市場環境", content: analysisResult.marketAnalysis },
@@ -18,23 +25,11 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
     { title: "提案内容", content: analysisResult.proposal },
   ]
 
-  const handleCopy = (content: string, title: string) => {
-    navigator.clipboard.writeText(content)
-    toast({
-      title: "コピー完了",
-      description: `${title}をクリップボードにコピーしました`
-    })
-  }
-
   const handleCopyAll = () => {
-    const allContent = sections.map(section => 
-      `${section.title}\n${section.content}`
-    ).join('\n\n')
-    navigator.clipboard.writeText(allContent)
-    toast({
-      title: "コピー完了",
-      description: "すべての内容をクリップボードにコピーしました"
-    })
+    const allContent = sections
+      .map(section => `${section.title}\n${section.content}`)
+      .join('\n\n')
+    copyToClipboard(allContent, "全ての内容")
   }
 
   return (
@@ -64,7 +59,7 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handleCopy(section.content, section.title)}
+              onClick={() => copyToClipboard(section.content, section.title)}
               className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
             >
               <Copy className="w-4 h-4 mr-2" />
@@ -79,7 +74,5 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
         </Card>
       ))}
     </motion.div>
-  )
-}
   )
 }
