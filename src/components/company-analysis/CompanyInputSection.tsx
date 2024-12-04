@@ -1,6 +1,7 @@
 import { TextInput } from "@/components/TextInput"
 import { Button } from "@/components/ui/button"
 import { RotateCcw, FileText } from "lucide-react"
+import { LoadingSpinner } from "@/components/LoadingSpinner"
 import { CompanyAnalysisData } from "@/pages/CompanyAnalysis"
 
 interface CompanyInputSectionProps {
@@ -47,11 +48,17 @@ export const CompanyInputSection = ({
       <div className="flex gap-4 justify-end">
         <Button
           onClick={onProcess}
-          className="w-32 h-10 bg-[#1E3D59] hover:bg-[#17A2B8]"
+          className="w-32 h-10 bg-[#1E3D59] hover:bg-[#17A2B8] relative"
           disabled={isProcessing}
         >
-          <FileText className="w-4 h-4 mr-2" />
-          分析生成
+          {isProcessing ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <FileText className="w-4 h-4 mr-2" />
+              分析生成
+            </>
+          )}
         </Button>
         <Button
           variant="outline"
