@@ -5,7 +5,7 @@ import { MainContent } from "@/components/MainContent"
 import { CompanyInputSection } from "@/components/company-analysis/CompanyInputSection"
 import { CompanyPreviewSection } from "@/components/company-analysis/CompanyPreviewSection"
 import { useToast } from "@/components/ui/use-toast"
-import { askClaude } from "@/lib/api"
+import { askClaude, parseClaudeResponse, generatePrompt } from "@/lib/api";
 
 export interface CompanyAnalysisData {
   companyName: string
