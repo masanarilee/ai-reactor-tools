@@ -10,6 +10,7 @@ export interface CompanyAnalysisData {
   companyName: string
   divisionName: string
   targetService: string
+  websiteUrl: string
 }
 
 export interface AnalysisResult {
@@ -25,6 +26,7 @@ const CompanyAnalysis = () => {
     companyName: "",
     divisionName: "",
     targetService: "",
+    websiteUrl: "",
   })
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult>({
     overview: "",
@@ -42,6 +44,7 @@ const CompanyAnalysis = () => {
 ■会社名：${data.companyName}
 ■事業部名：${data.divisionName || "（指定なし）"}
 ■支援テーマ：${data.targetService}
+■企業HP：${data.websiteUrl || "（指定なし）"}
 
 【分析レポート】
 1. 企業概要
@@ -121,6 +124,7 @@ const CompanyAnalysis = () => {
       companyName: "",
       divisionName: "",
       targetService: "",
+      websiteUrl: "",
     })
     setAnalysisResult({
       overview: "",

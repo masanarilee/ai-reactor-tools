@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button"
 import { RotateCcw, FileText } from "lucide-react"
 import LoadingDots from "@/components/LoadingDots"
 import { CompanyAnalysisData } from "@/pages/CompanyAnalysis"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 interface CompanyInputSectionProps {
   companyData: CompanyAnalysisData
@@ -31,6 +33,16 @@ export const CompanyInputSection = ({
         placeholder="企業名を入力してください"
         align="left"
       />
+      <div className="space-y-2 text-left">
+        <Label className="text-base font-medium text-[#1E3D59]">企業HP</Label>
+        <Input
+          type="url"
+          placeholder="https://example.com"
+          value={companyData.websiteUrl}
+          onChange={(e) => setCompanyData({ ...companyData, websiteUrl: e.target.value })}
+          className="bg-white"
+        />
+      </div>
       <TextInput
         label="事業部名"
         value={companyData.divisionName}
