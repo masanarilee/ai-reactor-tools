@@ -65,11 +65,11 @@ export const InputSection = ({
       <div className="flex gap-4 justify-end">
         <Button
           onClick={onProcess}
-          className="w-32 h-10 bg-[#1E3D59] hover:bg-[#17A2B8]"
+          className="w-32 h-10 bg-gradient-to-r from-[#1E3D59] to-[#17A2B8] hover:opacity-90 relative"
           disabled={isProcessing}
         >
           <FileText className="w-4 h-4 mr-2" />
-          サマリ生成
+          Generate
         </Button>
         <Button
           variant="outline"
@@ -78,7 +78,7 @@ export const InputSection = ({
           disabled={isProcessing}
         >
           <RotateCcw className="w-4 h-4 mr-2" />
-          リセット
+          Reset
         </Button>
       </div>
     </div>
