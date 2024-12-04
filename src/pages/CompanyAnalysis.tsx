@@ -1,10 +1,6 @@
-// src/pages/CompanyAnalysis.tsx
-
 import { useState } from "react"
-import { MainContent } from "@/components/MainContent"
-import { CompanyInputSection } from "@/components/company-analysis/CompanyInputSection"
-import { CompanyPreviewSection } from "@/components/company-analysis/CompanyPreviewSection"
-import { useToast } from "@/components/ui/use-toast"
+import { MainContent } from "@/components/layouts/MainContent"
+import { useToast } from "@/hooks/use-toast"
 import { askClaude } from "@/lib/api"
 
 export interface CompanyAnalysisData {
@@ -17,15 +13,15 @@ export interface CompanyAnalysisData {
 interface AnalysisResult {
   overview: string
   marketAnalysis: string
-  challenges: string
+  hypothesis: string
   proposal: string
 }
 
 const COMPANY_ANALYSIS_PROMPT = `
 【分析リクエスト】
 ■会社名：${data.companyName}
-■事業部名：${data.divisionName || "（指定なし）"}
-■企業URL：${data.websiteUrl || "（必須）"}
+■事業部名：${data.divisionName}
+■企業URL：${data.websiteUrl}
 ■支援テーマ：${data.targetService}
 
 【企業分析レポート】
@@ -54,7 +50,27 @@ const COMPANY_ANALYSIS_PROMPT = `
 ・課題仮説（セクション3）は支援テーマに依存しない
 ・提案内容（セクション4）のみ支援テーマに基づく
 ・推測による記載は「～と推察されます」等を明記
-・絶対にハルシネーションを起こさない`
+・絶対にハルシネーションを起こさない
+`
+
+const generatePrompt = (companyData: CompanyAnalysisData) => {
+  return COMPANY_ANALYSIS_PROMPT
+    .replace('{companyName}', companyData.companyName)
+    .replace('{divisionName}', companyData.divisionName)
+    .replace('{targetService}', companyData.targetService)
+    .replace('{websiteUrl}', companyData.websiteUrl)
+}
+
+const parseClaudeResponse = (response: string): AnalysisResult => {
+  // 応答を分析結果の各セクションに分割するロジック
+  return {
+    overview: response.split('2.')[0] || "",
+    marketAnalysis: response.split('2.')[1]?.split('3.')[0] || "",
+    hypothesis: response.split('3.')[1]?.split('4.')[0] || "",
+    proposal: response.split('4.')[1] || "",
+  }
+}
+
 const CompanyAnalysis = () => {
   const [companyData, setCompanyData] = useState<CompanyAnalysisData>({
     companyName: "",
@@ -62,12 +78,14 @@ const CompanyAnalysis = () => {
     targetService: "",
     websiteUrl: "",
   })
+  
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult>({
     overview: "",
     marketAnalysis: "",
-    challenges: "",
+    hypothesis: "",
     proposal: "",
   })
+  
   const [isProcessing, setIsProcessing] = useState(false)
   const { toast } = useToast()
 
@@ -103,31 +121,95 @@ const CompanyAnalysis = () => {
     setAnalysisResult({
       overview: "",
       marketAnalysis: "",
-      challenges: "",
+      hypothesis: "",
       proposal: "",
+    })
+    toast({
+      title: "リセット完了",
+      description: "すべての情報がクリアされました",
     })
   }
 
   return (
-  <MainContent title="企業分析">
-    <div className="container mx-auto p-6">
-      <div className="grid lg:grid-cols-2 gap-8">
-        <CompanyInputSection
-          companyData={companyData}
-          setCompanyData={setCompanyData}
-          isProcessing={isProcessing}
-          onProcess={handleProcess}
-          onReset={handleReset}
-        />
-        {(analysisResult.overview || 
-          analysisResult.marketAnalysis || 
-          analysisResult.challenges || 
-          analysisResult.proposal) && (
-          <CompanyPreviewSection analysisResult={analysisResult} />
-        )}
+    <MainContent title="企業分析">
+      <div className="grid lg:grid-cols-2 gap-8 mt-8">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <label className="text-sm font-medium">企業名</label>
+            <input
+              type="text"
+              value={companyData.companyName}
+              onChange={(e) => setCompanyData({ ...companyData, companyName: e.target.value })}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div className="space-y-4">
+            <label className="text-sm font-medium">部署名</label>
+            <input
+              type="text"
+              value={companyData.divisionName}
+              onChange={(e) => setCompanyData({ ...companyData, divisionName: e.target.value })}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div className="space-y-4">
+            <label className="text-sm font-medium">対象サービス</label>
+            <input
+              type="text"
+              value={companyData.targetService}
+              onChange={(e) => setCompanyData({ ...companyData, targetService: e.target.value })}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div className="space-y-4">
+            <label className="text-sm font-medium">WebサイトURL</label>
+            <input
+              type="text"
+              value={companyData.websiteUrl}
+              onChange={(e) => setCompanyData({ ...companyData, websiteUrl: e.target.value })}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div className="flex gap-4 justify-end">
+            <button
+              onClick={handleProcess}
+              disabled={isProcessing}
+              className="px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              分析開始
+            </button>
+            <button
+              onClick={handleReset}
+              className="px-4 py-2 border rounded"
+            >
+              リセット
+            </button>
+          </div>
+        </div>
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <h3 className="text-lg font-medium mb-4">分析結果</h3>
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-medium">企業概要</h4>
+              <p className="whitespace-pre-wrap">{analysisResult.overview}</p>
+            </div>
+            <div>
+              <h4 className="font-medium">市場環境</h4>
+              <p className="whitespace-pre-wrap">{analysisResult.marketAnalysis}</p>
+            </div>
+            <div>
+              <h4 className="font-medium">課題仮説</h4>
+              <p className="whitespace-pre-wrap">{analysisResult.hypothesis}</p>
+            </div>
+            <div>
+              <h4 className="font-medium">提案内容</h4>
+              <p className="whitespace-pre-wrap">{analysisResult.proposal}</p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </MainContent>
-)
+    </MainContent>
+  )
+}
 
 export default CompanyAnalysis
