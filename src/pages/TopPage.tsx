@@ -9,11 +9,11 @@ const TopPage = () => {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-50">
       <div 
-        className="cursor-pointer relative"
+        className="cursor-pointer relative group"
         onClick={() => navigate("/")}
       >
         <LogoParticles />
-        <span className="text-7xl font-extrabold tracking-wide font-sans">
+        <span className="text-7xl font-extrabold tracking-wide font-sans relative z-10">
           <span className="text-[#1E3D59] drop-shadow-lg">Biz</span>
           <span className="text-[#17A2B8] drop-shadow-lg">Assist</span>
         </span>
@@ -90,7 +90,7 @@ const TopPage = () => {
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TopPage
+export default TopPage;
