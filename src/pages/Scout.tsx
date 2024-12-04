@@ -4,6 +4,7 @@ import { MainContent } from "@/components/MainContent"
 import { ScoutInputSection } from "@/components/scout/ScoutInputSection"
 import { ScoutPreviewSection } from "@/components/scout/ScoutPreviewSection"
 import AIGenerationVisualizer from "@/components/AIGenerationVisualizer"
+import { askClaude } from "@/lib/claude"
 
 export interface ScoutData {
   companyName: string
@@ -21,6 +22,42 @@ export default function Scout() {
   })
   const [previewContent, setPreviewContent] = useState("")
   const [resetTrigger, setResetTrigger] = useState(false)
+
+  const generatePrompt = async (resumeContent: string, jobContent: string) => {
+    return `あなたは優秀なヘッドハンターです。
+入力された会社名の担当者名の人間として、以下の情報を元に、個別化された魅力的なスカウト文を作成してください：
+
+ヘッドハンター情報：
+- 会社名：${scoutData.companyName}
+- 担当者名：${scoutData.recruiterName}
+
+求人情報：
+- 求人票：${jobContent}
+
+候補者情報：
+${resumeContent}
+
+制約条件：
+1. 最大1000文字以内
+2. 候補者の経験と求人要件の具体的なマッチング点を2-3つ含める
+3. 会社の魅力や候補者への期待を簡潔に伝える
+4. 丁寧かつ専門的な口調を維持する
+
+出力形式：
+---
+[候補者名]様
+
+[スカウト本文]
+
+${scoutData.companyName}
+${scoutData.recruiterName}
+---
+
+必須要素：
+- 候補者の具体的なスキル・経験への言及
+- ポジションの具体的な説明
+- アクションの呼びかけ（面談や質問等）`
+  }
 
   const handleError = (error: Error) => {
     toast({
@@ -59,9 +96,16 @@ export default function Scout() {
 
     setIsProcessing(true)
     try {
-      // TODO: Implement scout message generation logic
-      const generatedMessage = "スカウト文が生成されます"
-      setPreviewContent(generatedMessage)
+      // Read the contents of both files
+      const resumeContent = await resumeFiles[0].text()
+      const jobContent = await jobFiles[0].text()
+      
+      // Generate the prompt
+      const prompt = await generatePrompt(resumeContent, jobContent)
+      
+      // Get response from Claude
+      const response = await askClaude(prompt)
+      setPreviewContent(response)
       
       toast({
         title: "完了",
