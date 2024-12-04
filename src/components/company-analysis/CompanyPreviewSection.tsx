@@ -18,22 +18,6 @@ interface CompanyPreviewSectionProps {
 export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionProps) => {
   const { copyToClipboard } = useCopyToClipboard()
   
-  return (
-    <div className="grid gap-4">
-      {sections.map((section, index) => (
-        <Card key={index}>
-          <CardHeader>
-            <h3 className="text-base font-medium text-[#1E3D59]">{section.title}</h3>
-          </CardHeader>
-          <CardContent>
-            <p className="whitespace-pre-wrap">{section.content}</p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  )
-}
-  
   const sections = [
     { title: "企業概要", content: analysisResult.overview },
     { title: "市場環境", content: analysisResult.marketAnalysis },
@@ -45,50 +29,29 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
     const allContent = sections
       .map(section => `${section.title}\n${section.content}`)
       .join('\n\n')
-    copyToClipboard(allContent, "全ての内容")
+    copyToClipboard(allContent)
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.2 }}
-      className="flex flex-col gap-6"
-    >
-      <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-sm">
-        <h3 className="text-base font-medium text-[#1E3D59]">分析結果</h3>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleCopyAll}
-          className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
-        >
-          <Copy className="w-4 h-4 mr-2" />
-          All Copy
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button onClick={handleCopyAll} variant="outline" size="sm">
+          <Copy className="mr-2 h-4 w-4" />
+          AllCopy
         </Button>
       </div>
-
-      {sections.map((section, index) => (
-        <Card key={index} className="bg-white shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h4 className="text-sm font-medium text-[#1E3D59]">{section.title}</h4>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => copyToClipboard(section.content, section.title)}
-              className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
-            >
-              <Copy className="w-4 h-4 mr-2" />
-              Copy
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <pre className="whitespace-pre-wrap text-sm text-gray-600 font-normal">
-              {section.content}
-            </pre>
-          </CardContent>
-        </Card>
-      ))}
-    </motion.div>
+      <div className="grid gap-4">
+        {sections.map((section, index) => (
+          <Card key={index}>
+            <CardHeader>
+              <h3 className="text-base font-medium text-[#1E3D59]">{section.title}</h3>
+            </CardHeader>
+            <CardContent>
+              <p className="whitespace-pre-wrap">{section.content}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
   )
 }
