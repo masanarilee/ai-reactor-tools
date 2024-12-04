@@ -1,4 +1,4 @@
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist"
+import { getDocument, GlobalWorkerOptions, version } from "pdfjs-dist"
 import { MAX_FILE_SIZE } from './constants'
 import { toast } from "sonner"
 
@@ -6,7 +6,7 @@ import { toast } from "sonner"
 if (typeof window !== 'undefined' && 'Worker' in window) {
   try {
     // CDNからPDFワーカーを読み込む
-    GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${getDocument.version}/pdf.worker.min.js`
+    GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.js`
     console.log('PDF Worker Source:', GlobalWorkerOptions.workerSrc)
   } catch (error) {
     console.error('PDF Worker initialization error:', error)
