@@ -1,6 +1,10 @@
 import { getDocument } from 'pdfjs-dist'
+import { GlobalWorkerOptions } from 'pdfjs-dist/build/pdf.mjs'
 import { MAX_FILE_SIZE } from './constants'
 import { toast } from "sonner"
+
+// PDFワーカーの初期化
+GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${getDocument.version}/pdf.worker.min.js`;
 
 // PDFファイルの検証
 const validatePdfFile = (file: File): boolean => {
