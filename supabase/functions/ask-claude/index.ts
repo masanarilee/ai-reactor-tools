@@ -51,10 +51,6 @@ serve(async (req) => {
     const data = await response.json();
     console.log('OpenAI API response received successfully');
 
-    if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
-      throw new Error('Unexpected response format from OpenAI API');
-    }
-
     return new Response(
       JSON.stringify({ text: data.choices[0].message.content }),
       { 
