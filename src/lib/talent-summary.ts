@@ -153,7 +153,7 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
       summary: extractSection(data.text, "1. 人材要約：", "2. 懸念点："),
       concerns: extractSection(data.text, "2. 懸念点：", "3. 質問例："),
       questions: extractSection(data.text, "3. 質問例：", "4. キャリアプラン："),
-      careerPlan: extractSection(data.text, "4. キャリアプラン：", "#")
+      careerPlan: extractSection(data.text, "4. キャリアプラン：", "#補足情報")
     };
 
     return sections;
