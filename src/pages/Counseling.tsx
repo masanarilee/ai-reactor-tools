@@ -82,12 +82,12 @@ export default function Counseling() {
     })
   }
 
-  const handleCopy = async (text: string, section: string) => {
+  const handleCopy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
       toast({
         title: "コピー完了",
-        description: `${section}をクリップボードにコピーしました`
+        description: "クリップボードにコピーしました"
       })
     } catch (error) {
       toast({
@@ -98,25 +98,19 @@ export default function Counseling() {
     }
   }
 
-  const PreviewSection = ({ title, content, section }: { title: string, content: string, section: string }) => (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
-      <div className="h-[60px] flex items-center justify-between">
-        <h3 className="text-base font-medium text-[#1E3D59]">{title}</h3>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => handleCopy(content, section)}
-          className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
-        >
-          <Copy className="w-4 h-4 mr-2" />
-          コピー
-        </Button>
-      </div>
-      <pre className="min-h-[200px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left overflow-auto">
-        {content || `${title}が生成されるとここに表示されます`}
-      </pre>
-    </div>
-  )
+  const allContent = `
+【人材要約】
+${counselingData.summary}
+
+【懸念点】
+${counselingData.concerns}
+
+【質問例】
+${counselingData.questions}
+
+【キャリアプラン】
+${counselingData.careerPlan}
+`
 
   return (
     <MainContent title="カウンセリング支援">
@@ -139,26 +133,23 @@ export default function Counseling() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <PreviewSection 
-              title="人材要約" 
-              content={counselingData.summary}
-              section="人材要約"
-            />
-            <PreviewSection 
-              title="懸念点" 
-              content={counselingData.concerns}
-              section="懸念点"
-            />
-            <PreviewSection 
-              title="質問例" 
-              content={counselingData.questions}
-              section="質問例"
-            />
-            <PreviewSection 
-              title="キャリアプラン" 
-              content={counselingData.careerPlan}
-              section="キャリアプラン"
-            />
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="h-[60px] flex items-center justify-between">
+                <h3 className="text-base font-medium text-[#1E3D59]">プレビュー</h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleCopy(allContent)}
+                  className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  コピー
+                </Button>
+              </div>
+              <pre className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left overflow-auto">
+                {allContent || "生成されたサマリーがここに表示されます"}
+              </pre>
+            </div>
           </motion.div>
         </div>
       </Suspense>
