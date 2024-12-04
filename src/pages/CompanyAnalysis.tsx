@@ -41,33 +41,34 @@ const CompanyAnalysis = () => {
 【分析リクエスト】
 ■会社名：${data.companyName}
 ■事業部名：${data.divisionName || "（指定なし）"}
-■企業URL：${data.websiteUrl || "（指定なし）"}
+■企業URL：${data.websiteUrl || "（必須）"}
 ■支援テーマ：${data.targetService}
 
 【企業分析レポート】
-1. 企業概要
-- 事業概要
-- 業績/規模
-- 経営方針
+1. 公開情報に基づく企業概要
+- 企業の基本情報（所在地/設立年等）
+- 公表されている事業領域
+- 公開されている経営方針・ビジョン
+※数値情報は公開情報のみ記載
 
-2. 市場分析／ 事業部分析（指定時）
-- 業界動向
-- 競合状況
-- 成長機会
+2. 市場環境
+- 対象業界の市場規模（出典明記）
+- 業界トレンド（出典明記）
+※個社の競合分析は控え、業界全体の動向を記載
 
 3. 課題仮説
+-1,2を考慮して企業がどのような課題を抱えているかの分析を支援テーマにとらわれず広い範囲で行って
 
 4. 提案内容（支援テーマに基づく）
-- 現状の課題
-- 具体的施策
-- 期待効果
-- 実施スケジュール
+- 支援テーマの内容を当企業に紹介する場合、どのような提案がよいか
+- 提案の方向性
+- 想定される施策例
 
 【分析基準】
-・1-3は客観的な企業分析のみ実施
-・4のみ支援テーマを考慮した提案を展開
-・ハルシネーションが発生しないよう注意してください
-・企業URLの情報を優先し、正しい回答を表示してください`
+・企業URLから確認できる情報のみを使用
+・推測による記載は「～と推察されます」等を明記
+・出典のない数値は使用しない
+・競合他社の具体名は記載しない`
   }
 
   const parseClaudeResponse = (response: string): AnalysisResult => {
@@ -81,11 +82,11 @@ const CompanyAnalysis = () => {
   };
 
   const handleProcess = async () => {
-    if (!companyData.companyName || !companyData.targetService) {
+    if (!companyData.companyName || !companyData.targetService || !companyData.websiteUrl) {
       toast({
         variant: "destructive",
         title: "入力エラー",
-        description: "会社名と支援テーマは必須項目です",
+        description: "会社名、企業URL、支援テーマは必須項目です",
       })
       return
     }
