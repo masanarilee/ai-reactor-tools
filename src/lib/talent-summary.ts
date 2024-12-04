@@ -13,7 +13,6 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
     if (file) {
       try {
         fileContent = await readFileContent(file);
-        toast.success("ファイルの読み込みが完了しました");
       } catch (error) {
         console.error('Error reading file:', error);
         toast.error("ファイルの読み込みに失敗しました");
@@ -21,20 +20,16 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
       }
     }
     
-    // 補足情報を処理
     const processedInfo = processSupplementaryInfo(supplementaryInfo);
-
-    // プロンプトを準備
     const prompt = TALENT_SUMMARY_PROMPT
       .replace('{resume}', fileContent || '提供なし')
       .replace('{supplementaryInfo}', processedInfo || '提供なし');
 
-    // OpenAI APIを呼び出し
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
         prompt,
         options: {
-          model: 'gpt-4o-mini',  // モデルをgpt-4o-miniに変更
+          model: 'gpt-4o-mini',
           max_tokens: 4096,
           temperature: 0.7
         }
@@ -65,7 +60,6 @@ export async function generateJobSummary(file: File | null, supplementaryInfo: s
     if (file) {
       try {
         fileContent = await readFileContent(file);
-        toast.success("ファイルの読み込みが完了しました");
       } catch (error) {
         console.error('Error reading file:', error);
         toast.error("ファイルの読み込みに失敗しました");
@@ -108,7 +102,6 @@ export async function generateCounselingReport(file: File | null, supplementaryI
     if (file) {
       try {
         fileContent = await readFileContent(file);
-        toast.success("ファイルの読み込みが完了しました");
       } catch (error) {
         console.error('Error reading file:', error);
         toast.error("ファイルの読み込みに失敗しました");
@@ -158,18 +151,46 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
 
     if (error) throw error;
 
-    // Split the response into sections
-    const sections = data.text.split(/\d\.\s+/);
-    return {
-      summary: sections[1]?.trim() || '',
-      concerns: sections[2]?.trim() || '',
-      questions: sections[3]?.trim() || '',
-      careerPlan: sections[4]?.trim() || ''
+    // Extract sections from the response
+    const sections = {
+      summary: extractSection(data.text, "人材要約"),
+      concerns: extractSection(data.text, "懸念点"),
+      questions: extractSection(data.text, "質問例"),
+      careerPlan: extractSection(data.text, "キャリアプラン")
     };
+
+    return sections;
 
   } catch (error) {
     console.error('Error generating counseling report:', error);
     toast.error("カウンセリングレポートの生成に失敗しました。" + (error instanceof Error ? error.message : '不明なエラーが発生しました'));
     throw error;
   }
+}
+
+// Helper function to extract sections from the response
+function extractSection(text: string, sectionName: string): string {
+  const sections = text.split(/\d\.\s+/);
+  let content = "";
+  
+  switch(sectionName) {
+    case "人材要約":
+      content = sections[1] || "";
+      break;
+    case "懸念点":
+      content = sections[2] || "";
+      break;
+    case "質問例":
+      content = sections[3] || "";
+      break;
+    case "キャリアプラン":
+      content = sections[4] || "";
+      break;
+  }
+
+  // Remove section title and bullet points
+  return content
+    .replace(new RegExp(`${sectionName}：?\n?`), '')
+    .replace(/^-\s+/gm, '')
+    .trim();
 }
