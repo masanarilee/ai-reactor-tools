@@ -16,7 +16,6 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
     { title: "市場分析", content: analysisResult.marketAnalysis },
     { title: "課題仮説", content: analysisResult.challenges },
     { title: "提案内容", content: analysisResult.proposal },
-    { title: "人材想定", content: analysisResult.talentProfile },
   ]
 
   const handleCopy = (content: string, title: string) => {

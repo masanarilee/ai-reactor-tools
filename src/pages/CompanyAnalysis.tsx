@@ -18,7 +18,6 @@ export interface AnalysisResult {
   marketAnalysis: string
   challenges: string
   proposal: string
-  talentProfile: string
 }
 
 const CompanyAnalysis = () => {
@@ -33,7 +32,6 @@ const CompanyAnalysis = () => {
     marketAnalysis: "",
     challenges: "",
     proposal: "",
-    talentProfile: "",
   })
   const [isProcessing, setIsProcessing] = useState(false)
   const { toast } = useToast()
@@ -66,11 +64,6 @@ const CompanyAnalysis = () => {
 - 期待される効果
 - 実装ステップ
 
-5. 人材要件
-- 必要スキル
-- 経験レベル
-- 適性要件
-
 【留意点】
 - 支援テーマの特性を踏まえた具体的な提案を行う
 - 業界特有の課題やトレンドを考慮
@@ -84,7 +77,6 @@ const CompanyAnalysis = () => {
       marketAnalysis: sections[2]?.trim() || "",
       challenges: sections[3]?.trim() || "",
       proposal: sections[4]?.trim() || "",
-      talentProfile: sections[5]?.trim() || "",
     };
   };
 
@@ -131,7 +123,6 @@ const CompanyAnalysis = () => {
       marketAnalysis: "",
       challenges: "",
       proposal: "",
-      talentProfile: "",
     })
   }
 
