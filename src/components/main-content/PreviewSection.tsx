@@ -40,7 +40,7 @@ export const PreviewSection = ({ previewContent, onCopy }: PreviewSectionProps) 
           className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
         >
           <Copy className="w-4 h-4 mr-2" />
-          コピー
+          Copy
         </Button>
       </div>
       <pre className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left overflow-auto">
@@ -78,7 +78,7 @@ export const CounselingPreview = ({ sections, onCopy }: CounselingPreviewProps) 
           className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
         >
           <Copy className="w-4 h-4 mr-2" />
-          全てコピー
+          AllCopy
         </Button>
       </div>
       <div className="space-y-6 bg-gray-50 rounded border border-gray-200 p-6">
@@ -93,7 +93,7 @@ export const CounselingPreview = ({ sections, onCopy }: CounselingPreviewProps) 
                 className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
               >
                 <Copy className="w-4 h-4 mr-2" />
-                コピー
+                Copy
               </Button>
             </div>
             <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left">
