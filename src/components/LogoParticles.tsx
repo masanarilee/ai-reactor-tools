@@ -18,23 +18,26 @@ const LogoParticles = () => {
     let interval: NodeJS.Timeout | null = null;
 
     if (isHovered) {
+      // Increased frequency by reducing interval from 100ms to 50ms
       interval = setInterval(() => {
-        const newParticle: Particle = {
-          id: Date.now(),
-          x: (Math.random() - 0.5) * 400,
-          y: (Math.random() - 0.5) * 200,
-          size: Math.random() * 4 + 2,
+        // Generate multiple particles per interval
+        const newParticles = Array.from({ length: 3 }).map(() => ({
+          id: Date.now() + Math.random(),
+          // Increased spread range for more dynamic movement
+          x: (Math.random() - 0.5) * 600,
+          y: (Math.random() - 0.5) * 400,
+          size: Math.random() * 6 + 2, // Slightly larger particles
           color: Math.random() > 0.5 ? '#1E3D59' : '#17A2B8',
           duration: Math.random() * 2 + 1
-        }
+        }));
 
-        setParticles(prev => [...prev, newParticle])
+        setParticles(prev => [...prev, ...newParticles])
 
         // Remove old particles
         setTimeout(() => {
-          setParticles(prev => prev.filter(p => p.id !== newParticle.id))
-        }, newParticle.duration * 1000)
-      }, 100)
+          setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)))
+        }, newParticles[0].duration * 1000)
+      }, 50)
     }
 
     return () => {
@@ -65,7 +68,8 @@ const LogoParticles = () => {
               opacity: [0, 1, 0],
               scale: [0, 1, 0],
               x: particle.x,
-              y: particle.y
+              y: particle.y,
+              rotate: Math.random() * 360 // Added rotation for more dynamic movement
             }}
             exit={{
               opacity: 0,

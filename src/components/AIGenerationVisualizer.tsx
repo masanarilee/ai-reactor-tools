@@ -177,7 +177,7 @@ const AIGenerationVisualizer: React.FC<AIGenerationVisualizerProps> = ({ isGener
         </div>
         <motion.div
           ref={textRef}
-          className="text-4xl font-bold whitespace-nowrap mt-8 text-center"
+          className="text-6xl font-bold whitespace-nowrap mt-8 text-center"
           style={{
             background: "linear-gradient(90deg, #1E3D59, #17A2B8, #1E3D59)",
             backgroundSize: "200% 100%",
