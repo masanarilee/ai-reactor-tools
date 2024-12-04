@@ -41,6 +41,10 @@ serve(async (req) => {
       throw new Error(`Failed to upload file: ${uploadError.message}`)
     }
 
+    // Configure PDF.js worker
+    const pdfjsWorker = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.269/build/pdf.worker.min.mjs')
+    pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
+
     // Get the file buffer for PDF processing
     const arrayBuffer = await file.arrayBuffer()
 
