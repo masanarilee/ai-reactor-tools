@@ -12,9 +12,9 @@ interface CompanyPreviewSectionProps {
 export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionProps) => {
   const { toast } = useToast()
   const sections = [
-    { title: "企業プロファイル", content: analysisResult.overview },
-    { title: "市場環境分析", content: analysisResult.marketAnalysis },
-    { title: "事業部分析", content: analysisResult.divisionAnalysis },
+    { title: "企業概要", content: analysisResult.overview },
+    { title: "市場分析／事業部分析", content: analysisResult.marketAnalysis },
+    { title: "課題仮説", content: analysisResult.challenges },
     { title: "提案内容", content: analysisResult.proposal },
   ]
 

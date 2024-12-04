@@ -16,7 +16,7 @@ export interface CompanyAnalysisData {
 export interface AnalysisResult {
   overview: string
   marketAnalysis: string
-  divisionAnalysis: string
+  challenges: string
   proposal: string
 }
 
@@ -30,7 +30,7 @@ const CompanyAnalysis = () => {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult>({
     overview: "",
     marketAnalysis: "",
-    divisionAnalysis: "",
+    challenges: "",
     proposal: "",
   })
   const [isProcessing, setIsProcessing] = useState(false)
@@ -39,27 +39,23 @@ const CompanyAnalysis = () => {
   const generatePrompt = (data: CompanyAnalysisData) => {
     return `
 【分析リクエスト】
-※ハルシネーションに注意してください
 ■会社名：${data.companyName}
 ■事業部名：${data.divisionName || "（指定なし）"}
 ■企業URL：${data.websiteUrl || "（指定なし）"}
 ■支援テーマ：${data.targetService}
 
 【企業分析レポート】
-1. 企業プロファイル（URLを読み込んで参考にしてください）
+1. 企業概要
 - 事業概要
 - 業績/規模
 - 経営方針
 
-2. 市場環境分析
+2. 市場分析／ 事業部分析（指定時）
 - 業界動向
 - 競合状況
 - 成長機会
 
-3. 事業部分析（指定時）
-- 組織構造
-- 主要施策
-- KPI
+3. 課題仮説
 
 4. 提案内容（支援テーマに基づく）
 - 現状の課題
@@ -69,7 +65,9 @@ const CompanyAnalysis = () => {
 
 【分析基準】
 ・1-3は客観的な企業分析のみ実施
-・4のみ支援テーマを考慮した提案を展開`
+・4のみ支援テーマを考慮した提案を展開
+・ハルシネーションが発生しないよう注意してください
+・企業URLの情報を優先し、正しい回答を表示してください`
   }
 
   const parseClaudeResponse = (response: string): AnalysisResult => {
@@ -77,7 +75,7 @@ const CompanyAnalysis = () => {
     return {
       overview: sections[1]?.trim() || "",
       marketAnalysis: sections[2]?.trim() || "",
-      divisionAnalysis: sections[3]?.trim() || "",
+      challenges: sections[3]?.trim() || "",
       proposal: sections[4]?.trim() || "",
     };
   };
@@ -123,7 +121,7 @@ const CompanyAnalysis = () => {
     setAnalysisResult({
       overview: "",
       marketAnalysis: "",
-      divisionAnalysis: "",
+      challenges: "",
       proposal: "",
     })
   }
