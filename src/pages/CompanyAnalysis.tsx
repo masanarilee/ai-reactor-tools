@@ -1,7 +1,7 @@
 // src/pages/CompanyAnalysis.tsx
 
 import { useState } from "react"
-import { MainContent } from "@/components/MainContent";
+import { MainContent } from "@/components/MainContent"
 import { CompanyInputSection } from "../components/company-analysis/CompanyInputSection";
 import { CompanyPreviewSection } from "../components/company-analysis/CompanyPreviewSection";
 import { useToast } from "@/components/ui/use-toast"
