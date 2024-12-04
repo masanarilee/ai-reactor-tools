@@ -18,6 +18,22 @@ interface CompanyPreviewSectionProps {
 export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionProps) => {
   const { copyToClipboard } = useCopyToClipboard()
   
+  return (
+    <div className="grid gap-4">
+      {sections.map((section, index) => (
+        <Card key={index}>
+          <CardHeader>
+            <h3 className="text-base font-medium text-[#1E3D59]">{section.title}</h3>
+          </CardHeader>
+          <CardContent>
+            <p className="whitespace-pre-wrap">{section.content}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}
+  
   const sections = [
     { title: "企業概要", content: analysisResult.overview },
     { title: "市場環境", content: analysisResult.marketAnalysis },
