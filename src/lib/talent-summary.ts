@@ -1,7 +1,6 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
-import { readFileContent, processSupplementaryInfo } from "@/utils/text-utils"
-import { TALENT_SUMMARY_PROMPT, JOB_SUMMARY_PROMPT } from "./prompts"
+import { readFileContent } from "@/utils/text-utils"
 
 export async function generateTalentSummary(file: File | null, supplementaryInfo: string) {
   try {
@@ -19,11 +18,34 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
         throw error;
       }
     }
-    
-    const processedInfo = processSupplementaryInfo(supplementaryInfo);
-    const prompt = TALENT_SUMMARY_PROMPT
-      .replace('{resume}', fileContent || '提供なし')
-      .replace('{supplementaryInfo}', processedInfo || '提供なし');
+
+    const processedInfo = supplementaryInfo.trim().replace(/\s+/g, ' ');
+    const prompt = `\
+経歴書を読み取るか補足情報の内容を分析して、次の形式で情報を整理してください：
+アウトプットは‐や*等の記載を避けタイトルと回答を分ける際には【】と・を利用してください。
+
+【人材要約】
+・経験、スキル、強みを簡潔に要約
+・キャリアの方向性や特徴を分析
+
+【懸念点】
+・スキルギャップや改善が必要な領域
+・キャリアパスにおける潜在的な課題
+
+【質問例】
+・キャリアの方向性を明確にするための質問(複数)
+・スキルの詳細を深堀りする質問(複数)
+
+【キャリアプラン】
+・短期的な目標（1-2年）
+・中期的な目標（3-5年）
+・長期的なキャリアビジョン
+
+#補足情報
+${processedInfo}
+
+${file ? `ファイル名：${file.name}` : ''}
+${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
@@ -37,11 +59,18 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
     });
 
     if (error) {
-      console.error('API Error:', error);
+      console.error('Supabase function error:', error);
       throw error;
     }
 
-    return data.text;
+    const sections = {
+      summary: extractSection(data.text, "【人材要約】", "【懸念点】"),
+      concerns: extractSection(data.text, "【懸念点】", "【質問例】"),
+      questions: extractSection(data.text, "【質問例】", "【キャリアプラン】"),
+      careerPlan: extractSection(data.text, "【キャリアプラン】", "#補足情報")
+    };
+
+    return sections;
 
   } catch (error) {
     console.error('Error generating summary:', error);
@@ -67,9 +96,9 @@ export async function generateJobSummary(file: File | null, supplementaryInfo: s
       }
     }
 
-    const prompt = JOB_SUMMARY_PROMPT
-      .replace('{fileContent}', fileContent || '提供なし')
-      .replace('{supplementaryInfo}', supplementaryInfo || '提供なし');
+    const prompt = `\
+${fileContent ? `ファイル名：${file.name}` : ''}
+${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`;
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
@@ -116,23 +145,23 @@ export async function generateCounselingReport(file: File | null, supplementaryI
       }
     }
 
-    const prompt = `
+    const prompt = `\
 経歴書を読み取るか補足情報の内容を分析して、次の形式で情報を整理してください：
 アウトプットは‐や*等の記載を避けタイトルと回答を分ける際には【】と・を利用してください。
 
-1. 人材要約：
+【人材要約】
 ・経験、スキル、強みを簡潔に要約
 ・キャリアの方向性や特徴を分析
 
-2. 懸念点：
+【懸念点】
 ・スキルギャップや改善が必要な領域
 ・キャリアパスにおける潜在的な課題
 
-3. 質問例：
+【質問例】
 ・キャリアの方向性を明確にするための質問(複数)
 ・スキルの詳細を深堀りする質問(複数)
 
-4. キャリアプラン：(本人の経歴を元に今後のキャリアを考えてアウトプットして)
+【キャリアプラン】
 ・短期的な目標（1-2年）
 ・中期的な目標（3-5年）
 ・長期的なキャリアビジョン
@@ -141,7 +170,7 @@ export async function generateCounselingReport(file: File | null, supplementaryI
 ${supplementaryInfo}
 
 ${file ? `ファイル名：${file.name}` : ''}
-${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
+${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`;
 
     console.log('Sending prompt to OpenAI:', prompt);
 
@@ -164,10 +193,10 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
     }
 
     const sections = {
-      summary: extractSection(data.text, "1. 人材要約：", "2. 懸念点："),
-      concerns: extractSection(data.text, "2. 懸念点：", "3. 質問例："),
-      questions: extractSection(data.text, "3. 質問例：", "4. キャリアプラン："),
-      careerPlan: extractSection(data.text, "4. キャリアプラン：", "#補足情報")
+      summary: extractSection(data.text, "【人材要約】", "【懸念点】"),
+      concerns: extractSection(data.text, "【懸念点】", "【質問例】"),
+      questions: extractSection(data.text, "【質問例】", "【キャリアプラン】"),
+      careerPlan: extractSection(data.text, "【キャリアプラン】", "#補足情報")
     };
 
     console.log('Extracted sections:', sections);
