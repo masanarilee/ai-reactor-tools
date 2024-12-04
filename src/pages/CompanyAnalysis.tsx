@@ -65,10 +65,9 @@ const CompanyAnalysis = () => {
 - 想定される施策例
 
 【分析基準】
-・企業URLから確認できる情報のみを使用
+・企業URLから確認できる情報や確実性の高い情報のみを表示
 ・推測による記載は「～と推察されます」等を明記
-・出典のない数値は使用しない
-・競合他社の具体名は記載しない`
+・絶対にハルシネーションを起こさない`
   }
 
   const parseClaudeResponse = (response: string): AnalysisResult => {
