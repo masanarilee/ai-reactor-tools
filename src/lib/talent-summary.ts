@@ -149,12 +149,12 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
 
     if (error) throw error;
 
-    // Extract sections from the response
+    // Extract sections from the response using improved regex patterns
     const sections = {
-      summary: extractSection(data.text, "人材要約"),
-      concerns: extractSection(data.text, "懸念点"),
-      questions: extractSection(data.text, "質問例"),
-      careerPlan: extractSection(data.text, "キャリアプラン")
+      summary: extractSection(data.text, "1. 人材要約", "2. 懸念点"),
+      concerns: extractSection(data.text, "2. 懸念点", "3. 質問例"),
+      questions: extractSection(data.text, "3. 質問例", "4. キャリアプラン"),
+      careerPlan: extractSection(data.text, "4. キャリアプラン", "#")
     };
 
     return sections;
@@ -166,17 +166,20 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
   }
 }
 
-// Helper function to extract sections from the response
-function extractSection(text: string, sectionName: string): string {
-  const sectionRegex = new RegExp(`${sectionName}：([\\s\\S]*?)(?=\\d\\.\\s|$)`, 'g');
-  const match = sectionRegex.exec(text);
+// Improved helper function to extract sections from the response
+function extractSection(text: string, startSection: string, endSection: string): string {
+  const startIndex = text.indexOf(startSection);
+  if (startIndex === -1) return "";
   
-  if (!match || !match[1]) return "";
+  const endIndex = text.indexOf(endSection, startIndex);
+  const sectionContent = endIndex === -1 
+    ? text.slice(startIndex + startSection.length)
+    : text.slice(startIndex + startSection.length, endIndex);
   
-  return match[1]
+  return sectionContent
     .split('\n')
     .map(line => line.trim())
-    .filter(line => line && !line.startsWith(sectionName))
+    .filter(line => line && !line.startsWith(startSection))
     .join('\n')
     .trim();
 }

@@ -51,10 +51,10 @@ export const PreviewSection = ({ previewContent, onCopy }: PreviewSectionProps) 
 
 export const CounselingPreview = ({ sections, onCopy }: CounselingPreviewProps) => {
   const sectionsList: CounselingSection[] = [
-    { title: "人材要約", content: sections.summary },
-    { title: "懸念点", content: sections.concerns },
-    { title: "質問例", content: sections.questions },
-    { title: "キャリアプラン", content: sections.careerPlan }
+    { title: "1. 人材要約", content: sections.summary },
+    { title: "2. 懸念点", content: sections.concerns },
+    { title: "3. 質問例", content: sections.questions },
+    { title: "4. キャリアプラン", content: sections.careerPlan }
   ]
 
   return (
@@ -86,7 +86,7 @@ export const CounselingPreview = ({ sections, onCopy }: CounselingPreviewProps) 
               {section.content || `${section.title}が生成されるとここに表示されます`}
             </pre>
             {index < sectionsList.length - 1 && (
-              <div className="border-b border-gray-200" />
+              <div className="border-b border-gray-200 my-4" />
             )}
           </div>
         ))}
