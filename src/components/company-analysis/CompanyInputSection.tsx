@@ -36,7 +36,7 @@ export const CompanyInputSection = ({
       <div className="space-y-2 text-left">
         <Label className="text-base font-medium text-[#1E3D59]">企業HP</Label>
         <Input
-          type="url"
+          type="url *"
           placeholder="https://example.com"
           value={companyData.websiteUrl}
           onChange={(e) => setCompanyData({ ...companyData, websiteUrl: e.target.value })}
