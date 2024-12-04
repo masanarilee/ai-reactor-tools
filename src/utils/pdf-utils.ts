@@ -4,10 +4,8 @@ import { toast } from "sonner"
 
 // PDFワーカーの初期化
 if (typeof window !== 'undefined' && 'Worker' in window) {
-  GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.mjs',
-    import.meta.url,
-  ).toString()
+  const workerUrl = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url)
+  GlobalWorkerOptions.workerSrc = workerUrl.href
 }
 
 // PDFファイルの検証
