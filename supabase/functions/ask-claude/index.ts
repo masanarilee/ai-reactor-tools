@@ -25,12 +25,6 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY environment variable is not set');
     }
 
-    const {
-      model = 'gpt-4o-mini',
-      max_tokens = 4096,
-      temperature = 0.7
-    } = options;
-
     console.log('Making request to OpenAI API...');
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -39,12 +33,12 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model,
+        model: options.model || 'gpt-4o-mini',
         messages: [
           { role: 'user', content: prompt }
         ],
-        max_tokens,
-        temperature,
+        max_tokens: options.max_tokens || 4096,
+        temperature: options.temperature || 0.7
       }),
     });
 
@@ -72,7 +66,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error in ask-gpt function:', error);
+    console.error('Error in ask-claude function:', error);
     return new Response(
       JSON.stringify({ 
         error: error instanceof Error ? error.message : 'Unknown error occurred',

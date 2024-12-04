@@ -94,6 +94,11 @@ export async function generateJobSummary(file: File | null, supplementaryInfo: s
 
 export async function generateCounselingReport(file: File | null, supplementaryInfo: string) {
   try {
+    console.log('Starting generateCounselingReport with:', { 
+      hasFile: !!file, 
+      supplementaryInfo 
+    });
+
     if (!file && !supplementaryInfo) {
       throw new Error('経歴書または補足情報のいずれかが必要です');
     }
@@ -101,7 +106,9 @@ export async function generateCounselingReport(file: File | null, supplementaryI
     let fileContent = '';
     if (file) {
       try {
+        console.log('Attempting to read file:', file.name);
         fileContent = await readFileContent(file);
+        console.log('File content read successfully');
       } catch (error) {
         console.error('Error reading file:', error);
         toast.error("ファイルの読み込みに失敗しました");
@@ -136,6 +143,8 @@ ${supplementaryInfo}
 ${file ? `ファイル名：${file.name}` : ''}
 ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
 
+    console.log('Sending prompt to OpenAI:', prompt);
+
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
         prompt,
@@ -147,7 +156,12 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
       }
     });
 
-    if (error) throw error;
+    console.log('Response from OpenAI:', data);
+
+    if (error) {
+      console.error('Supabase function error:', error);
+      throw error;
+    }
 
     const sections = {
       summary: extractSection(data.text, "1. 人材要約：", "2. 懸念点："),
@@ -156,10 +170,12 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
       careerPlan: extractSection(data.text, "4. キャリアプラン：", "#補足情報")
     };
 
+    console.log('Extracted sections:', sections);
+
     return sections;
 
   } catch (error) {
-    console.error('Error generating counseling report:', error);
+    console.error('Error in generateCounselingReport:', error);
     toast.error("カウンセリングレポートの生成に失敗しました。" + (error instanceof Error ? error.message : '不明なエラーが発生しました'));
     throw error;
   }
