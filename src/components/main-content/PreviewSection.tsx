@@ -1,6 +1,7 @@
 import { Button } from "../ui/button"
 import { Copy } from "lucide-react"
 import { motion } from "framer-motion"
+import { Card, CardHeader, CardContent } from "../ui/card"
 
 interface PreviewSectionProps {
   previewContent: string

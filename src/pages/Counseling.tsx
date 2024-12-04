@@ -3,10 +3,8 @@ import { useToast } from "@/components/ui/use-toast"
 import { generateCounselingReport } from "@/lib/talent-summary"
 import AIGenerationVisualizer from "@/components/AIGenerationVisualizer"
 import { InputSection } from "@/components/main-content/InputSection"
+import { CounselingPreview } from "@/components/main-content/PreviewSection"
 import { MainContent } from "@/components/MainContent"
-import { Button } from "@/components/ui/button"
-import { Copy } from "lucide-react"
-import { motion } from "framer-motion"
 
 export default function Counseling() {
   const { toast } = useToast()
@@ -82,12 +80,12 @@ export default function Counseling() {
     })
   }
 
-  const handleCopy = async (text: string) => {
+  const handleCopy = async (text: string, section: string) => {
     try {
       await navigator.clipboard.writeText(text)
       toast({
         title: "コピー完了",
-        description: "クリップボードにコピーしました"
+        description: `${section}をクリップボードにコピーしました`
       })
     } catch (error) {
       toast({
@@ -97,20 +95,6 @@ export default function Counseling() {
       })
     }
   }
-
-  const allContent = `
-【人材要約】
-${counselingData.summary}
-
-【懸念点】
-${counselingData.concerns}
-
-【質問例】
-${counselingData.questions}
-
-【キャリアプラン】
-${counselingData.careerPlan}
-`
 
   return (
     <MainContent title="カウンセリング支援">
@@ -127,30 +111,10 @@ ${counselingData.careerPlan}
             resetTrigger={resetTrigger}
           />
 
-          <motion.div 
-            className="space-y-8"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="h-[60px] flex items-center justify-between">
-                <h3 className="text-base font-medium text-[#1E3D59]">プレビュー</h3>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleCopy(allContent)}
-                  className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
-                >
-                  <Copy className="w-4 h-4 mr-2" />
-                  コピー
-                </Button>
-              </div>
-              <pre className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left overflow-auto">
-                {allContent || "生成されたサマリーがここに表示されます"}
-              </pre>
-            </div>
-          </motion.div>
+          <CounselingPreview 
+            sections={counselingData}
+            onCopy={handleCopy}
+          />
         </div>
       </Suspense>
 
