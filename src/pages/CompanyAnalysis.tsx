@@ -40,8 +40,8 @@ const CompanyAnalysis = () => {
     return `
 【分析リクエスト】
 ■会社名：${data.companyName}
-■事業部名：${data.divisionName || "（指定なし）"}
-■企業URL：${data.websiteUrl || "（必須）"}
+■事業部名：${data.divisionName }
+■企業URL：${data.websiteUrl }
 ■支援テーマ：${data.targetService}
 
 【企業分析レポート】
@@ -49,7 +49,6 @@ const CompanyAnalysis = () => {
 - 企業の基本情報（所在地/設立年等）
 - 公表されている事業領域
 - 公開されている経営方針・ビジョン
-※数値情報は公開情報のみ記載
 
 2. 市場環境
 - 対象業界の市場規模（出典明記）
@@ -57,17 +56,19 @@ const CompanyAnalysis = () => {
 ※個社の競合分析は控え、業界全体の動向を記載
 
 3. 課題仮説
--1,2を考慮して企業がどのような課題を抱えているかの分析を支援テーマにとらわれず広い範囲で行って
+- 1,2を考慮して企業が抱える可能性のある課題を分析（支援テーマに依存せず広い範囲で行う）
 
 4. 提案内容（支援テーマに基づく）
-- 支援テーマの内容を当企業に紹介する場合、どのような提案がよいか
+- ここでのみtargetServiceを考慮し、提案を行う
 - 提案の方向性
 - 想定される施策例
 
 【分析基準】
 ・企業URLから確認できる情報や確実性の高い情報のみを表示
+・セクション1,2,3はtargetServiceに依存しない
+・提案内容（セクション4）のみtargetServiceに基づく
 ・推測による記載は「～と推察されます」等を明記
-・絶対にハルシネーションを起こさない`
+・絶対に事実に反する内容を生成しないでください`
   }
 
   const parseClaudeResponse = (response: string): AnalysisResult => {
