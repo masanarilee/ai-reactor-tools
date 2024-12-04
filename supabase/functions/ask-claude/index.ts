@@ -1,4 +1,7 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+
+const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,53 +21,48 @@ serve(async (req) => {
       throw new Error('No prompt provided')
     }
 
-    const apiKey = Deno.env.get('CLAUDE_API_KEY')
-    if (!apiKey) {
-      throw new Error('CLAUDE_API_KEY environment variable is not set')
+    if (!openAIApiKey) {
+      throw new Error('OPENAI_API_KEY environment variable is not set')
     }
 
     const {
-      model = 'claude-3-sonnet-20240229',
+      model = 'gpt-4o-mini',
       max_tokens = 4096,
       temperature = 0.7
     } = options;
 
-    console.log('Making request to Claude API...')
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    console.log('Making request to OpenAI API...')
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01',
-        'x-api-key': apiKey,
       },
       body: JSON.stringify({
         model,
+        messages: [
+          { role: 'user', content: prompt }
+        ],
         max_tokens,
         temperature,
-        messages: [
-          {
-            role: 'user',
-            content: prompt
-          }
-        ]
-      })
+      }),
     })
 
     if (!response.ok) {
       const errorData = await response.text()
-      console.error('Claude API error response:', errorData)
-      throw new Error(`Claude API request failed: ${response.status} - ${errorData}`)
+      console.error('OpenAI API error response:', errorData)
+      throw new Error(`OpenAI API request failed: ${response.status} - ${errorData}`)
     }
 
     const data = await response.json()
-    console.log('Claude API response received successfully')
+    console.log('OpenAI API response received successfully')
 
-    if (!data.content || !data.content[0] || !data.content[0].text) {
-      throw new Error('Unexpected response format from Claude API')
+    if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+      throw new Error('Unexpected response format from OpenAI API')
     }
 
     return new Response(
-      JSON.stringify({ text: data.content[0].text }),
+      JSON.stringify({ text: data.choices[0].message.content }),
       { 
         headers: { 
           ...corsHeaders, 
@@ -74,7 +72,7 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Error in ask-claude function:', error)
+    console.error('Error in ask-gpt function:', error)
     return new Response(
       JSON.stringify({ 
         error: error instanceof Error ? error.message : 'Unknown error occurred',

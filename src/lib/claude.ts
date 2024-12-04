@@ -4,7 +4,14 @@ import { supabase } from "@/integrations/supabase/client"
 export async function askClaude(prompt: string) {
   try {
     const { data, error } = await supabase.functions.invoke('ask-claude', {
-      body: { prompt }
+      body: { 
+        prompt,
+        options: {
+          model: 'gpt-4o-mini',
+          max_tokens: 4096,
+          temperature: 0.7
+        }
+      }
     })
 
     if (error) throw error
