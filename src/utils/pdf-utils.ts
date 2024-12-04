@@ -4,7 +4,7 @@ import { MAX_FILE_SIZE } from './constants'
 import { toast } from "sonner"
 
 // PDFワーカーの初期化
-GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
+GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.124/pdf.worker.min.js`;
 
 // PDFファイルの検証
 const validatePdfFile = (file: File): boolean => {
@@ -44,7 +44,7 @@ export async function readPDFContent(file: File): Promise<string> {
     // PDFドキュメントの読み込み
     const pdf = await getDocument({
       data: arrayBuffer,
-      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',
+      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.9.124/cmaps/',
       cMapPacked: true,
     }).promise
 
