@@ -149,12 +149,11 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
 
     if (error) throw error;
 
-    // Extract sections from the response using improved regex patterns
     const sections = {
-      summary: extractSection(data.text, "1. 人材要約", "2. 懸念点"),
-      concerns: extractSection(data.text, "2. 懸念点", "3. 質問例"),
-      questions: extractSection(data.text, "3. 質問例", "4. キャリアプラン"),
-      careerPlan: extractSection(data.text, "4. キャリアプラン", "#")
+      summary: extractSection(data.text, "1. 人材要約：", "2. 懸念点："),
+      concerns: extractSection(data.text, "2. 懸念点：", "3. 質問例："),
+      questions: extractSection(data.text, "3. 質問例：", "4. キャリアプラン："),
+      careerPlan: extractSection(data.text, "4. キャリアプラン：", "#")
     };
 
     return sections;
@@ -166,7 +165,6 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
   }
 }
 
-// Improved helper function to extract sections from the response
 function extractSection(text: string, startSection: string, endSection: string): string {
   const startIndex = text.indexOf(startSection);
   if (startIndex === -1) return "";
