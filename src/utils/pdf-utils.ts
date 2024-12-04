@@ -1,43 +1,70 @@
-import { toast } from "sonner"
 import * as PDFJS from 'pdfjs-dist'
 import { MAX_FILE_SIZE } from './constants'
+import { toast } from "sonner"
 
 // PDFワーカーの初期化を関数化
 const initializePdfWorker = async () => {
   try {
-    // Import the worker directly from node_modules
-    const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.mjs');
-    PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    if (PDFJS.GlobalWorkerOptions.workerSrc) {
+      return true;
+    }
+
+    const workerUrl = new URL(
+      'pdfjs-dist/build/pdf.worker.min.js',
+      import.meta.url
+    ).toString();
+
+    PDFJS.GlobalWorkerOptions.workerSrc = workerUrl;
     return true;
   } catch (error) {
     console.error('PDF Worker initialization failed:', error);
     return false;
   }
-};
+}
 
 // PDFファイルの検証
 const validatePdfFile = (file: File): boolean => {
-  const validTypes = ['application/pdf', 'binary/octet-stream'];
-  const hasValidType = validTypes.includes(file.type) || file.name.toLowerCase().endsWith('.pdf');
-  const hasValidSize = file.size > 0 && file.size <= MAX_FILE_SIZE;
-  return hasValidType && hasValidSize;
-};
+  // ファイルタイプとサイズの検証
+  const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  const isValidSize = file.size > 0 && file.size <= MAX_FILE_SIZE;
+
+  if (!isPdf) {
+    toast.error("PDFファイル形式ではありません");
+    return false;
+  }
+
+  if (!isValidSize) {
+    toast.error(`ファイルサイズは${MAX_FILE_SIZE / (1024 * 1024)}MB以下にしてください`);
+    return false;
+  }
+
+  return true;
+}
 
 export async function readPDFContent(file: File): Promise<string> {
   try {
+    if (!file) {
+      throw new Error('ファイルが選択されていません');
+    }
+
     if (!validatePdfFile(file)) {
       throw new Error('無効なPDFファイルです');
     }
 
-    // PDFワーカーの初期化を待機
-    await initializePdfWorker();
+    // PDFワーカーの初期化を確認
+    const isWorkerInitialized = await initializePdfWorker();
+    if (!isWorkerInitialized) {
+      throw new Error('PDFワーカーの初期化に失敗しました');
+    }
 
+    // ファイルをArrayBufferとして読み込む
     const arrayBuffer = await file.arrayBuffer();
     if (!arrayBuffer || arrayBuffer.byteLength === 0) {
       throw new Error('ファイルの読み込みに失敗しました');
     }
 
-    const loadingTask = PDFJS.getDocument({ 
+    // PDFドキュメントの読み込み
+    const loadingTask = PDFJS.getDocument({
       data: arrayBuffer,
       cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',
       cMapPacked: true,
@@ -45,32 +72,23 @@ export async function readPDFContent(file: File): Promise<string> {
 
     const pdf = await loadingTask.promise;
     let text = '';
-    
-    const totalPages = pdf.numPages;
-    if (totalPages === 0) {
-      throw new Error('PDFページが見つかりません');
-    }
 
-    for (let i = 1; i <= totalPages; i++) {
+    // 全ページのテキストを抽出
+    for (let i = 1; i <= pdf.numPages; i++) {
       try {
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
-        
         const pageText = content.items
           .filter((item: any) => 'str' in item && typeof item.str === 'string')
           .map((item: any) => item.str.trim())
-          .filter(str => str.length > 0)
           .join(' ');
 
         text += pageText + '\n';
 
-        if (totalPages > 1) {
-          toast.info(`PDFの処理中... (${i}/${totalPages}ページ)`);
-        }
-
+        // メモリリークを防ぐためにページを解放
         await page.cleanup();
       } catch (pageError) {
-        console.error(`Error processing page ${i}:`, pageError);
+        console.error(`ページ${i}の処理中にエラーが発生:`, pageError);
         toast.warning(`ページ${i}の処理中にエラーが発生しましたが、続行します`);
       }
     }
@@ -79,7 +97,9 @@ export async function readPDFContent(file: File): Promise<string> {
       throw new Error('PDFからテキストを抽出できませんでした');
     }
 
+    toast.success("PDFファイルの読み込みが完了しました");
     return text;
+
   } catch (error) {
     console.error('Error reading PDF:', error);
     const errorMessage = error instanceof Error ? error.message : 'PDFファイルの読み込みに失敗しました';
