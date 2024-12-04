@@ -167,27 +167,15 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
 
 // Helper function to extract sections from the response
 function extractSection(text: string, sectionName: string): string {
-  const sections = text.split(/\d\.\s+/);
-  let content = "";
+  const sectionRegex = new RegExp(`${sectionName}：([\\s\\S]*?)(?=\\d\\.\\s|$)`, 'g');
+  const match = sectionRegex.exec(text);
   
-  switch(sectionName) {
-    case "人材要約":
-      content = sections[1] || "";
-      break;
-    case "懸念点":
-      content = sections[2] || "";
-      break;
-    case "質問例":
-      content = sections[3] || "";
-      break;
-    case "キャリアプラン":
-      content = sections[4] || "";
-      break;
-  }
-
-  // Remove section title and bullet points
-  return content
-    .replace(new RegExp(`${sectionName}：?\n?`), '')
-    .replace(/^-\s+/gm, '')
+  if (!match || !match[1]) return "";
+  
+  return match[1]
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line && !line.startsWith(sectionName))
+    .join('\n')
     .trim();
 }
