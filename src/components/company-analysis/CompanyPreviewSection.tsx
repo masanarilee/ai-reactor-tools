@@ -1,5 +1,3 @@
-// src/components/company-analysis/CompanyPreviewSection.tsx
-
 import { Button } from "@/components/ui/button"
 import { Copy } from "lucide-react"
 import { motion } from "framer-motion"
@@ -33,25 +31,48 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-end">
-        <Button onClick={handleCopyAll} variant="outline" size="sm">
-          <Copy className="mr-2 h-4 w-4" />
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.2 }}
+      className="bg-white p-6 rounded-lg shadow-sm"
+    >
+      <div className="h-[60px] flex items-center justify-between">
+        <h3 className="text-base font-medium text-[#1E3D59]">プレビュー</h3>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleCopyAll}
+          className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
+        >
+          <Copy className="w-4 h-4 mr-2" />
           AllCopy
         </Button>
       </div>
-      <div className="grid gap-4">
+      <div className="space-y-6 bg-gray-50 rounded border border-gray-200 p-6">
         {sections.map((section, index) => (
-          <Card key={index}>
-            <CardHeader>
-              <h3 className="text-base font-medium text-[#1E3D59]">{section.title}</h3>
-            </CardHeader>
-            <CardContent>
-              <p className="whitespace-pre-wrap">{section.content}</p>
-            </CardContent>
-          </Card>
+          <div key={index} className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h4 className="font-medium text-[#1E3D59]">{section.title}</h4>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => copyToClipboard(section.content)}
+                className="text-[#17A2B8] border-[#17A2B8] hover:bg-[#17A2B8] hover:text-white"
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Copy
+              </Button>
+            </div>
+            <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left">
+              {section.content || `${section.title}が生成されるとここに表示されます`}
+            </pre>
+            {index < sections.length - 1 && (
+              <div className="border-b border-gray-200 my-4" />
+            )}
+          </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
