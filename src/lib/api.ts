@@ -1,6 +1,5 @@
-// src/lib/api.ts
-import { toast } from "@/components/ui/use-toast"
 import { supabase } from "@/integrations/supabase/client"
+import { toast } from "@/components/ui/use-toast"
 
 export interface AnalysisResult {
   overview: string;
@@ -57,34 +56,4 @@ export function parseClaudeResponse(response: string): AnalysisResult {
   });
 
   return result;
-}
-
-export function generatePrompt(data: { 
-  companyName: string;
-  targetService: string;
-  websiteUrl?: string;
-}): string {
-  return `
-企業名：${data.companyName}
-支援テーマ：${data.targetService}
-${data.websiteUrl ? `企業URL：${data.websiteUrl}` : ''}
-
-上記の企業について以下の項目を分析してください：
-
-【企業概要】
-・企業の事業内容、特徴、強みを簡潔に説明
-
-【市場環境】
-・業界の現状と課題
-・競合状況
-・市場機会
-
-【課題仮説】
-・想定される経営課題や組織課題
-・改善が必要な領域
-
-【提案内容】
-・課題解決に向けた具体的な提案
-・期待される効果
-`;
 }
