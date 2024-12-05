@@ -3,7 +3,7 @@ import { MainContent } from "@/components/MainContent"
 import { CompanyInputSection } from "@/components/company-analysis/CompanyInputSection"
 import { CompanyPreviewSection } from "@/components/company-analysis/CompanyPreviewSection"
 import { useToast } from "@/components/ui/use-toast"
-import { askClaude, parseClaudeResponse } from "@/lib/claude"
+import { askClaude } from "@/lib/claude"
 
 export interface CompanyAnalysisData {
   companyName: string
@@ -47,6 +47,16 @@ const generatePrompt = (companyData: CompanyAnalysisData) => {
     .replace('{divisionName}', companyData.divisionName)
     .replace('{targetService}', companyData.targetService)
     .replace('{websiteUrl}', companyData.websiteUrl)
+}
+
+const parseClaudeResponse = (response: string) => {
+  const sections = response.split('\n\n')
+  return {
+    overview: sections[0] || '',
+    marketAnalysis: sections[1] || '',
+    challenges: sections[2] || '',
+    proposal: sections[3] || ''
+  }
 }
 
 const CompanyAnalysis = () => {
