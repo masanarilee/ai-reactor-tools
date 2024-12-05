@@ -1,6 +1,32 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
 import { readFileContent } from "@/utils/text-utils"
+import { TALENT_SUMMARY_PROMPT, JOB_SUMMARY_PROMPT, COUNSELING_REPORT_PROMPT } from "@/lib/prompts"
+
+export interface TalentSummaryResult {
+  summary: string;
+  concerns: string;
+  questions: string;
+  careerPlan: string;
+}
+
+const generateTalentPrompt = (fileContent: string, supplementaryInfo: string) => {
+  return TALENT_SUMMARY_PROMPT
+    .replace('{resume}', fileContent)
+    .replace('{supplementaryInfo}', supplementaryInfo)
+}
+
+const generateJobPrompt = (fileContent: string, supplementaryInfo: string) => {
+  return JOB_SUMMARY_PROMPT
+    .replace('{fileContent}', fileContent)
+    .replace('{supplementaryInfo}', supplementaryInfo)
+}
+
+const generateCounselingPrompt = (fileContent: string, supplementaryInfo: string) => {
+  return COUNSELING_REPORT_PROMPT
+    .replace('{fileContent}', fileContent ? `#経歴書の内容\n${fileContent}` : '')
+    .replace('{supplementaryInfo}', supplementaryInfo)
+}
 
 export async function generateTalentSummary(file: File | null, supplementaryInfo: string) {
   try {
@@ -19,33 +45,7 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
       }
     }
 
-    const processedInfo = supplementaryInfo.trim().replace(/\s+/g, ' ');
-    const prompt = `\
-経歴書を読み取るか補足情報の内容を分析して、次の形式で情報を整理してください：
-アウトプットは‐や*等の記載を避けタイトルと回答を分ける際には【】と・を利用してください。
-
-【人材要約】
-・経験、スキル、強みを簡潔に要約
-・キャリアの方向性や特徴を分析
-
-【懸念点】
-・スキルギャップや改善が必要な領域
-・キャリアパスにおける潜在的な課題
-
-【質問例】
-・キャリアの方向性を明確にするための質問(複数)
-・スキルの詳細を深堀りする質問(複数)
-
-【キャリアプラン】
-・短期的な目標（1-2年）
-・中期的な目標（3-5年）
-・長期的なキャリアビジョン
-
-#補足情報
-${processedInfo}
-
-${file ? `ファイル名：${file.name}` : ''}
-${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
+    const prompt = generateTalentPrompt(fileContent, supplementaryInfo.trim());
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
@@ -58,19 +58,8 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`
       }
     });
 
-    if (error) {
-      console.error('Supabase function error:', error);
-      throw error;
-    }
-
-    const sections = {
-      summary: extractSection(data.text, "【人材要約】", "【懸念点】"),
-      concerns: extractSection(data.text, "【懸念点】", "【質問例】"),
-      questions: extractSection(data.text, "【質問例】", "【キャリアプラン】"),
-      careerPlan: extractSection(data.text, "【キャリアプラン】", "#補足情報")
-    };
-
-    return sections;
+    if (error) throw error;
+    return data.text;
 
   } catch (error) {
     console.error('Error generating summary:', error);
@@ -96,9 +85,7 @@ export async function generateJobSummary(file: File | null, supplementaryInfo: s
       }
     }
 
-    const prompt = `\
-${fileContent ? `ファイル名：${file.name}` : ''}
-${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`;
+    const prompt = generateJobPrompt(fileContent, supplementaryInfo);
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
@@ -121,13 +108,8 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`;
   }
 }
 
-export async function generateCounselingReport(file: File | null, supplementaryInfo: string) {
+export async function generateCounselingReport(file: File | null, supplementaryInfo: string): Promise<TalentSummaryResult> {
   try {
-    console.log('Starting generateCounselingReport with:', { 
-      hasFile: !!file, 
-      supplementaryInfo 
-    });
-
     if (!file && !supplementaryInfo) {
       throw new Error('経歴書または補足情報のいずれかが必要です');
     }
@@ -135,9 +117,7 @@ export async function generateCounselingReport(file: File | null, supplementaryI
     let fileContent = '';
     if (file) {
       try {
-        console.log('Attempting to read file:', file.name);
         fileContent = await readFileContent(file);
-        console.log('File content read successfully');
       } catch (error) {
         console.error('Error reading file:', error);
         toast.error("ファイルの読み込みに失敗しました");
@@ -145,34 +125,7 @@ export async function generateCounselingReport(file: File | null, supplementaryI
       }
     }
 
-    const prompt = `\
-経歴書を読み取るか補足情報の内容を分析して、次の形式で情報を整理してください：
-アウトプットは‐や*等の記載を避けタイトルと回答を分ける際には【】と・を利用してください。
-
-【人材要約】
-・経験、スキル、強みを簡潔に要約
-・キャリアの方向性や特徴を分析
-
-【懸念点】
-・スキルギャップや改善が必要な領域
-・キャリアパスにおける潜在的な課題
-
-【質問例】
-・キャリアの方向性を明確にするための質問(複数)
-・スキルの詳細を深堀りする質問(複数)
-
-【キャリアプラン】
-・短期的な目標（1-2年）
-・中期的な目標（3-5年）
-・長期的なキャリアビジョン
-
-#補足情報
-${supplementaryInfo}
-
-${file ? `ファイル名：${file.name}` : ''}
-${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`;
-
-    console.log('Sending prompt to OpenAI:', prompt);
+    const prompt = generateCounselingPrompt(fileContent, supplementaryInfo);
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
@@ -185,29 +138,25 @@ ${fileContent ? `#経歴書の内容\n${fileContent}` : ''}`;
       }
     });
 
-    console.log('Response from OpenAI:', data);
+    if (error) throw error;
 
-    if (error) {
-      console.error('Supabase function error:', error);
-      throw error;
-    }
-
-    const sections = {
-      summary: extractSection(data.text, "【人材要約】", "【懸念点】"),
-      concerns: extractSection(data.text, "【懸念点】", "【質問例】"),
-      questions: extractSection(data.text, "【質問例】", "【キャリアプラン】"),
-      careerPlan: extractSection(data.text, "【キャリアプラン】", "#補足情報")
-    };
-
-    console.log('Extracted sections:', sections);
-
-    return sections;
-
+    return extractSections(data.text);
   } catch (error) {
     console.error('Error in generateCounselingReport:', error);
     toast.error("カウンセリングレポートの生成に失敗しました。" + (error instanceof Error ? error.message : '不明なエラーが発生しました'));
     throw error;
   }
+}
+
+function extractSections(text: string): TalentSummaryResult {
+  const sections = {
+    summary: extractSection(text, "【人材要約】", "【懸念点】"),
+    concerns: extractSection(text, "【懸念点】", "【質問例】"),
+    questions: extractSection(text, "【質問例】", "【キャリアプラン】"),
+    careerPlan: extractSection(text, "【キャリアプラン】", "#補足情報")
+  };
+
+  return sections;
 }
 
 function extractSection(text: string, startSection: string, endSection: string): string {

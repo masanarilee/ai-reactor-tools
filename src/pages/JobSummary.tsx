@@ -1,6 +1,6 @@
 import { useState, Suspense } from "react"
 import { useToast } from "@/components/ui/use-toast"
-import { generateJobSummary } from "@/lib/talent-summary"
+import { generateJobSummary } from "@/lib/utils/talent-utils"
 import AIGenerationVisualizer from "@/components/AIGenerationVisualizer"
 import { InputSection } from "@/components/main-content/InputSection"
 import { PreviewSection } from "@/components/main-content/PreviewSection"
