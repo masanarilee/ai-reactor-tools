@@ -50,13 +50,27 @@ const generatePrompt = (companyData: CompanyAnalysisData) => {
 }
 
 const parseClaudeResponse = (response: string) => {
-  const sections = response.split('\n\n')
-  return {
-    overview: sections[0] || '',
-    marketAnalysis: sections[1] || '',
-    challenges: sections[2] || '',
-    proposal: sections[3] || ''
+  const sections = response.split('【')
+  const result = {
+    overview: '',
+    marketAnalysis: '',
+    challenges: '',
+    proposal: ''
   }
+
+  sections.forEach(section => {
+    if (section.includes('企業概要】')) {
+      result.overview = section.split('】')[1].trim()
+    } else if (section.includes('市場環境】')) {
+      result.marketAnalysis = section.split('】')[1].trim()
+    } else if (section.includes('課題仮説】')) {
+      result.challenges = section.split('】')[1].trim()
+    } else if (section.includes('提案内容】')) {
+      result.proposal = section.split('】')[1].trim()
+    }
+  })
+
+  return result
 }
 
 const CompanyAnalysis = () => {
@@ -134,11 +148,9 @@ const CompanyAnalysis = () => {
             onProcess={handleProcess}
             onReset={handleReset}
           />
-          {(analysisResult.overview || analysisResult.marketAnalysis || analysisResult.challenges || analysisResult.proposal) && (
-            <CompanyPreviewSection
-              analysisResult={analysisResult}
-            />
-          )}
+          <CompanyPreviewSection
+            analysisResult={analysisResult}
+          />
         </div>
       </div>
     </MainContent>
