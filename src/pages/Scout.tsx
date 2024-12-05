@@ -29,6 +29,7 @@ export default function Scout() {
   })
   const [previewContent, setPreviewContent] = useState("")
   const [resetTrigger, setResetTrigger] = useState(false)
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(previewContent)
@@ -188,6 +189,7 @@ ${scoutData.recruiterName}
 
           <ScoutPreviewSection 
             previewContent={previewContent}
+            onCopy={handleCopy}
           />
         </div>
       </Suspense>

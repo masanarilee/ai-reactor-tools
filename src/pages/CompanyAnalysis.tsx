@@ -3,7 +3,14 @@ import { MainContent } from "@/components/MainContent"
 import { CompanyInputSection } from "@/components/company-analysis/CompanyInputSection"
 import { CompanyPreviewSection } from "@/components/company-analysis/CompanyPreviewSection"
 import { useToast } from "@/components/ui/use-toast"
-import { askClaude, parseClaudeResponse } from "@/lib/api"
+import { askClaude, parseClaudeResponse } from "@/lib/claude"
+
+export interface CompanyAnalysisData {
+  companyName: string
+  divisionName: string
+  targetService: string
+  websiteUrl: string
+}
 
 const COMPANY_ANALYSIS_PROMPT = `
 【分析リクエスト】
@@ -34,7 +41,7 @@ const COMPANY_ANALYSIS_PROMPT = `
 ・絶対にハルシネーションを起こさない
 `
 
-const generatePrompt = (companyData: any) => {
+const generatePrompt = (companyData: CompanyAnalysisData) => {
   return COMPANY_ANALYSIS_PROMPT
     .replace('{companyName}', companyData.companyName)
     .replace('{divisionName}', companyData.divisionName)
@@ -43,7 +50,7 @@ const generatePrompt = (companyData: any) => {
 }
 
 const CompanyAnalysis = () => {
-  const [companyData, setCompanyData] = useState({
+  const [companyData, setCompanyData] = useState<CompanyAnalysisData>({
     companyName: "",
     divisionName: "",
     targetService: "",
