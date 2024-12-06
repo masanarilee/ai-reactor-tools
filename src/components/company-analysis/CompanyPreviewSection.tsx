@@ -65,7 +65,7 @@ export const CompanyPreviewSection = ({ analysisResult }: CompanyPreviewSectionP
               </Button>
             </div>
             <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left">
-              {section.content || `${section.title}が生成されるとここに表示されます`}
+              {section.content || `${section.title}が生成されるとここに表示されます。`}
             </pre>
             {index < sections.length - 1 && (
               <div className="border-b border-gray-200 my-4" />
