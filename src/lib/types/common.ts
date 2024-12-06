@@ -1,10 +1,3 @@
-export interface AnalysisResult {
-  overview: string;
-  marketAnalysis: string;
-  challenges: string;
-  proposal: string;
-}
-
 export interface TalentSummaryResult {
   summary: string;
   concerns: string;

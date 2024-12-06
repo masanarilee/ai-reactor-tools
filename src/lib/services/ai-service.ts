@@ -41,16 +41,3 @@ export function generateJobPrompt(fileContent: string, supplementaryInfo: string
     .replace('{fileContent}', fileContent)
     .replace('{supplementaryInfo}', supplementaryInfo);
 }
-
-export function generateCompanyAnalysisPrompt(params: {
-  companyName: string;
-  divisionName: string;
-  websiteUrl: string;
-  targetService: string;
-}) {
-  return PROMPTS.COMPANY.ANALYSIS
-    .replace('{companyName}', params.companyName)
-    .replace('{divisionName}', params.divisionName)
-    .replace('{websiteUrl}', params.websiteUrl)
-    .replace('{targetService}', params.targetService);
-}
