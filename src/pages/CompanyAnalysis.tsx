@@ -4,7 +4,7 @@ import { CompanyInputSection } from "@/components/company-analysis/CompanyInputS
 import { CompanyPreviewSection } from "@/components/company-analysis/CompanyPreviewSection"
 import { useToast } from "@/components/ui/use-toast"
 import { askClaude } from "@/lib/claude"
-import { COMPANY_ANALYSIS_PROMPT } from "@/lib/prompts"
+import { PROMPTS } from "@/lib/constants/prompts"
 
 export interface CompanyAnalysisData {
   companyName: string
@@ -14,7 +14,7 @@ export interface CompanyAnalysisData {
 }
 
 const generatePrompt = (companyData: CompanyAnalysisData) => {
-  return COMPANY_ANALYSIS_PROMPT
+  return PROMPTS.COMPANY.ANALYSIS
     .replace('{companyName}', companyData.companyName)
     .replace('{divisionName}', companyData.divisionName)
     .replace('{targetService}', companyData.targetService)

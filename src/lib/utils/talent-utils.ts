@@ -1,7 +1,7 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
 import { readFileContent } from "@/utils/text-utils"
-import { TALENT_SUMMARY_PROMPT, JOB_SUMMARY_PROMPT, COUNSELING_REPORT_PROMPT } from "@/lib/prompts"
+import { PROMPTS } from "@/lib/constants/prompts"
 
 export interface TalentSummaryResult {
   summary: string;
@@ -11,19 +11,19 @@ export interface TalentSummaryResult {
 }
 
 const generateTalentPrompt = (fileContent: string, supplementaryInfo: string) => {
-  return TALENT_SUMMARY_PROMPT
+  return PROMPTS.TALENT.SUMMARY
     .replace('{resume}', fileContent)
     .replace('{supplementaryInfo}', supplementaryInfo)
 }
 
 const generateJobPrompt = (fileContent: string, supplementaryInfo: string) => {
-  return JOB_SUMMARY_PROMPT
+  return PROMPTS.JOB.SUMMARY
     .replace('{fileContent}', fileContent)
     .replace('{supplementaryInfo}', supplementaryInfo)
 }
 
 const generateCounselingPrompt = (fileContent: string, supplementaryInfo: string) => {
-  return COUNSELING_REPORT_PROMPT
+  return PROMPTS.TALENT.COUNSELING
     .replace('{fileContent}', fileContent ? `#経歴書の内容\n${fileContent}` : '')
     .replace('{supplementaryInfo}', supplementaryInfo)
 }
