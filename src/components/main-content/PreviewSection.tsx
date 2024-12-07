@@ -24,6 +24,25 @@ interface CounselingPreviewProps {
 }
 
 export const PreviewSection = ({ previewContent, onCopy }: PreviewSectionProps) => {
+  const defaultContent = `以下の形式で情報を整理して出力されます：
+
+【ID】
+【年齢】歳
+【性別】
+【国籍】
+【所属】弊社個人事業主
+【住まい】
+【稼働形態】
+【稼動開始日】
+【稼働率】
+【稼働例】
+【希望単金】
+【経験スキル】
+【希望案件】
+【NG案件】
+【経験コメント】
+【お人柄】`
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -44,7 +63,7 @@ export const PreviewSection = ({ previewContent, onCopy }: PreviewSectionProps) 
         </Button>
       </div>
       <pre className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left overflow-auto">
-        {previewContent || "生成されたサマリーがここに表示されます。"}
+        {previewContent || defaultContent}
       </pre>
     </motion.div>
   )
