@@ -4,7 +4,7 @@ import { Copy } from "lucide-react"
 
 interface ScoutPreviewSectionProps {
   previewContent: string
-  onCopy: () => void  // コピー機能のための関数を追加
+  onCopy: () => void
 }
 
 export const ScoutPreviewSection = ({ 
@@ -31,7 +31,7 @@ export const ScoutPreviewSection = ({
         </Button>
       </div>
       <pre className="min-h-[500px] p-8 bg-gray-50 rounded border border-gray-200 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words text-left overflow-auto">
-        {previewContent || "生成されたスカウト文がここに表示されます。"}
+        {previewContent || "以下の形式でスカウトメールが生成されます。\n\n件名：\n本文："}
       </pre>
     </motion.div>
   )
