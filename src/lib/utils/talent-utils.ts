@@ -46,6 +46,7 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
     }
 
     const prompt = generateTalentPrompt(fileContent, supplementaryInfo.trim());
+    console.log('Generated prompt:', prompt); // デバッグ用
 
     const { data, error } = await supabase.functions.invoke('ask-claude', {
       body: { 
@@ -59,6 +60,7 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
     });
 
     if (error) throw error;
+    console.log('AI response:', data.text); // デバッグ用
     return data.text;
 
   } catch (error) {

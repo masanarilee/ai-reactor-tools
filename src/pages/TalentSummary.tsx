@@ -6,13 +6,6 @@ import { InputSection } from "@/components/main-content/InputSection"
 import { PreviewSection } from "@/components/main-content/PreviewSection"
 import { MainContent } from "@/components/MainContent"
 
-interface SummaryData {
-  summary: string;
-  concerns: string;
-  questions: string;
-  careerPlan: string;
-}
-
 export function TalentSummary() {
   const { toast } = useToast()
   const [isProcessing, setIsProcessing] = useState(false)
@@ -45,26 +38,12 @@ export function TalentSummary() {
 
     setIsProcessing(true)
     try {
-      const sections = await generateTalentSummary(
+      const result = await generateTalentSummary(
         uploadedFiles.length > 0 ? uploadedFiles[0] : null, 
         supplementaryInfo
-      ) as SummaryData
+      )
       
-      const formattedContent = `
-【人材要約】
-${sections.summary}
-
-【懸念点】
-${sections.concerns}
-
-【質問例】
-${sections.questions}
-
-【キャリアプラン】
-${sections.careerPlan}
-`.trim()
-      
-      setPreviewContent(formattedContent)
+      setPreviewContent(result)
       
       toast({
         title: "完了",
