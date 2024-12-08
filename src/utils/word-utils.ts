@@ -1,5 +1,5 @@
-import * as mammoth from 'mammoth'
-import { MAX_FILE_SIZE } from './constants'
+import mammoth from 'mammoth';
+import { MAX_FILE_SIZE } from './constants';
 
 export async function readWordContent(file: File): Promise<string> {
   try {
@@ -9,6 +9,7 @@ export async function readWordContent(file: File): Promise<string> {
 
     const arrayBuffer = await file.arrayBuffer();
     const result = await mammoth.extractRawText({ arrayBuffer });
+    console.log('Word file content:', result.value); // デバッグ用
     return result.value;
   } catch (error) {
     console.error('Error reading Word document:', error);
