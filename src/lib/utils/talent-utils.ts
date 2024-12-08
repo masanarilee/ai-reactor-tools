@@ -1,6 +1,6 @@
 import { toast } from "sonner"
 import { supabase } from "@/integrations/supabase/client"
-import { readFileContent } from "@/utils/text-utils"
+import { readFileContent } from "@/lib/file-reader"
 import { PROMPTS } from "@/lib/constants/prompts"
 
 export interface TalentSummaryResult {
@@ -38,6 +38,7 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
     if (file) {
       try {
         fileContent = await readFileContent(file);
+        console.log('File content read successfully:', fileContent); // デバッグ用
       } catch (error) {
         console.error('Error reading file:', error);
         toast.error("ファイルの読み込みに失敗しました");
@@ -59,7 +60,11 @@ export async function generateTalentSummary(file: File | null, supplementaryInfo
       }
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('AI response error:', error); // デバッグ用
+      throw error;
+    }
+    
     console.log('AI response:', data.text); // デバッグ用
     return data.text;
 
